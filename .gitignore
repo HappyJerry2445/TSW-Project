@@ -46,3 +46,5 @@ build/
 /documents/report.mtc
 /documents/report.mtc0
 /documents/report.out
+/src/main/WebContent/WEB-INF/lib/
+/src/main/WebContent/WEB-INF/classes/
