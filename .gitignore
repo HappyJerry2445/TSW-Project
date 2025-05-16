@@ -39,3 +39,10 @@ build/
 ### Mac OS ###
 .DS_Store
 /src/main/WebContent/META-INF/context.xml
+/documents/report.toc
+/documents/report.aux
+/documents/report.log
+/documents/report.maf
+/documents/report.mtc
+/documents/report.mtc0
+/documents/report.out
