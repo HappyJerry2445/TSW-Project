@@ -6,7 +6,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
-public class CategoryDAO implements IBeanDAO<Category> {
+public class CategoryDAO implements GenericDAO<Category, Integer> {
 
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
             "CategoryID", "CategoryName", "ParentCategoryID", "CategoryType", "Description"
@@ -36,7 +36,7 @@ public class CategoryDAO implements IBeanDAO<Category> {
      * @throws SQLException if a database access error occurs.
      */
     @Override
-    public void doSave(Category category) throws SQLException {
+    public void save(Category category) throws SQLException {
         // Input validation: Ensure critical fields are not null or empty
         if (category == null || category.getName() == null || category.getName().trim().isEmpty() ||
                 category.getType() == null || category.getType().trim().isEmpty()) {
@@ -97,20 +97,20 @@ public class CategoryDAO implements IBeanDAO<Category> {
     /**
      * Deletes a Category from the database.
      *
-     * @param category The Category object to delete (CategoryID is used).
+     * @param id The Category object to delete (CategoryID is used).
      * @return true if the category was deleted, false otherwise.
      * @throws SQLException if a database access error occurs.
      */
     @Override
-    public boolean doDelete(Category category) throws SQLException {
-        if (category == null || category.getId() == 0) {
-            throw new IllegalArgumentException("Category or CategoryID cannot be null or zero for deletion.");
+    public boolean delete(Integer id) throws SQLException {
+        if (id == null || id == 0) {
+            throw new IllegalArgumentException("CategoryID cannot be null or zero for deletion.");
         }
 
         String sql = "DELETE FROM Category WHERE CategoryID = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, category.getId());
+            ps.setInt(1, id);
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         }
@@ -124,7 +124,7 @@ public class CategoryDAO implements IBeanDAO<Category> {
      * @throws SQLException if a database access error occurs.
      */
     @Override
-    public Category doRetrieveByKey(int categoryID) throws SQLException {
+    public Category getById(Integer categoryID) throws SQLException {
         if (categoryID <= 0) {
             throw new IllegalArgumentException("CategoryID must be a positive integer.");
         }
@@ -152,7 +152,7 @@ public class CategoryDAO implements IBeanDAO<Category> {
      * @throws SQLException if a database access error occurs.
      */
     @Override
-    public Collection<Category> doRetrieveAll(String order) throws SQLException {
+    public Collection<Category> getAll(String order) throws SQLException {
         Collection<Category> categories = new ArrayList<>();
         // Basic validation for order parameter to prevent direct injection,
         // but robust whitelisting is recommended for dynamic sorting.

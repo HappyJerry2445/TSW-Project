@@ -27,7 +27,7 @@ public class CategoryServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            Collection<Category> categories = categoryDao.doRetrieveAll(null);
+            Collection<Category> categories = categoryDao.getAll(null);
             request.setAttribute("categories", categories);
             request.getRequestDispatcher("/WEB-INF/categories.jsp").forward(request, response);
         } catch (SQLException e) {
