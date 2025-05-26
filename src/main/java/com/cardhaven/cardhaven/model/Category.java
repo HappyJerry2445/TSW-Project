@@ -1,19 +1,21 @@
-package com.cardhaven.cardhaven;
+package com.cardhaven.cardhaven.model;
 
 public class Category {
     private int id;
     private String name;
     private Integer parentId;
     private String type;
+    private String description;
 
     public Category() {
     }
 
-    public Category(int id, String name, Integer parentId, String type) {
+    public Category(int id, String name, Integer parentId, String type, String description) {
         this.id = id;
         this.name = name;
         this.parentId = parentId;
         this.type = type;
+        this.description = description;
     }
 
     public int getId() {
@@ -46,5 +48,13 @@ public class Category {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
