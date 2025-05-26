@@ -2,6 +2,7 @@ package com.cardhaven.cardhaven.model.beans;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Product implements Serializable {
 
@@ -144,5 +145,12 @@ public class Product implements Serializable {
                 ", lastUpdated=" + lastUpdated +
                 ", isActive=" + isActive +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return id == product.id && Double.compare(basePrice, product.basePrice) == 0 && Double.compare(currentPrice, product.currentPrice) == 0 && stockQuantity == product.stockQuantity && categoryId == product.categoryId && isActive == product.isActive && Objects.equals(sku, product.sku) && Objects.equals(productName, product.productName) && productType == product.productType && Objects.equals(createdAt, product.createdAt) && Objects.equals(lastUpdated, product.lastUpdated);
     }
 }
