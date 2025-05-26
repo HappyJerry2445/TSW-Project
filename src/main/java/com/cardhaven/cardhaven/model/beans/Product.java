@@ -12,7 +12,7 @@ public class Product implements Serializable {
         BoosterPack
     }
 
-    private int id;
+    private int productId;
     private String sku;
     private String productName;
     private double basePrice;
@@ -28,8 +28,8 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public Product(int id, String sku, String productName, double basePrice, double currentPrice, int stockQuantity, int categoryId, ProductType productType, LocalDateTime createdAt, LocalDateTime lastUpdated, boolean isActive) {
-        this.id = id;
+    public Product(int productId, String sku, String productName, double basePrice, double currentPrice, int stockQuantity, int categoryId, ProductType productType, LocalDateTime createdAt, LocalDateTime lastUpdated, boolean isActive) {
+        this.productId = productId;
         this.sku = sku;
         this.productName = productName;
         this.basePrice = basePrice;
@@ -42,12 +42,12 @@ public class Product implements Serializable {
         this.isActive = isActive;
     }
 
-    public int getId() {
-        return id;
+    public int getProductId() {
+        return productId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public String getSku() {
@@ -133,7 +133,7 @@ public class Product implements Serializable {
     @Override
     public String toString() {
         return "Product{" +
-                "id=" + id +
+                "productId=" + productId +
                 ", sku='" + sku + '\'' +
                 ", productName='" + productName + '\'' +
                 ", basePrice=" + basePrice +
@@ -151,6 +151,6 @@ public class Product implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return id == product.id && Double.compare(basePrice, product.basePrice) == 0 && Double.compare(currentPrice, product.currentPrice) == 0 && stockQuantity == product.stockQuantity && categoryId == product.categoryId && isActive == product.isActive && Objects.equals(sku, product.sku) && Objects.equals(productName, product.productName) && productType == product.productType && Objects.equals(createdAt, product.createdAt) && Objects.equals(lastUpdated, product.lastUpdated);
+        return productId == product.productId && Double.compare(basePrice, product.basePrice) == 0 && Double.compare(currentPrice, product.currentPrice) == 0 && stockQuantity == product.stockQuantity && categoryId == product.categoryId && isActive == product.isActive && Objects.equals(sku, product.sku) && Objects.equals(productName, product.productName) && productType == product.productType && Objects.equals(createdAt, product.createdAt) && Objects.equals(lastUpdated, product.lastUpdated);
     }
 }
