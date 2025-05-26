@@ -1,4 +1,4 @@
-package com.cardhaven.cardhaven.model;
+package com.cardhaven.cardhaven.model.dao;
 
 import java.sql.SQLException;
 import java.util.Collection;

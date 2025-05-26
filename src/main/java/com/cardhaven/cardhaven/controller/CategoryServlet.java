@@ -1,7 +1,7 @@
 package com.cardhaven.cardhaven.controller;
 
-import com.cardhaven.cardhaven.model.Category;
-import com.cardhaven.cardhaven.model.CategoryDAO;
+import com.cardhaven.cardhaven.model.beans.Category;
+import com.cardhaven.cardhaven.model.dao.CategoryDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,7 +19,7 @@ public class CategoryServlet extends HttpServlet {
 
     @Override
     public void init() {
-        DataSource ds = (DataSource) getServletContext().getAttribute("dataSource");
+        DataSource ds = (DataSource) getServletContext().getAttribute("ds");
         categoryDao = new CategoryDAO(ds);
     }
 

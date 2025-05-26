@@ -1,4 +1,4 @@
-package com.cardhaven.cardhaven.model;
+package com.cardhaven.cardhaven.model.beans;
 
 public class Category {
     private int id;

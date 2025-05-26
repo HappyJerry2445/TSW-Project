@@ -1,4 +1,6 @@
-package com.cardhaven.cardhaven.model;
+package com.cardhaven.cardhaven.model.dao;
+
+import com.cardhaven.cardhaven.model.beans.Category;
 
 import javax.sql.DataSource;
 import java.sql.*;

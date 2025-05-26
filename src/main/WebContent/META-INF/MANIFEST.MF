@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
 Created-By: IntelliJ IDEA
 Built-By: andrea
-Build-Jdk: 24.0.1
+Build-Jdk: Java 24.0.1
 
