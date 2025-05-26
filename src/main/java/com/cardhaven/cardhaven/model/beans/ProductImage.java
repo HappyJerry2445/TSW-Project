@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class ProdutcImage implements Serializable {
+public class ProductImage implements Serializable {
     private int imageId;
     private int productId;
     private byte[] imageData;
@@ -16,11 +16,11 @@ public class ProdutcImage implements Serializable {
     private byte[] thumbnailData;
     private String thumbnailMimeType;
 
-    public ProdutcImage() {
+    public ProductImage() {
 
     }
 
-    public ProdutcImage(int imageId, int productId, byte[] imageData, String mimeType, String description, int sortOrder, LocalDateTime createdAt, byte[] thumbnailData, String thumbnailMimeType) {
+    public ProductImage(int imageId, int productId, byte[] imageData, String mimeType, String description, int sortOrder, LocalDateTime createdAt, byte[] thumbnailData, String thumbnailMimeType) {
         this.imageId = imageId;
         this.productId = productId;
         this.imageData = imageData;
@@ -122,7 +122,7 @@ public class ProdutcImage implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        ProdutcImage that = (ProdutcImage) o;
+        ProductImage that = (ProductImage) o;
         return imageId == that.imageId && productId == that.productId && sortOrder == that.sortOrder && Objects.deepEquals(imageData, that.imageData) && Objects.equals(mimeType, that.mimeType) && Objects.equals(description, that.description) && Objects.equals(createdAt, that.createdAt) && Objects.deepEquals(thumbnailData, that.thumbnailData) && Objects.equals(thumbnailMimeType, that.thumbnailMimeType);
     }
 }
