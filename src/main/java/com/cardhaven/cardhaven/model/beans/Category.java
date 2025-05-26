@@ -1,6 +1,9 @@
 package com.cardhaven.cardhaven.model.beans;
 
-public class Category {
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Category implements Serializable {
     private int id;
     private String name;
     private Integer parentId;
@@ -57,4 +60,24 @@ public class Category {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", parentId=" + parentId +
+                ", type='" + type + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Category category = (Category) o;
+        return id == category.id && Objects.equals(name, category.name) && Objects.equals(parentId, category.parentId) && Objects.equals(type, category.type) && Objects.equals(description, category.description);
+    }
+
 }
