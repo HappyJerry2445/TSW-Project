@@ -125,7 +125,7 @@ public class CategoryDAO implements GenericDAO<Category, Integer> {
      */
     @Override
     public Category getById(Integer categoryID) throws SQLException {
-        if (categoryID <= 0) {
+        if (categoryID == null || categoryID <= 0) {
             throw new IllegalArgumentException("CategoryID must be a positive integer.");
         }
 
