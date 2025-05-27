@@ -22,12 +22,12 @@ public class TradingCard extends Product implements Serializable {
 
     // Constructor that calls super constructor for Product fields
     public TradingCard(int id, String sku, String productName, double basePrice, double currentPrice,
-                       int stockQuantity, int categoryId, ProductType productType,
+                       int stockQuantity, ProductType productType,
                        LocalDateTime createdAt, LocalDateTime lastUpdated, boolean isActive,
                        String cardSet, String cardNumber, Rarity rarity, CardCondition cardCondition,
                        String cardText, String artist, Integer yearPublished) {
         // Call Product constructor with matching parameters
-        super(id, sku, productName, basePrice, currentPrice, stockQuantity, categoryId, productType,
+        super(id, sku, productName, basePrice, currentPrice, stockQuantity, productType,
                 createdAt, lastUpdated, isActive);
         this.cardSet = cardSet;
         this.cardNumber = cardNumber;
