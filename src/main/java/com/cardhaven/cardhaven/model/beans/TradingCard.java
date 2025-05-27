@@ -1,34 +1,24 @@
+// TradingCard.java
 package com.cardhaven.cardhaven.model.beans;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
-// TradingCard now extends the updated Product bean
-public class TradingCard extends Product implements Serializable {
-
+public class TradingCard implements Serializable {
+    private int cardId; // Foreign key to Product
     private String cardSet;
     private String cardNumber;
-    private Rarity rarity;
-    private CardCondition cardCondition; // Can be null
-    private String cardText; // Can be null
-    private String artist; // Can be null
-    private Integer yearPublished; // Use Integer to allow nulls for YEAR type
+    private String rarity; // ENUM ('Common', 'Uncommon', 'Rare', 'Mythic', 'Secret')
+    private String cardCondition; // ENUM ('Mint', 'Near Mint', 'Lightly Played', 'Moderately Played', 'Heavily Played')
+    private String cardText;
+    private String artist;
+    private Integer yearPublished; // YEAR type in SQL is usually int in Java
 
-    // Constructors
     public TradingCard() {
-        super(); // Call default Product constructor
     }
 
-    // Constructor that calls super constructor for Product fields
-    public TradingCard(int id, String sku, String productName, double basePrice, double currentPrice,
-                       int stockQuantity, ProductType productType,
-                       LocalDateTime createdAt, LocalDateTime lastUpdated, boolean isActive,
-                       String cardSet, String cardNumber, Rarity rarity, CardCondition cardCondition,
-                       String cardText, String artist, Integer yearPublished) {
-        // Call Product constructor with matching parameters
-        super(id, sku, productName, basePrice, currentPrice, stockQuantity, productType,
-                createdAt, lastUpdated, isActive);
+    public TradingCard(int cardId, String cardSet, String cardNumber, String rarity, String cardCondition, String cardText, String artist, Integer yearPublished) {
+        this.cardId = cardId;
         this.cardSet = cardSet;
         this.cardNumber = cardNumber;
         this.rarity = rarity;
@@ -38,7 +28,15 @@ public class TradingCard extends Product implements Serializable {
         this.yearPublished = yearPublished;
     }
 
-    // Getters and Setters (only for TradingCard specific fields)
+    // Getters and Setters
+    public int getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(int cardId) {
+        this.cardId = cardId;
+    }
+
     public String getCardSet() {
         return cardSet;
     }
@@ -55,19 +53,19 @@ public class TradingCard extends Product implements Serializable {
         this.cardNumber = cardNumber;
     }
 
-    public Rarity getRarity() {
+    public String getRarity() {
         return rarity;
     }
 
-    public void setRarity(Rarity rarity) {
+    public void setRarity(String rarity) {
         this.rarity = rarity;
     }
 
-    public CardCondition getCardCondition() {
+    public String getCardCondition() {
         return cardCondition;
     }
 
-    public void setCardCondition(CardCondition cardCondition) {
+    public void setCardCondition(String cardCondition) {
         this.cardCondition = cardCondition;
     }
 
@@ -95,50 +93,37 @@ public class TradingCard extends Product implements Serializable {
         this.yearPublished = yearPublished;
     }
 
-    // Override equals and toString to include superclass fields and own fields
+    @Override
+    public String toString() {
+        return "TradingCard{" +
+                "cardId=" + cardId +
+                ", cardSet='" + cardSet + '\'' +
+                ", cardNumber='" + cardNumber + '\'' +
+                ", rarity='" + rarity + '\'' +
+                ", cardCondition='" + cardCondition + '\'' +
+                ", cardText='" + cardText + '\'' +
+                ", artist='" + artist + '\'' +
+                ", yearPublished=" + yearPublished +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false; // Important: call super.equals()
         TradingCard that = (TradingCard) o;
-        return Objects.equals(cardSet, that.cardSet) &&
+        return cardId == that.cardId &&
+                Objects.equals(cardSet, that.cardSet) &&
                 Objects.equals(cardNumber, that.cardNumber) &&
-                rarity == that.rarity &&
-                cardCondition == that.cardCondition &&
+                Objects.equals(rarity, that.rarity) &&
+                Objects.equals(cardCondition, that.cardCondition) &&
                 Objects.equals(cardText, that.cardText) &&
                 Objects.equals(artist, that.artist) &&
                 Objects.equals(yearPublished, that.yearPublished);
     }
 
     @Override
-    public String toString() {
-        return "TradingCard{" +
-                "cardSet='" + cardSet + '\'' +
-                ", cardNumber='" + cardNumber + '\'' +
-                ", rarity=" + rarity +
-                ", cardCondition=" + cardCondition +
-                ", cardText='" + cardText + '\'' +
-                ", artist='" + artist + '\'' +
-                ", yearPublished=" + yearPublished +
-                "} " + super.toString();
-    }
-
-    // Enum for Rarity
-    public enum Rarity {
-        Common,
-        Uncommon,
-        Rare,
-        Mythic,
-        Secret
-    }
-
-    // Enum for CardCondition
-    public enum CardCondition {
-        Mint,
-        Near_Mint,
-        Lightly_Played,
-        Moderately_Played,
-        Heavily_Played
+    public int hashCode() {
+        return Objects.hash(cardId, cardSet, cardNumber, rarity, cardCondition, cardText, artist, yearPublished);
     }
 }
