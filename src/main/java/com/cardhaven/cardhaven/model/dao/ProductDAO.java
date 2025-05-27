@@ -20,11 +20,7 @@ public class ProductDAO implements GenericDAO<Product, Integer> {
     }
 
     public void save(Product product) throws SQLException {
-        if (product == null || product.getSku() == null || product.getSku().trim().isEmpty() || product.getProductName() == null || product.getProductName().trim().isEmpty() ||
-                product.getBasePrice() < 0 || product.getCurrentPrice() < 0 || product.getStockQuantity() < 0 ||
-                product.getProductType() == null || product.getCreatedAt() == null) {
-            throw new IllegalArgumentException("Product, SKU, ProductName, BasePrice, CurrentPrice, StockQuantity, ProductType, CreatedAt cannot be null, empty or < 0.");
-        }
+        validateProduct(product);
 
         String sql;
         if (product.getProductId() == 0) {
@@ -151,5 +147,33 @@ public class ProductDAO implements GenericDAO<Product, Integer> {
         product.setActive(rs.getBoolean("IsActive"));
 
         return product;
+    }
+
+    private void validateProduct(Product product) {
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null.");
+        }
+        if (product.getSku() == null || product.getSku().trim().isEmpty()) {
+            throw new IllegalArgumentException("SKU cannot be null or empty.");
+        }
+        if (product.getProductName() == null || product.getProductName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Product Name cannot be null or empty.");
+        }
+        if (product.getBasePrice() <= 0) {
+            throw new IllegalArgumentException("Base Price must be positive.");
+        }
+        if (product.getCurrentPrice() <= 0) {
+            throw new IllegalArgumentException("Current Price must be positive.");
+        }
+        if (product.getStockQuantity() < 0) {
+            throw new IllegalArgumentException("Stock Quantity cannot be negative.");
+        }
+        if (product.getProductType() == null) {
+            throw new IllegalArgumentException("Product Type cannot be null.");
+        }
+        if (product.getCreatedAt() == null) {
+            throw new IllegalArgumentException("CreatedAt timestamp cannot be null.");
+        }
+
     }
 }
