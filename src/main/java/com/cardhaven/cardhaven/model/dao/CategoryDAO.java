@@ -188,6 +188,11 @@ public class CategoryDAO implements GenericDAO<Category, Integer> {
         return categories;
     }
 
+    @Override
+    public List<String> getAllowedOrderColumns() {
+        return ALLOWED_ORDER_COLUMNS;
+    }
+
     /**
      * Helper method to extract a Category object from a ResultSet.
      *

@@ -178,6 +178,11 @@ public class UserDAO implements GenericDAO<User, Integer> {
         return users;
     }
 
+    @Override
+    public List<String> getAllowedOrderColumns() {
+        return ALLOWED_ORDER_COLUMNS;
+    }
+
     /**
      * Retrieves a user by their email address.
      *

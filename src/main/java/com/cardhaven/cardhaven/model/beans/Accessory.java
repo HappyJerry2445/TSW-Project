@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Accessory extends Product implements Serializable {
-    // Note: AccessoryID is inherited from Product as 'id'
-
     private AccessoryType accessoryType;
     private String material; // Can be null
     private String color;    // Can be null
@@ -20,12 +18,12 @@ public class Accessory extends Product implements Serializable {
 
     // Constructor that calls super constructor for Product fields
     public Accessory(int id, String sku, String productName, double basePrice, double currentPrice,
-                     int stockQuantity, int categoryId, ProductType productType,
+                     int stockQuantity, ProductType productType,
                      LocalDateTime createdAt, LocalDateTime lastUpdated, boolean isActive,
                      AccessoryType accessoryType, String material, String color,
                      String dimensions, String compatibility) {
         // Call Product constructor with matching parameters
-        super(id, sku, productName, basePrice, currentPrice, stockQuantity, categoryId, productType,
+        super(id, sku, productName, basePrice, currentPrice, stockQuantity, productType,
                 createdAt, lastUpdated, isActive);
         this.accessoryType = accessoryType;
         this.material = material;
@@ -75,6 +73,21 @@ public class Accessory extends Product implements Serializable {
         this.compatibility = compatibility;
     }
 
+
+    // Override equals and toString to include superclass fields and own fields
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Accessory accessory = (Accessory) o;
+        return accessoryType == accessory.accessoryType &&
+                Objects.equals(material, accessory.material) &&
+                Objects.equals(color, accessory.color) &&
+                Objects.equals(dimensions, accessory.dimensions) &&
+                Objects.equals(compatibility, accessory.compatibility);
+    }
+
     @Override
     public String toString() {
         return "Accessory{" +
@@ -84,20 +97,6 @@ public class Accessory extends Product implements Serializable {
                 ", dimensions='" + dimensions + '\'' +
                 ", compatibility='" + compatibility + '\'' +
                 "} " + super.toString();
-    }
-
-    // Override equals and toString to include superclass fields and own fields
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false; // Important: call super.equals()
-        Accessory accessory = (Accessory) o;
-        return accessoryType == accessory.accessoryType &&
-                Objects.equals(material, accessory.material) &&
-                Objects.equals(color, accessory.color) &&
-                Objects.equals(dimensions, accessory.dimensions) &&
-                Objects.equals(compatibility, accessory.compatibility);
     }
 
     // Enum for AccessoryType

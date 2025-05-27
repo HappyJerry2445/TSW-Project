@@ -6,36 +6,28 @@ import java.util.Objects;
 
 public class Product implements Serializable {
 
-    public enum ProductType {
-        TradingCard,
-        Accessory,
-        BoosterPack
-    }
-
     private int productId;
     private String sku;
     private String productName;
     private double basePrice;
     private double currentPrice;
     private int stockQuantity;
-    private int categoryId;
     private ProductType productType;
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
     private boolean isActive;
 
-
     public Product() {
     }
 
-    public Product(int productId, String sku, String productName, double basePrice, double currentPrice, int stockQuantity, int categoryId, ProductType productType, LocalDateTime createdAt, LocalDateTime lastUpdated, boolean isActive) {
+
+    public Product(int productId, String sku, String productName, double basePrice, double currentPrice, int stockQuantity, ProductType productType, LocalDateTime createdAt, LocalDateTime lastUpdated, boolean isActive) {
         this.productId = productId;
         this.sku = sku;
         this.productName = productName;
         this.basePrice = basePrice;
         this.currentPrice = currentPrice;
         this.stockQuantity = stockQuantity;
-        this.categoryId = categoryId;
         this.productType = productType;
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
@@ -90,13 +82,6 @@ public class Product implements Serializable {
         this.stockQuantity = stockQuantity;
     }
 
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
 
     public ProductType getProductType() {
         return productType;
@@ -139,7 +124,6 @@ public class Product implements Serializable {
                 ", basePrice=" + basePrice +
                 ", currentPrice=" + currentPrice +
                 ", stockQuantity=" + stockQuantity +
-                ", categoryId=" + categoryId +
                 ", productType=" + productType +
                 ", createdAt=" + createdAt +
                 ", lastUpdated=" + lastUpdated +
@@ -151,6 +135,12 @@ public class Product implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return productId == product.productId && Double.compare(basePrice, product.basePrice) == 0 && Double.compare(currentPrice, product.currentPrice) == 0 && stockQuantity == product.stockQuantity && categoryId == product.categoryId && isActive == product.isActive && Objects.equals(sku, product.sku) && Objects.equals(productName, product.productName) && productType == product.productType && Objects.equals(createdAt, product.createdAt) && Objects.equals(lastUpdated, product.lastUpdated);
+        return productId == product.productId && Double.compare(basePrice, product.basePrice) == 0 && Double.compare(currentPrice, product.currentPrice) == 0 && stockQuantity == product.stockQuantity && isActive == product.isActive && Objects.equals(sku, product.sku) && Objects.equals(productName, product.productName) && productType == product.productType && Objects.equals(createdAt, product.createdAt) && Objects.equals(lastUpdated, product.lastUpdated);
+    }
+
+    public enum ProductType {
+        TradingCard,
+        Accessory,
+        BoosterPack
     }
 }
