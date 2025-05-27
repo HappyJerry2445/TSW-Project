@@ -1,23 +1,21 @@
-// src/main/java/com/cardhaven/cardhaven/model/dao/AccessoryDAO.java
+// AccessoryDAO.java
 package com.cardhaven.cardhaven.model.dao;
 
 import com.cardhaven.cardhaven.model.beans.Accessory;
-import com.cardhaven.cardhaven.model.beans.Accessory.AccessoryType;
-import com.cardhaven.cardhaven.model.beans.Product;
 
 import javax.sql.DataSource;
-import java.sql.*;
-import java.time.LocalDateTime;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 public class AccessoryDAO implements GenericDAO<Accessory, Integer> {
 
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
-            "ProductId", "SKU", "ProductName", "BasePrice", "CurrentPrice", "StockQuantity",
-            "AccessoryID", "AccessoryType", "Material", "Color", "Dimensions", "Compatibility",
-            "CreatedAt", "LastUpdated", "IsActive"
+            "AccessoryID", "AccessoryType", "Material", "Color", "Dimensions", "Compatibility"
     );
-    private static final String DEFAULT_ORDER_COLUMN = "ProductId";
+    private static final String DEFAULT_ORDER_COLUMN = "AccessoryID";
 
     private final DataSource dataSource;
 
@@ -32,211 +30,171 @@ public class AccessoryDAO implements GenericDAO<Accessory, Integer> {
 
     /**
      * Saves an Accessory bean to the database.
-     * If the ProductId (AccessoryID) is 0, it performs an INSERT operation (first to Product, then to Accessory).
-     * Otherwise, it performs an UPDATE operation (first to Product, then to Accessory).
-     * This method manages its own transaction.
+     * This method will attempt to INSERT if the AccessoryID does not exist, or UPDATE if it does.
+     * Note: The `AccessoryID` for an Accessory should correspond to a `ProductID` from the `Product` table.
+     * It's assumed that a `Product` entry has already been created and its ID is set in the `Accessory` object
+     * before calling this save method for a new accessory.
      *
      * @param accessory The Accessory object to save.
      * @throws SQLException             if a database access error occurs.
-     * @throws IllegalArgumentException if accessory or essential fields are null/empty.
+     * @throws IllegalArgumentException if critical accessory fields are null or empty/invalid.
      */
     @Override
     public void save(Accessory accessory) throws SQLException {
-        validateAccessory(accessory);
+        if (accessory == null || accessory.getAccessoryId() == 0 ||
+                accessory.getAccessoryType() == null || accessory.getAccessoryType().trim().isEmpty()) {
+            throw new IllegalArgumentException("Accessory, AccessoryID (must be set), or AccessoryType cannot be null or empty/zero.");
+        }
 
-        Connection connection = null;
-        try {
-            connection = dataSource.getConnection();
-            connection.setAutoCommit(false); // Start transaction for atomicity
+        // Check if the accessory already exists to decide between INSERT and UPDATE
+        boolean exists = getById(accessory.getAccessoryId()) != null;
 
-            // 1. Save the Product part (INSERT or UPDATE)
-            String productSql;
-            if (accessory.getProductId() == 0) { // New Product (and Accessory)
-                productSql = "INSERT INTO Product (SKU, ProductName, BasePrice, CurrentPrice, StockQuantity, ProductType, CreatedAt, LastUpdated, IsActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                try (PreparedStatement ps = connection.prepareStatement(productSql, Statement.RETURN_GENERATED_KEYS)) {
-                    ps.setString(1, accessory.getSku());
-                    ps.setString(2, accessory.getProductName());
-                    ps.setDouble(3, accessory.getBasePrice());
-                    ps.setDouble(4, accessory.getCurrentPrice());
-                    ps.setDouble(5, accessory.getStockQuantity());
-                    ps.setString(6, Product.ProductType.Accessory.name()); // Force ProductType to Accessory
-                    ps.setTimestamp(7, (accessory.getCreatedAt() != null) ? Timestamp.valueOf(accessory.getCreatedAt()) : Timestamp.valueOf(LocalDateTime.now()));
-                    ps.setTimestamp(8, (accessory.getLastUpdated() != null) ? Timestamp.valueOf(accessory.getLastUpdated()) : null);
-                    ps.setBoolean(9, accessory.isActive());
-
-                    int affectedRows = ps.executeUpdate();
-                    if (affectedRows == 0) {
-                        throw new SQLException("Creating product failed, no rows affected.");
-                    }
-
-                    try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                        if (generatedKeys.next()) {
-                            accessory.setProductId(generatedKeys.getInt(1)); // Set the generated Product ID
-                        } else {
-                            throw new SQLException("Creating product failed, no ID obtained.");
-                        }
-                    }
+        String sql;
+        if (!exists) { // New accessory (INSERT)
+            sql = "INSERT INTO Accessory (AccessoryID, AccessoryType, Material, Color, Dimensions, Compatibility) VALUES (?, ?, ?, ?, ?, ?)";
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setInt(1, accessory.getAccessoryId()); // AccessoryID is the PK, must be set
+                ps.setString(2, accessory.getAccessoryType());
+                // Handle nullable Material
+                if (accessory.getMaterial() != null && !accessory.getMaterial().trim().isEmpty()) {
+                    ps.setString(3, accessory.getMaterial());
+                } else {
+                    ps.setNull(3, java.sql.Types.VARCHAR);
                 }
-            } else { // Existing Product (UPDATE)
-                productSql = "UPDATE Product SET SKU = ?, ProductName = ?, BasePrice = ?, CurrentPrice = ?, StockQuantity = ?, ProductType = ?, LastUpdated = ?, IsActive = ? WHERE ProductId = ?";
-                try (PreparedStatement ps = connection.prepareStatement(productSql)) {
-                    ps.setString(1, accessory.getSku());
-                    ps.setString(2, accessory.getProductName());
-                    ps.setDouble(3, accessory.getBasePrice());
-                    ps.setDouble(4, accessory.getCurrentPrice());
-                    ps.setDouble(5, accessory.getStockQuantity());
-                    ps.setString(6, Product.ProductType.Accessory.name()); // Force ProductType to Accessory
-                    ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now())); // Update LastUpdated
-                    ps.setBoolean(8, accessory.isActive());
-                    ps.setInt(9, accessory.getProductId());
-                    ps.executeUpdate();
+                // Handle nullable Color
+                if (accessory.getColor() != null && !accessory.getColor().trim().isEmpty()) {
+                    ps.setString(4, accessory.getColor());
+                } else {
+                    ps.setNull(4, java.sql.Types.VARCHAR);
+                }
+                // Handle nullable Dimensions
+                if (accessory.getDimensions() != null && !accessory.getDimensions().trim().isEmpty()) {
+                    ps.setString(5, accessory.getDimensions());
+                } else {
+                    ps.setNull(5, java.sql.Types.VARCHAR);
+                }
+                // Handle nullable Compatibility
+                if (accessory.getCompatibility() != null && !accessory.getCompatibility().trim().isEmpty()) {
+                    ps.setString(6, accessory.getCompatibility());
+                } else {
+                    ps.setNull(6, java.sql.Types.VARCHAR);
+                }
+
+                int affectedRows = ps.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new SQLException("Creating accessory failed, no rows affected. Ensure Product with AccessoryID exists.");
                 }
             }
+        } else { // Existing accessory (UPDATE)
+            sql = "UPDATE Accessory SET AccessoryType = ?, Material = ?, Color = ?, Dimensions = ?, Compatibility = ? WHERE AccessoryID = ?";
+            try (Connection connection = dataSource.getConnection();
+                 PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setString(1, accessory.getAccessoryType());
+                // Handle nullable Material
+                if (accessory.getMaterial() != null && !accessory.getMaterial().trim().isEmpty()) {
+                    ps.setString(2, accessory.getMaterial());
+                } else {
+                    ps.setNull(2, java.sql.Types.VARCHAR);
+                }
+                // Handle nullable Color
+                if (accessory.getColor() != null && !accessory.getColor().trim().isEmpty()) {
+                    ps.setString(3, accessory.getColor());
+                } else {
+                    ps.setNull(3, java.sql.Types.VARCHAR);
+                }
+                // Handle nullable Dimensions
+                if (accessory.getDimensions() != null && !accessory.getDimensions().trim().isEmpty()) {
+                    ps.setString(4, accessory.getDimensions());
+                } else {
+                    ps.setNull(4, java.sql.Types.VARCHAR);
+                }
+                // Handle nullable Compatibility
+                if (accessory.getCompatibility() != null && !accessory.getCompatibility().trim().isEmpty()) {
+                    ps.setString(5, accessory.getCompatibility());
+                } else {
+                    ps.setNull(5, java.sql.Types.VARCHAR);
+                }
+                ps.setInt(6, accessory.getAccessoryId());
 
-            // 2. Save the Accessory specific part (INSERT or UPDATE)
-            String accessorySql;
-            if (getByIdInternal(accessory.getProductId(), connection) == null) { // Check if Accessory entry exists for this ProductId
-                accessorySql = "INSERT INTO Accessory (AccessoryID, AccessoryType, Material, Color, Dimensions, Compatibility) VALUES (?, ?, ?, ?, ?, ?)";
-                try (PreparedStatement ps = connection.prepareStatement(accessorySql)) {
-                    ps.setInt(1, accessory.getProductId()); // Use the Product ID as AccessoryID
-                    ps.setString(2, accessory.getAccessoryType().name());
-                    setNullableString(ps, 3, accessory.getMaterial());
-                    setNullableString(ps, 4, accessory.getColor());
-                    setNullableString(ps, 5, accessory.getDimensions());
-                    setNullableString(ps, 6, accessory.getCompatibility());
-                    ps.executeUpdate();
-                }
-            } else { // Existing Accessory (UPDATE)
-                accessorySql = "UPDATE Accessory SET AccessoryType = ?, Material = ?, Color = ?, Dimensions = ?, Compatibility = ? WHERE AccessoryID = ?";
-                try (PreparedStatement ps = connection.prepareStatement(accessorySql)) {
-                    ps.setString(1, accessory.getAccessoryType().name());
-                    setNullableString(ps, 2, accessory.getMaterial());
-                    setNullableString(ps, 3, accessory.getColor());
-                    setNullableString(ps, 4, accessory.getDimensions());
-                    setNullableString(ps, 5, accessory.getCompatibility());
-                    ps.setInt(6, accessory.getProductId()); // Use the Product ID as AccessoryID for WHERE clause
-                    ps.executeUpdate();
-                }
-            }
-            connection.commit(); // Commit transaction if all successful
-        } catch (SQLException e) {
-            if (connection != null) {
-                connection.rollback(); // Rollback on error
-            }
-            System.err.println("Error saving Accessory: " + e.getMessage());
-            throw e;
-        } finally {
-            if (connection != null) {
-                connection.setAutoCommit(true); // Reset auto-commit
-                connection.close(); // Close connection
+                ps.executeUpdate();
             }
         }
     }
 
     /**
-     * Deletes an Accessory from the database by its ID (which is also ProductID).
-     * This method manages its own transaction and explicitly deletes from both tables.
+     * Deletes an Accessory from the database.
+     * Note: Deleting an Accessory by its AccessoryID will also implicitly mean the associated Product
+     * might need to be handled, depending on the foreign key constraints and application logic.
      *
-     * @param id The ID (which is also ProductID) of the Accessory to delete.
-     * @return true if the Accessory was deleted, false otherwise.
+     * @param id The ID of the accessory to delete.
+     * @return true if the accessory was deleted, false otherwise.
      * @throws SQLException             if a database access error occurs.
-     * @throws IllegalArgumentException if the ID is null or zero.
+     * @throws IllegalArgumentException if the accessory ID is null or zero.
      */
     @Override
     public boolean delete(Integer id) throws SQLException {
         if (id == null || id == 0) {
-            throw new IllegalArgumentException("ID cannot be null or zero for deletion.");
+            throw new IllegalArgumentException("AccessoryID cannot be null or zero for deletion.");
         }
 
-        Connection connection = null;
-        try {
-            connection = dataSource.getConnection();
-            connection.setAutoCommit(false); // Start transaction for atomicity
-
-            // Delete from Accessory table first
-            String deleteAccessorySql = "DELETE FROM Accessory WHERE AccessoryID = ?";
-            try (PreparedStatement ps = connection.prepareStatement(deleteAccessorySql)) {
-                ps.setInt(1, id);
-                ps.executeUpdate();
-            }
-
-            // Then delete from Product table
-            String deleteProductSql = "DELETE FROM Product WHERE ProductId = ?";
-            try (PreparedStatement ps = connection.prepareStatement(deleteProductSql)) {
-                ps.setInt(1, id);
-                int affectedRows = ps.executeUpdate();
-                if (affectedRows == 0) {
-                    connection.rollback(); // Rollback if product not deleted.
-                    return false;
-                }
-            }
-            connection.commit(); // Commit transaction if both successful
-            return true;
-        } catch (SQLException e) {
-            if (connection != null) {
-                connection.rollback(); // Rollback on error
-            }
-            System.err.println("Error deleting Accessory with ID " + id + ": " + e.getMessage());
-            throw e;
-        } finally {
-            if (connection != null) {
-                connection.setAutoCommit(true); // Reset auto-commit
-                connection.close(); // Close connection
-            }
-        }
-    }
-
-    /**
-     * Retrieves an Accessory by its ProductID (which is also the AccessoryID).
-     * Performs a JOIN to fetch data from both Product and Accessory tables.
-     *
-     * @param id The ID of the Accessory to retrieve.
-     * @return The Accessory object if found, null otherwise.
-     * @throws SQLException if a database access error occurs.
-     */
-    @Override
-    public Accessory getById(Integer id) throws SQLException {
-        if (id == null || id == 0) {
-            return null;
-        }
-
-        String sql = "SELECT p.ProductId, p.SKU, p.ProductName, p.BasePrice, p.CurrentPrice, p.StockQuantity, p.ProductType, p.CreatedAt, p.LastUpdated, p.IsActive, " +
-                "a.AccessoryID, a.AccessoryType, a.Material, a.Color, a.Dimensions, a.Compatibility " +
-                "FROM Product p JOIN Accessory a ON p.ProductId = a.AccessoryID WHERE p.ProductId = ?";
-
+        String sql = "DELETE FROM Accessory WHERE AccessoryID = ?";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return extractAccessoryFromResultSet(rs);
-                }
-            }
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
         }
-        return null;
     }
 
     /**
-     * Retrieves all Accessories from the database, optionally ordered by a specified column.
-     * Performs a JOIN to fetch data from both Product and Accessory tables.
+     * Retrieves an Accessory from the database by its primary key (AccessoryID).
      *
-     * @param order The column name to order the results by (e.g., "ProductName", "AccessoryType").
+     * @param accessoryId The ID of the accessory to retrieve.
+     * @return The Accessory object if found, or null if not found.
+     * @throws SQLException             if a database access error occurs.
+     * @throws IllegalArgumentException if the accessory ID is null or not positive.
+     */
+    @Override
+    public Accessory getById(Integer accessoryId) throws SQLException {
+        if (accessoryId == null || accessoryId <= 0) {
+            throw new IllegalArgumentException("AccessoryID must be a positive integer.");
+        }
+
+        String sql = "SELECT AccessoryID, AccessoryType, Material, Color, Dimensions, Compatibility FROM Accessory WHERE AccessoryID = ?";
+        Accessory accessory = null;
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, accessoryId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    accessory = extractAccessoryFromResultSet(rs);
+                }
+            }
+        }
+        return accessory;
+    }
+
+    /**
+     * Retrieves all accessories from the database, optionally ordered by a specified column.
+     *
+     * @param order The column name to order the results by. Pass null or an empty string for no specific order.
      * @return A collection of Accessory objects.
      * @throws SQLException if a database access error occurs.
      */
     @Override
     public Collection<Accessory> getAll(String order) throws SQLException {
-        List<Accessory> accessories = new ArrayList<>();
-        StringBuilder sql = new StringBuilder(
-                "SELECT p.ProductId, p.SKU, p.ProductName, p.BasePrice, p.CurrentPrice, p.StockQuantity, p.ProductType, p.CreatedAt, p.LastUpdated, p.IsActive, " +
-                        "a.AccessoryID, a.AccessoryType, a.Material, a.Color, a.Dimensions, a.Compatibility " +
-                        "FROM Product p JOIN Accessory a ON p.ProductId = a.AccessoryID " +
-                        "WHERE p.ProductType = 'Accessory'" // Ensure we only get Accessory products
-        );
-
+        Collection<Accessory> accessories = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT AccessoryID, AccessoryType, Material, Color, Dimensions, Compatibility FROM Accessory");
         String actualOrderColumn = DEFAULT_ORDER_COLUMN;
-        if (order != null && !order.trim().isEmpty() && ALLOWED_ORDER_COLUMNS.contains(order)) {
-            actualOrderColumn = order; // Use the provided order column
+
+        if (order != null && !order.trim().isEmpty()) {
+            String trimmedOrder = order.trim();
+            if (ALLOWED_ORDER_COLUMNS.contains(trimmedOrder)) {
+                actualOrderColumn = trimmedOrder;
+            } else {
+                System.err.println("Warning: Attempted to order by invalid column: '" + order + "'. Falling back to default order.");
+            }
         }
         sql.append(" ORDER BY ").append(actualOrderColumn);
 
@@ -256,106 +214,20 @@ public class AccessoryDAO implements GenericDAO<Accessory, Integer> {
     }
 
     /**
-     * Helper method to extract a complete Accessory object from a ResultSet,
-     * joining data from both Product and Accessory tables.
+     * Helper method to extract an Accessory object from a ResultSet.
      *
-     * @param rs The ResultSet containing joined product and accessory data.
+     * @param rs The ResultSet containing accessory data.
      * @return A populated Accessory object.
      * @throws SQLException if a database access error occurs.
      */
     private Accessory extractAccessoryFromResultSet(ResultSet rs) throws SQLException {
         Accessory accessory = new Accessory();
-        // Product fields
-        accessory.setProductId(rs.getInt("ProductId"));
-        accessory.setSku(rs.getString("SKU"));
-        accessory.setProductName(rs.getString("ProductName"));
-        accessory.setBasePrice(rs.getDouble("BasePrice"));
-        accessory.setCurrentPrice(rs.getDouble("CurrentPrice"));
-        accessory.setStockQuantity(rs.getInt("StockQuantity"));
-        accessory.setProductType(Product.ProductType.valueOf(rs.getString("ProductType")));
-
-        Timestamp createdAtTimestamp = rs.getTimestamp("CreatedAt");
-        if (createdAtTimestamp != null) {
-            accessory.setCreatedAt(createdAtTimestamp.toLocalDateTime());
-        }
-        Timestamp lastUpdatedTimestamp = rs.getTimestamp("LastUpdated");
-        if (lastUpdatedTimestamp != null) {
-            accessory.setLastUpdated(lastUpdatedTimestamp.toLocalDateTime());
-        }
-        accessory.setActive(rs.getBoolean("IsActive"));
-
-        // Accessory specific fields
-        String accessoryTypeStr = rs.getString("AccessoryType");
-        if (accessoryTypeStr != null) {
-            accessory.setAccessoryType(AccessoryType.valueOf(accessoryTypeStr));
-        }
-
-        accessory.setMaterial(rs.getString("Material"));
-        accessory.setColor(rs.getString("Color"));
-        accessory.setDimensions(rs.getString("Dimensions"));
-        accessory.setCompatibility(rs.getString("Compatibility"));
-
+        accessory.setAccessoryId(rs.getInt("AccessoryID"));
+        accessory.setAccessoryType(rs.getString("AccessoryType"));
+        accessory.setMaterial(rs.getString("Material")); // This can be null
+        accessory.setColor(rs.getString("Color")); // This can be null
+        accessory.setDimensions(rs.getString("Dimensions")); // This can be null
+        accessory.setCompatibility(rs.getString("Compatibility")); // This can be null
         return accessory;
-    }
-
-    /**
-     * Helper method to check if an Accessory specific entry exists for a given ProductID,
-     * without fetching product details. Used internally for save logic's update path.
-     */
-    private Accessory getByIdInternal(int accessoryId, Connection connection) throws SQLException {
-        String sql = "SELECT AccessoryID FROM Accessory WHERE AccessoryID = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, accessoryId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    Accessory acc = new Accessory();
-                    acc.setProductId(rs.getInt("AccessoryID"));
-                    return acc;
-                }
-            }
-        }
-        return null;
-    }
-
-    // Helper methods to set nullable PreparedStatement parameters
-    private void setNullableString(PreparedStatement ps, int index, String value) throws SQLException {
-        if (value != null && !value.trim().isEmpty()) {
-            ps.setString(index, value);
-        } else {
-            ps.setNull(index, java.sql.Types.VARCHAR);
-        }
-    }
-
-    private void validateAccessory(Accessory accessory) {
-        if (accessory == null) {
-            throw new IllegalArgumentException("Accessory cannot be null.");
-        }
-        // Product validations (replicated from ProductDAO)
-        if (accessory.getSku() == null || accessory.getSku().trim().isEmpty()) {
-            throw new IllegalArgumentException("SKU cannot be null or empty.");
-        }
-        if (accessory.getProductName() == null || accessory.getProductName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Product Name cannot be null or empty.");
-        }
-        if (accessory.getBasePrice() <= 0) {
-            throw new IllegalArgumentException("Base Price must be positive.");
-        }
-        if (accessory.getCurrentPrice() <= 0) {
-            throw new IllegalArgumentException("Current Price must be positive.");
-        }
-        if (accessory.getStockQuantity() < 0) {
-            throw new IllegalArgumentException("Stock Quantity cannot be negative.");
-        }
-        // Ensure ProductType is set to Accessory
-        if (accessory.getProductType() != Product.ProductType.Accessory) {
-            System.err.println("Warning: Accessory's ProductType was not 'Accessory'. Setting it to 'Accessory'.");
-            accessory.setProductType(Product.ProductType.Accessory);
-        }
-        // CreatedAt will be handled in save if null for new products
-
-        // Accessory specific validations
-        if (accessory.getAccessoryType() == null) {
-            throw new IllegalArgumentException("Accessory Type cannot be null.");
-        }
     }
 }
