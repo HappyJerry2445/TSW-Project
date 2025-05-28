@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
-
+//TODO Remove this servlet
 @WebServlet("/categories")
 public class CategoryServlet extends HttpServlet {
     private CategoryDAO categoryDao;
