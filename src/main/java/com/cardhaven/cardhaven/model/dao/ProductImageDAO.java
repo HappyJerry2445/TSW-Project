@@ -7,7 +7,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class ProductImageDAO implements GenericDAO<ProductImageDAO, Integer> {
+public class ProductImageDAO implements GenericDAO<ProductImage, Integer> {
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
             "ImageId", "ProductId", "ImageData", "MimeType", "Description", "SortOrder", "CreatedAt", "ThumbnailData", "thumbnailMimeType"
     );
@@ -24,7 +24,7 @@ public class ProductImageDAO implements GenericDAO<ProductImageDAO, Integer> {
         validateProductImage(productImage);
 
         String sql;
-        if(productImage.getImageId() == 0) {
+        if (productImage.getImageId() == 0) {
             sql = "INSERT INTO ProductImage (ImageId, ProductId, ImageData, MimeType, Description, SortOrder, CreatedAt, ThumbnailData, thumbnailMimeType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setInt(1, productImage.getImageId());
@@ -82,7 +82,7 @@ public class ProductImageDAO implements GenericDAO<ProductImageDAO, Integer> {
         }
     }
 
-    /*public ProductImage getById(Integer id) throws SQLException {
+    public ProductImage getById(Integer id) throws SQLException {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ImageID must be a positive integer.");
         }
@@ -98,9 +98,9 @@ public class ProductImageDAO implements GenericDAO<ProductImageDAO, Integer> {
             }
         }
         return productImage;
-    }*/
+    }
 
-    /*public Collection<ProductImage> getAll(String order) throws SQLException {
+    public Collection<ProductImage> getAll(String order) throws SQLException {
         Collection<ProductImage> images = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM ProductImage");
 
@@ -122,7 +122,7 @@ public class ProductImageDAO implements GenericDAO<ProductImageDAO, Integer> {
             }
         }
         return images;
-    }*/
+    }
 
     public List<String> getAllowedOrderColumns() {
         return ALLOWED_ORDER_COLUMNS;
