@@ -46,4 +46,15 @@ body {
     padding: 0 var(--spacing-unit);
 }
 
+a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--accent-bright);
+}
+
+
 
