@@ -370,3 +370,54 @@ footer {
     border-radius: 2px;
 }
 
+/* Responsive (Basic) */
+@media (max-width: 992px) {
+    .main-nav {
+        display: none; /* TODO: To be handled by JS for mobile menu */
+    }
+
+    .mobile-menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: var(--text-light);
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    header .container {
+        flex-wrap: wrap; /* Allow search bar to wrap if needed */
+    }
+
+    .header-actions .search-bar {
+        order: 3; /* Move search bar below logo/nav on small screens if it wraps */
+        width: 100%;
+        margin-top: 0.5rem;
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    .footer-columns {
+        grid-template-columns: 1fr; /* Stack footer columns */
+        text-align: center;
+    }
+
+    .social-icons {
+        text-align: center;
+    }
+}
+
+
