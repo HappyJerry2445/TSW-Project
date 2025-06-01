@@ -14,6 +14,14 @@ public class Cart implements Serializable {
     public Cart() {
     }
 
+    public Cart(LocalDateTime createdAt, LocalDateTime lastUpdated, int cartId, Integer userId, String sessionId) {
+        this.createdAt = createdAt;
+        this.lastUpdated = lastUpdated;
+        this.cartId = cartId;
+        this.userId = userId;
+        this.sessionId = sessionId;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
