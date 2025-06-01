@@ -5,6 +5,7 @@
     --secondary-blue: #2541b2;
     --accent-bright: #06bee1;
     --text-light: #ffffff;
+    --text-light-grey: #bdc3c7;
     --text-dark: #333333;
     --background-light: #ffffff;
     --background-grey: #f4f6f8;
@@ -225,7 +226,7 @@ header .container {
 }
 
 .search-bar input[type="search"]::placeholder {
-    color: #bdc3c7;
+    color: var(--text-light-grey);
 }
 
 .search-bar button {
@@ -264,6 +265,55 @@ header .container {
 /* TODO: For mobile */
 .mobile-menu-toggle {
     display: none;
+}
+
+
+/* Footer */
+footer {
+    background-color: var(--primary-dark);
+    color: var(--text-light-grey); /* Lighter grey for footer text */
+    padding: calc(var(--spacing-unit) * 3) 0 calc(var(--spacing-unit) * 1.5);
+    margin-top: calc(var(--spacing-unit) * 3);
+}
+
+.footer-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+.footer-column h4 {
+    font-family: var(--font-heading);
+    color: var(--accent-bright);
+    margin-bottom: var(--spacing-unit);
+    font-size: 1.2rem;
+}
+
+.footer-column ul {
+    list-style: none;
+}
+
+.footer-column ul li {
+    margin-bottom: calc(var(--spacing-unit) * 0.5);
+}
+
+.footer-column ul li a {
+    color: var(--text-light-grey);
+}
+
+.footer-column ul li a:hover {
+    color: var(--text-light);
+}
+
+.social-icons a {
+    color: var(--text-light-grey);
+    font-size: 1.5rem;
+    margin-right: var(--spacing-unit);
+}
+
+.social-icons a:hover {
+    color: var(--accent-bright);
 }
 
 
