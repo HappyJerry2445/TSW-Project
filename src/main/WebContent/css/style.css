@@ -85,4 +85,53 @@ img {
     display: block;
 }
 
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: calc(var(--spacing-unit) * 0.6) calc(var(--spacing-unit) * 1.2);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    text-align: center;
+    border-radius: var(--border-radius-md);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: var(--text-light);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-blue);
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow-light);
+    color: var(--text-light);
+}
+
+.btn-accent {
+    background-color: var(--accent-bright);
+    color: var(--primary-dark);
+}
+
+.btn-accent:hover {
+    background-color: #05a8c7; /* Slightly darker accent */
+    transform: translateY(-2px);
+    box-shadow: var(--box-shadow-light);
+    color: var(--primary-dark);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+}
+
+.btn-outline:hover {
+    background-color: var(--primary-blue);
+    color: var(--text-light);
+}
+
 
