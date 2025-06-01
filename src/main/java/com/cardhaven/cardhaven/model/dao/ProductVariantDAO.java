@@ -1,12 +1,12 @@
 package com.cardhaven.cardhaven.model.dao;
 
-import com.cardhaven.cardhaven.model.beans.ProductVariant;
+import com.cardhaven.cardhaven.model.dto.ProductVariantDTO;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
-public class ProductVariantDAO implements GenericDAO<ProductVariant, Integer> {
+public class ProductVariantDAO implements GenericDAO<ProductVariantDTO, Integer> {
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
             "VariantId", "ProductId", "VariantName", "Attributes", "AdditionalPrice", "Stock"
     );
@@ -18,19 +18,19 @@ public class ProductVariantDAO implements GenericDAO<ProductVariant, Integer> {
         this.dataSource = Objects.requireNonNull(dataSource, "DataSource cannot be null.");
     }
 
-    public void save(ProductVariant productVariant) throws SQLException {
-        validateProductVariant(productVariant);
+    public void save(ProductVariantDTO productVariantDTO) throws SQLException {
+        validateProductVariant(productVariantDTO);
 
         String sql;
-        if (productVariant.getVariantId() == 0) {
+        if (productVariantDTO.getVariantId() == 0) {
             sql = "INSERT INTO ProductVariant (VariantId, ProductId, VariantName, Attributes, AdditionalPrice, Stock) VALUES (?, ?, ?, ?, ?, ?)";
             try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setInt(1, productVariant.getVariantId());
-                ps.setInt(2, productVariant.getProductId());
-                ps.setString(3, productVariant.getVariantName());
-                ps.setString(4, productVariant.getAttributes());
-                ps.setDouble(5, productVariant.getAdditionalPrice());
-                ps.setInt(6, productVariant.getStock());
+                ps.setInt(1, productVariantDTO.getVariantId());
+                ps.setInt(2, productVariantDTO.getProductId());
+                ps.setString(3, productVariantDTO.getVariantName());
+                ps.setString(4, productVariantDTO.getAttributes());
+                ps.setDouble(5, productVariantDTO.getAdditionalPrice());
+                ps.setInt(6, productVariantDTO.getStock());
 
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
@@ -39,7 +39,7 @@ public class ProductVariantDAO implements GenericDAO<ProductVariant, Integer> {
 
                 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        productVariant.setVariantId(generatedKeys.getInt(1));
+                        productVariantDTO.setVariantId(generatedKeys.getInt(1));
                     } else {
                         throw new SQLException("Creating product variant failed, no ID obtained.");
                     }
@@ -48,11 +48,11 @@ public class ProductVariantDAO implements GenericDAO<ProductVariant, Integer> {
         } else {
             sql = "UPDATE ProductVariant SET ProductId = ?, VariantName = ?, Attributes = ?, AdditionalPrice = ?, Stock = ? WHERE VariantId = ?";
             try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setInt(1, productVariant.getProductId());
-                ps.setString(2, productVariant.getVariantName());
-                ps.setString(3, productVariant.getAttributes());
-                ps.setDouble(4, productVariant.getAdditionalPrice());
-                ps.setInt(5, productVariant.getStock());
+                ps.setInt(1, productVariantDTO.getProductId());
+                ps.setString(2, productVariantDTO.getVariantName());
+                ps.setString(3, productVariantDTO.getAttributes());
+                ps.setDouble(4, productVariantDTO.getAdditionalPrice());
+                ps.setInt(5, productVariantDTO.getStock());
 
                 ps.executeUpdate();
             }
@@ -72,24 +72,24 @@ public class ProductVariantDAO implements GenericDAO<ProductVariant, Integer> {
         }
     }
 
-    public ProductVariant getById(Integer id) throws SQLException {
+    public ProductVariantDTO getById(Integer id) throws SQLException {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("Product Variant id must be a positive integer.");
         }
         String sql = "SELECT * FROM ProductVariant WHERE VariantId = ?";
-        ProductVariant productVariant = null;
+        ProductVariantDTO productVariantDTO = null;
         try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                productVariant = extractProductVariantFromResulSet(rs);
+                productVariantDTO = extractProductVariantFromResulSet(rs);
             }
-            return productVariant;
+            return productVariantDTO;
         }
     }
 
-    public Collection<ProductVariant> getAll(String order) throws SQLException {
-        Collection<ProductVariant> productVariants = new ArrayList<>();
+    public Collection<ProductVariantDTO> getAll(String order) throws SQLException {
+        Collection<ProductVariantDTO> productVariantDTOS = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM ProductVariant");
 
         String actualOrderColumn = DEFAULT_ORDER_COLUMN;
@@ -106,50 +106,50 @@ public class ProductVariantDAO implements GenericDAO<ProductVariant, Integer> {
         try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                productVariants.add(extractProductVariantFromResulSet(rs));
+                productVariantDTOS.add(extractProductVariantFromResulSet(rs));
             }
         }
-        return productVariants;
+        return productVariantDTOS;
     }
 
     public List<String> getAllowedOrderColumns() {
         return new ArrayList<>(ALLOWED_ORDER_COLUMNS);
     }
 
-    private ProductVariant extractProductVariantFromResulSet(ResultSet rs) throws SQLException {
-        ProductVariant productVariant = new ProductVariant();
-        productVariant.setVariantId(rs.getInt("VariantId"));
-        productVariant.setProductId(rs.getInt("ProductId"));
-        productVariant.setVariantName(rs.getString("VariantName"));
-        productVariant.setAttributes(rs.getString("Attributes"));
-        productVariant.setAdditionalPrice(rs.getDouble("AdditionalPrice"));
-        productVariant.setStock(rs.getInt("Stock"));
+    private ProductVariantDTO extractProductVariantFromResulSet(ResultSet rs) throws SQLException {
+        ProductVariantDTO productVariantDTO = new ProductVariantDTO();
+        productVariantDTO.setVariantId(rs.getInt("VariantId"));
+        productVariantDTO.setProductId(rs.getInt("ProductId"));
+        productVariantDTO.setVariantName(rs.getString("VariantName"));
+        productVariantDTO.setAttributes(rs.getString("Attributes"));
+        productVariantDTO.setAdditionalPrice(rs.getDouble("AdditionalPrice"));
+        productVariantDTO.setStock(rs.getInt("Stock"));
 
-        return productVariant;
+        return productVariantDTO;
     }
 
-    private void validateProductVariant(ProductVariant productVariant) {
-        if (productVariant == null) {
+    private void validateProductVariant(ProductVariantDTO productVariantDTO) {
+        if (productVariantDTO == null) {
             throw new IllegalArgumentException("Product variant cannot be null.");
         }
 
-        if (productVariant.getProductId() <= 0) {
+        if (productVariantDTO.getProductId() <= 0) {
             throw new IllegalArgumentException("ProductId must be a positive integer.");
         }
 
-        if (productVariant.getVariantName() == null || productVariant.getVariantName().trim().isEmpty()) {
+        if (productVariantDTO.getVariantName() == null || productVariantDTO.getVariantName().trim().isEmpty()) {
             throw new IllegalArgumentException("Variant name cannot be null or empty.");
         }
 
-        if (productVariant.getAttributes() == null) {
+        if (productVariantDTO.getAttributes() == null) {
             throw new IllegalArgumentException("Attributes cannot be null.");
         }
 
-        if (productVariant.getAdditionalPrice() < 0) {
+        if (productVariantDTO.getAdditionalPrice() < 0) {
             throw new IllegalArgumentException("Additional price cannot be negative.");
         }
 
-        if (productVariant.getStock() < 0) {
+        if (productVariantDTO.getStock() < 0) {
             throw new IllegalArgumentException("Stock cannot be negative.");
         }
     }

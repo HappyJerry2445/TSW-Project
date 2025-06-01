@@ -1,9 +1,9 @@
-package com.cardhaven.cardhaven.model.beans;
+package com.cardhaven.cardhaven.model.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class ProductVariant implements Serializable {
+public class ProductVariantDTO implements Serializable {
     private int variantId;
     private int productId;
     private String variantName;
@@ -11,11 +11,11 @@ public class ProductVariant implements Serializable {
     private double additionalPrice;
     private int stock;
 
-    public ProductVariant() {
+    public ProductVariantDTO() {
 
     }
 
-    public ProductVariant(int variantId, int productId, String variantName, String attributes, double additionalPrice, int stock) {
+    public ProductVariantDTO(int variantId, int productId, String variantName, String attributes, double additionalPrice, int stock) {
         this.variantId = variantId;
         this.productId = productId;
         this.variantName = variantName;
@@ -87,7 +87,7 @@ public class ProductVariant implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        ProductVariant that = (ProductVariant) o;
+        ProductVariantDTO that = (ProductVariantDTO) o;
         return variantId == that.variantId && productId == that.productId && Double.compare(additionalPrice, that.additionalPrice) == 0 && stock == that.stock && Objects.equals(variantName, that.variantName) && Objects.equals(attributes, that.attributes);
     }
 }

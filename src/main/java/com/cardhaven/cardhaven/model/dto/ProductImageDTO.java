@@ -1,11 +1,11 @@
-package com.cardhaven.cardhaven.model.beans;
+package com.cardhaven.cardhaven.model.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class ProductImage implements Serializable {
+public class ProductImageDTO implements Serializable {
     private int imageId;
     private int productId;
     private byte[] imageData;
@@ -16,11 +16,11 @@ public class ProductImage implements Serializable {
     private byte[] thumbnailData;
     private String thumbnailMimeType;
 
-    public ProductImage() {
+    public ProductImageDTO() {
 
     }
 
-    public ProductImage(int imageId, int productId, byte[] imageData, String mimeType, String description, int sortOrder, LocalDateTime createdAt, byte[] thumbnailData, String thumbnailMimeType) {
+    public ProductImageDTO(int imageId, int productId, byte[] imageData, String mimeType, String description, int sortOrder, LocalDateTime createdAt, byte[] thumbnailData, String thumbnailMimeType) {
         this.imageId = imageId;
         this.productId = productId;
         this.imageData = imageData;
@@ -122,7 +122,7 @@ public class ProductImage implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        ProductImage that = (ProductImage) o;
+        ProductImageDTO that = (ProductImageDTO) o;
         return imageId == that.imageId && productId == that.productId && sortOrder == that.sortOrder && Objects.deepEquals(imageData, that.imageData) && Objects.equals(mimeType, that.mimeType) && Objects.equals(description, that.description) && Objects.equals(createdAt, that.createdAt) && Objects.deepEquals(thumbnailData, that.thumbnailData) && Objects.equals(thumbnailMimeType, that.thumbnailMimeType);
     }
 }

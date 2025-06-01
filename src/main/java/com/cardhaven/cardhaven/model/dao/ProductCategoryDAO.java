@@ -1,7 +1,7 @@
 // ProductCategoryDAO.java
 package com.cardhaven.cardhaven.model.dao;
 
-import com.cardhaven.cardhaven.model.beans.ProductCategory;
+import com.cardhaven.cardhaven.model.dto.ProductCategoryDTO;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class ProductCategoryDAO implements GenericDAO<ProductCategory, ProductCategory.ProductCategoryKey> {
+public class ProductCategoryDAO implements GenericDAO<ProductCategoryDTO, ProductCategoryDTO.ProductCategoryKey> {
 
 
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
@@ -35,21 +35,21 @@ public class ProductCategoryDAO implements GenericDAO<ProductCategory, ProductCa
      * If an entry with the same ProductID and CategoryID already exists, a SQLException
      * due to unique constraint violation will likely occur.
      *
-     * @param productCategory The ProductCategory object to save.
+     * @param productCategoryDTO The ProductCategory object to save.
      * @throws SQLException             if a database access error occurs (e.g., duplicate entry).
      * @throws IllegalArgumentException if critical product category fields are invalid.
      */
     @Override
-    public void save(ProductCategory productCategory) throws SQLException {
-        if (productCategory == null || productCategory.getProductId() == 0 || productCategory.getCategoryId() == 0) {
+    public void save(ProductCategoryDTO productCategoryDTO) throws SQLException {
+        if (productCategoryDTO == null || productCategoryDTO.getProductId() == 0 || productCategoryDTO.getCategoryId() == 0) {
             throw new IllegalArgumentException("ProductID and CategoryID cannot be zero.");
         }
 
         String sql = "INSERT INTO ProductCategory (ProductID, CategoryID) VALUES (?, ?)";
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, productCategory.getProductId());
-            ps.setInt(2, productCategory.getCategoryId());
+            ps.setInt(1, productCategoryDTO.getProductId());
+            ps.setInt(2, productCategoryDTO.getCategoryId());
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
@@ -67,7 +67,7 @@ public class ProductCategoryDAO implements GenericDAO<ProductCategory, ProductCa
      * @throws IllegalArgumentException if the composite ID is null or contains zero values.
      */
     @Override
-    public boolean delete(ProductCategory.ProductCategoryKey id) throws SQLException {
+    public boolean delete(ProductCategoryDTO.ProductCategoryKey id) throws SQLException {
         if (id == null || id.getProductId() == 0 || id.getCategoryId() == 0) {
             throw new IllegalArgumentException("ProductID and CategoryID in ProductCategoryKey cannot be null or zero for deletion.");
         }
@@ -91,24 +91,24 @@ public class ProductCategoryDAO implements GenericDAO<ProductCategory, ProductCa
      * @throws IllegalArgumentException if the composite ID is null or contains non-positive values.
      */
     @Override
-    public ProductCategory getById(ProductCategory.ProductCategoryKey id) throws SQLException {
+    public ProductCategoryDTO getById(ProductCategoryDTO.ProductCategoryKey id) throws SQLException {
         if (id == null || id.getProductId() <= 0 || id.getCategoryId() <= 0) {
             throw new IllegalArgumentException("ProductID and CategoryID in ProductCategoryKey must be positive integers.");
         }
 
         String sql = "SELECT ProductID, CategoryID FROM ProductCategory WHERE ProductID = ? AND CategoryID = ?";
-        ProductCategory productCategory = null;
+        ProductCategoryDTO productCategoryDTO = null;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, id.getProductId());
             ps.setInt(2, id.getCategoryId());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    productCategory = extractProductCategoryFromResultSet(rs);
+                    productCategoryDTO = extractProductCategoryFromResultSet(rs);
                 }
             }
         }
-        return productCategory;
+        return productCategoryDTO;
     }
 
     /**
@@ -119,8 +119,8 @@ public class ProductCategoryDAO implements GenericDAO<ProductCategory, ProductCa
      * @throws SQLException if a database access error occurs.
      */
     @Override
-    public Collection<ProductCategory> getAll(String order) throws SQLException {
-        Collection<ProductCategory> productCategories = new ArrayList<>();
+    public Collection<ProductCategoryDTO> getAll(String order) throws SQLException {
+        Collection<ProductCategoryDTO> productCategories = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT ProductID, CategoryID FROM ProductCategory");
         String actualOrderColumns = DEFAULT_ORDER_COLUMN;
 
@@ -163,10 +163,10 @@ public class ProductCategoryDAO implements GenericDAO<ProductCategory, ProductCa
      * @return A populated ProductCategory object.
      * @throws SQLException if a database access error occurs.
      */
-    private ProductCategory extractProductCategoryFromResultSet(ResultSet rs) throws SQLException {
-        ProductCategory productCategory = new ProductCategory();
-        productCategory.setProductId(rs.getInt("ProductID"));
-        productCategory.setCategoryId(rs.getInt("CategoryID"));
-        return productCategory;
+    private ProductCategoryDTO extractProductCategoryFromResultSet(ResultSet rs) throws SQLException {
+        ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
+        productCategoryDTO.setProductId(rs.getInt("ProductID"));
+        productCategoryDTO.setCategoryId(rs.getInt("CategoryID"));
+        return productCategoryDTO;
     }
 }

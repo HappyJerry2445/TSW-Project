@@ -1,7 +1,7 @@
 package com.cardhaven.cardhaven.controller;
 
-import com.cardhaven.cardhaven.model.beans.Category;
 import com.cardhaven.cardhaven.model.dao.CategoryDAO;
+import com.cardhaven.cardhaven.model.dto.CategoryDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
+
 //TODO Remove this servlet
 @WebServlet("/categories")
 public class CategoryServlet extends HttpServlet {
@@ -27,7 +28,7 @@ public class CategoryServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            Collection<Category> categories = categoryDao.getAll(null);
+            Collection<CategoryDTO> categories = categoryDao.getAll(null);
             request.setAttribute("categories", categories);
             request.getRequestDispatcher("/WEB-INF/categories.jsp").forward(request, response);
         } catch (SQLException e) {

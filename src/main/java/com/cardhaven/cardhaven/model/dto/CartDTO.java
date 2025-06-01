@@ -1,19 +1,19 @@
-package com.cardhaven.cardhaven.model.beans;
+package com.cardhaven.cardhaven.model.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Cart implements Serializable {
+public class CartDTO implements Serializable {
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
     private int cartId;
     private int userId;
 
-    public Cart() {
+    public CartDTO() {
     }
 
-    public Cart(LocalDateTime createdAt, LocalDateTime lastUpdated, int cartId, Integer userId) {
+    public CartDTO(LocalDateTime createdAt, LocalDateTime lastUpdated, int cartId, Integer userId) {
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
         this.cartId = cartId;
@@ -65,8 +65,8 @@ public class Cart implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Cart cart = (Cart) o;
-        return cartId == cart.cartId && Objects.equals(createdAt, cart.createdAt) && Objects.equals(lastUpdated, cart.lastUpdated) && Objects.equals(userId, cart.userId);
+        CartDTO cartDTO = (CartDTO) o;
+        return cartId == cartDTO.cartId && Objects.equals(createdAt, cartDTO.createdAt) && Objects.equals(lastUpdated, cartDTO.lastUpdated) && Objects.equals(userId, cartDTO.userId);
     }
 
     @Override

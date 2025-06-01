@@ -1,10 +1,10 @@
-package com.cardhaven.cardhaven.model.beans;
+package com.cardhaven.cardhaven.model.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class CartItem implements Serializable {
+public class CartItemDTO implements Serializable {
     private int cartItemId;
     private int cartId;
     private int productId;
@@ -12,10 +12,10 @@ public class CartItem implements Serializable {
     private int quantity;
     private LocalDateTime addedAt;
 
-    public CartItem() {
+    public CartItemDTO() {
     }
 
-    public CartItem(Integer cartItemId, Integer cartId, Integer productId, Integer variantId, int quantity, LocalDateTime addedAt) {
+    public CartItemDTO(Integer cartItemId, Integer cartId, Integer productId, Integer variantId, int quantity, LocalDateTime addedAt) {
         this.cartItemId = cartItemId;
         this.cartId = cartId;
         this.productId = productId;
@@ -75,8 +75,8 @@ public class CartItem implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        CartItem cartItem = (CartItem) o;
-        return cartItemId == cartItem.cartItemId && cartId == cartItem.cartId && productId == cartItem.productId && quantity == cartItem.quantity && Objects.equals(variantId, cartItem.variantId) && Objects.equals(addedAt, cartItem.addedAt);
+        CartItemDTO cartItemDTO = (CartItemDTO) o;
+        return cartItemId == cartItemDTO.cartItemId && cartId == cartItemDTO.cartId && productId == cartItemDTO.productId && quantity == cartItemDTO.quantity && Objects.equals(variantId, cartItemDTO.variantId) && Objects.equals(addedAt, cartItemDTO.addedAt);
     }
 
     @Override

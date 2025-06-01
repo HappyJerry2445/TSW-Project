@@ -1,10 +1,10 @@
-package com.cardhaven.cardhaven.model.beans;
+package com.cardhaven.cardhaven.model.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class User implements Serializable {
+public class UserDTO implements Serializable {
     private int id;
     private String firstName;
     private String lastName;
@@ -14,10 +14,10 @@ public class User implements Serializable {
     private LocalDateTime lastLogin;
     private Role role;
 
-    public User() {
+    public UserDTO() {
     }
 
-    public User(int id, String firstName, String lastName, String email, String passwordHash, LocalDateTime createdAt, LocalDateTime lastLogin, Role role) {
+    public UserDTO(int id, String firstName, String lastName, String email, String passwordHash, LocalDateTime createdAt, LocalDateTime lastLogin, Role role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -96,8 +96,8 @@ public class User implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
-        return id == user.id && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(email, user.email) && Objects.equals(passwordHash, user.passwordHash) && Objects.equals(createdAt, user.createdAt) && Objects.equals(lastLogin, user.lastLogin) && role == user.role;
+        UserDTO userDTO = (UserDTO) o;
+        return id == userDTO.id && Objects.equals(firstName, userDTO.firstName) && Objects.equals(lastName, userDTO.lastName) && Objects.equals(email, userDTO.email) && Objects.equals(passwordHash, userDTO.passwordHash) && Objects.equals(createdAt, userDTO.createdAt) && Objects.equals(lastLogin, userDTO.lastLogin) && role == userDTO.role;
     }
 
 

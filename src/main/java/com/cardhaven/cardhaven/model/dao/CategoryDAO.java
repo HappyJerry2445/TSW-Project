@@ -1,12 +1,12 @@
 package com.cardhaven.cardhaven.model.dao;
 
-import com.cardhaven.cardhaven.model.beans.Category;
+import com.cardhaven.cardhaven.model.dto.CategoryDTO;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
-public class CategoryDAO implements GenericDAO<Category, Integer> {
+public class CategoryDAO implements GenericDAO<CategoryDTO, Integer> {
 
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
             "CategoryID", "CategoryName", "ParentCategoryID", "CategoryType", "Description"
@@ -32,32 +32,32 @@ public class CategoryDAO implements GenericDAO<Category, Integer> {
      * If the CategoryID is 0, it performs an INSERT operation.
      * Otherwise, it performs an UPDATE operation based on the CategoryID.
      *
-     * @param category The Category object to save.
+     * @param categoryDTO The Category object to save.
      * @throws SQLException if a database access error occurs.
      */
     @Override
-    public void save(Category category) throws SQLException {
+    public void save(CategoryDTO categoryDTO) throws SQLException {
         // Input validation: Ensure critical fields are not null or empty
-        if (category == null || category.getName() == null || category.getName().trim().isEmpty() ||
-                category.getType() == null || category.getType().trim().isEmpty()) {
+        if (categoryDTO == null || categoryDTO.getName() == null || categoryDTO.getName().trim().isEmpty() ||
+                categoryDTO.getType() == null || categoryDTO.getType().trim().isEmpty()) {
             throw new IllegalArgumentException("Category, CategoryName, or CategoryType cannot be null or empty.");
         }
 
         String sql;
-        if (category.getId() == 0) { // New category (INSERT)
+        if (categoryDTO.getId() == 0) { // New category (INSERT)
             sql = "INSERT INTO Category (CategoryName, ParentCategoryID, CategoryType, Description) VALUES (?, ?, ?, ?)";
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) { // Get generated ID
                 //noinspection DuplicatedCode
-                ps.setString(1, category.getName());
+                ps.setString(1, categoryDTO.getName());
                 // Handle nullable ParentCategoryID
-                if (category.getParentId() != null && category.getParentId() != 0) {
-                    ps.setInt(2, category.getParentId());
+                if (categoryDTO.getParentId() != null && categoryDTO.getParentId() != 0) {
+                    ps.setInt(2, categoryDTO.getParentId());
                 } else {
                     ps.setNull(2, java.sql.Types.INTEGER);
                 }
-                ps.setString(3, category.getType());
-                ps.setString(4, category.getDescription());
+                ps.setString(3, categoryDTO.getType());
+                ps.setString(4, categoryDTO.getDescription());
 
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
@@ -67,7 +67,7 @@ public class CategoryDAO implements GenericDAO<Category, Integer> {
                 // Retrieve the generated CategoryID
                 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        category.setId(generatedKeys.getInt(1));
+                        categoryDTO.setId(generatedKeys.getInt(1));
                     } else {
                         throw new SQLException("Creating category failed, no ID obtained.");
                     }
@@ -78,16 +78,16 @@ public class CategoryDAO implements GenericDAO<Category, Integer> {
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement ps = connection.prepareStatement(sql)) {
                 //noinspection DuplicatedCode
-                ps.setString(1, category.getName());
+                ps.setString(1, categoryDTO.getName());
                 // Handle nullable ParentCategoryID
-                if (category.getParentId() != null && category.getParentId() != 0) {
-                    ps.setInt(2, category.getParentId());
+                if (categoryDTO.getParentId() != null && categoryDTO.getParentId() != 0) {
+                    ps.setInt(2, categoryDTO.getParentId());
                 } else {
                     ps.setNull(2, java.sql.Types.INTEGER);
                 }
-                ps.setString(3, category.getType());
-                ps.setString(4, category.getDescription());
-                ps.setInt(5, category.getId());
+                ps.setString(3, categoryDTO.getType());
+                ps.setString(4, categoryDTO.getDescription());
+                ps.setInt(5, categoryDTO.getId());
 
                 ps.executeUpdate();
             }
@@ -124,23 +124,23 @@ public class CategoryDAO implements GenericDAO<Category, Integer> {
      * @throws SQLException if a database access error occurs.
      */
     @Override
-    public Category getById(Integer categoryID) throws SQLException {
+    public CategoryDTO getById(Integer categoryID) throws SQLException {
         if (categoryID == null || categoryID <= 0) {
             throw new IllegalArgumentException("CategoryID must be a positive integer.");
         }
 
         String sql = "SELECT CategoryID, CategoryName, ParentCategoryID, CategoryType, Description FROM Category WHERE CategoryID = ?";
-        Category category = null;
+        CategoryDTO categoryDTO = null;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, categoryID);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    category = extractCategoryFromResultSet(rs);
+                    categoryDTO = extractCategoryFromResultSet(rs);
                 }
             }
         }
-        return category;
+        return categoryDTO;
     }
 
     /**
@@ -152,8 +152,8 @@ public class CategoryDAO implements GenericDAO<Category, Integer> {
      * @throws SQLException if a database access error occurs.
      */
     @Override
-    public Collection<Category> getAll(String order) throws SQLException {
-        Collection<Category> categories = new ArrayList<>();
+    public Collection<CategoryDTO> getAll(String order) throws SQLException {
+        Collection<CategoryDTO> categories = new ArrayList<>();
         // Basic validation for order parameter to prevent direct injection,
         // but robust whitelisting is recommended for dynamic sorting.
         String validOrderColumns = "CategoryID, CategoryName, ParentCategoryID, CategoryType, Description"; // Whitelist
@@ -200,21 +200,21 @@ public class CategoryDAO implements GenericDAO<Category, Integer> {
      * @return A populated Category object.
      * @throws SQLException if a database access error occurs.
      */
-    private Category extractCategoryFromResultSet(ResultSet rs) throws SQLException {
-        Category category = new Category();
-        category.setId(rs.getInt("CategoryID"));
-        category.setName(rs.getString("CategoryName"));
+    private CategoryDTO extractCategoryFromResultSet(ResultSet rs) throws SQLException {
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setId(rs.getInt("CategoryID"));
+        categoryDTO.setName(rs.getString("CategoryName"));
 
         // Handle nullable ParentCategoryID
         int parentId = rs.getInt("ParentCategoryID");
         if (rs.wasNull()) {
-            category.setParentId(null);
+            categoryDTO.setParentId(null);
         } else {
-            category.setParentId(parentId);
+            categoryDTO.setParentId(parentId);
         }
 
-        category.setType(rs.getString("CategoryType"));
-        category.setDescription(rs.getString("Description"));
-        return category;
+        categoryDTO.setType(rs.getString("CategoryType"));
+        categoryDTO.setDescription(rs.getString("Description"));
+        return categoryDTO;
     }
 }

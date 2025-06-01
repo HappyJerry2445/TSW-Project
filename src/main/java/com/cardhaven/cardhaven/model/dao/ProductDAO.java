@@ -1,13 +1,13 @@
 package com.cardhaven.cardhaven.model.dao;
 
-import com.cardhaven.cardhaven.model.beans.Product;
+import com.cardhaven.cardhaven.model.dto.ProductDTO;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class ProductDAO implements GenericDAO<Product, Integer> {
+public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
             "ProductId", "SKU", "ProductName", "BasePrice", "CurrentPrice", "StockQuantity", "ProductType", "CreatedAt", "LastUpdated", "IsActive"
     );
@@ -19,23 +19,23 @@ public class ProductDAO implements GenericDAO<Product, Integer> {
         this.dataSource = Objects.requireNonNull(dataSource, "DataSource cannot be null.");
     }
 
-    public void save(Product product) throws SQLException {
-        validateProduct(product);
+    public void save(ProductDTO productDTO) throws SQLException {
+        validateProduct(productDTO);
 
         String sql;
-        if (product.getProductId() == 0) {
+        if (productDTO.getProductId() == 0) {
             sql = "INSERT INTO Product (ProductId, SKU, ProductName, BasePrice, CurrentPrice, StockQuantity, ProductType, CreatedAt, LastUpdated, IsActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setInt(1, product.getProductId());
-                ps.setString(2, product.getSku());
-                ps.setString(3, product.getProductName());
-                ps.setDouble(4, product.getBasePrice());
-                ps.setDouble(5, product.getCurrentPrice());
-                ps.setDouble(6, product.getStockQuantity());
-                ps.setString(7, product.getProductType().name());
-                ps.setTimestamp(8, (product.getCreatedAt() != null) ? Timestamp.valueOf(product.getCreatedAt()) : Timestamp.valueOf(LocalDateTime.now()));
-                ps.setTimestamp(9, (product.getLastUpdated() != null) ? Timestamp.valueOf(product.getLastUpdated()) : null);
-                ps.setBoolean(10, product.isActive());
+                ps.setInt(1, productDTO.getProductId());
+                ps.setString(2, productDTO.getSku());
+                ps.setString(3, productDTO.getProductName());
+                ps.setDouble(4, productDTO.getBasePrice());
+                ps.setDouble(5, productDTO.getCurrentPrice());
+                ps.setDouble(6, productDTO.getStockQuantity());
+                ps.setString(7, productDTO.getProductType().name());
+                ps.setTimestamp(8, (productDTO.getCreatedAt() != null) ? Timestamp.valueOf(productDTO.getCreatedAt()) : Timestamp.valueOf(LocalDateTime.now()));
+                ps.setTimestamp(9, (productDTO.getLastUpdated() != null) ? Timestamp.valueOf(productDTO.getLastUpdated()) : null);
+                ps.setBoolean(10, productDTO.isActive());
 
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
@@ -44,7 +44,7 @@ public class ProductDAO implements GenericDAO<Product, Integer> {
 
                 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        product.setProductId(generatedKeys.getInt(1));
+                        productDTO.setProductId(generatedKeys.getInt(1));
                     } else {
                         throw new SQLException("Creating product failed, no ID obtained.");
                     }
@@ -53,15 +53,15 @@ public class ProductDAO implements GenericDAO<Product, Integer> {
         } else {
             sql = "UPDATE Product SET SKU = ?, ProductName = ?, BasePrice = ?, CurrentPrice = ?, StockQuantity = ?, ProductType = ?, CreatedAt = ?, LastUpdated = ?, IsActive = ? WHERE ProductId = ?";
             try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, product.getSku());
-                ps.setString(2, product.getProductName());
-                ps.setDouble(3, product.getBasePrice());
-                ps.setDouble(4, product.getCurrentPrice());
-                ps.setDouble(5, product.getStockQuantity());
-                ps.setString(6, product.getProductType().name());
-                ps.setTimestamp(7, (product.getCreatedAt() != null) ? Timestamp.valueOf(product.getCreatedAt()) : null);
-                ps.setTimestamp(8, (product.getLastUpdated() != null) ? Timestamp.valueOf(product.getLastUpdated()) : null);
-                ps.setBoolean(9, product.isActive());
+                ps.setString(1, productDTO.getSku());
+                ps.setString(2, productDTO.getProductName());
+                ps.setDouble(3, productDTO.getBasePrice());
+                ps.setDouble(4, productDTO.getCurrentPrice());
+                ps.setDouble(5, productDTO.getStockQuantity());
+                ps.setString(6, productDTO.getProductType().name());
+                ps.setTimestamp(7, (productDTO.getCreatedAt() != null) ? Timestamp.valueOf(productDTO.getCreatedAt()) : null);
+                ps.setTimestamp(8, (productDTO.getLastUpdated() != null) ? Timestamp.valueOf(productDTO.getLastUpdated()) : null);
+                ps.setBoolean(9, productDTO.isActive());
 
                 ps.executeUpdate();
             }
@@ -81,24 +81,24 @@ public class ProductDAO implements GenericDAO<Product, Integer> {
         }
     }
 
-    public Product getById(Integer id) throws SQLException {
+    public ProductDTO getById(Integer id) throws SQLException {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("ProductID must be a positive integer.");
         }
         String sql = "SELECT * FROM Product WHERE ProductId = ?";
-        Product product = null;
+        ProductDTO productDTO = null;
         try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                product = extractProductFromResultSet(rs);
+                productDTO = extractProductFromResultSet(rs);
             }
         }
-        return product;
+        return productDTO;
     }
 
-    public Collection<Product> getAll(String order) throws SQLException {
-        Collection<Product> products = new ArrayList<>();
+    public Collection<ProductDTO> getAll(String order) throws SQLException {
+        Collection<ProductDTO> productDTOS = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM Product");
 
         String actualOrderColumn = DEFAULT_ORDER_COLUMN;
@@ -115,10 +115,10 @@ public class ProductDAO implements GenericDAO<Product, Integer> {
         try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                products.add(extractProductFromResultSet(rs));
+                productDTOS.add(extractProductFromResultSet(rs));
             }
         }
-        return products;
+        return productDTOS;
     }
 
     @Override
@@ -127,51 +127,51 @@ public class ProductDAO implements GenericDAO<Product, Integer> {
 
     }
 
-    private Product extractProductFromResultSet(ResultSet rs) throws SQLException {
-        Product product = new Product();
-        product.setProductId(rs.getInt("ProductId"));
-        product.setSku(rs.getString("SKU"));
-        product.setProductName(rs.getString("ProductName"));
-        product.setBasePrice(rs.getDouble("BasePrice"));
-        product.setCurrentPrice(rs.getDouble("CurrentPrice"));
-        product.setStockQuantity(rs.getInt("StockQuantity"));
-        product.setProductType(Product.ProductType.valueOf(rs.getString("ProductType")));
+    private ProductDTO extractProductFromResultSet(ResultSet rs) throws SQLException {
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setProductId(rs.getInt("ProductId"));
+        productDTO.setSku(rs.getString("SKU"));
+        productDTO.setProductName(rs.getString("ProductName"));
+        productDTO.setBasePrice(rs.getDouble("BasePrice"));
+        productDTO.setCurrentPrice(rs.getDouble("CurrentPrice"));
+        productDTO.setStockQuantity(rs.getInt("StockQuantity"));
+        productDTO.setProductType(ProductDTO.ProductType.valueOf(rs.getString("ProductType")));
         Timestamp createdAtTimestamp = rs.getTimestamp("CreatedAt");
         if (createdAtTimestamp != null) {
-            product.setCreatedAt(createdAtTimestamp.toLocalDateTime());
+            productDTO.setCreatedAt(createdAtTimestamp.toLocalDateTime());
         }
         Timestamp lastUpdatedTimestamp = rs.getTimestamp("LastUpdated");
         if (lastUpdatedTimestamp != null) {
-            product.setLastUpdated(lastUpdatedTimestamp.toLocalDateTime());
+            productDTO.setLastUpdated(lastUpdatedTimestamp.toLocalDateTime());
         }
-        product.setActive(rs.getBoolean("IsActive"));
+        productDTO.setActive(rs.getBoolean("IsActive"));
 
-        return product;
+        return productDTO;
     }
 
-    private void validateProduct(Product product) {
-        if (product == null) {
+    private void validateProduct(ProductDTO productDTO) {
+        if (productDTO == null) {
             throw new IllegalArgumentException("Product cannot be null.");
         }
-        if (product.getSku() == null || product.getSku().trim().isEmpty()) {
+        if (productDTO.getSku() == null || productDTO.getSku().trim().isEmpty()) {
             throw new IllegalArgumentException("SKU cannot be null or empty.");
         }
-        if (product.getProductName() == null || product.getProductName().trim().isEmpty()) {
+        if (productDTO.getProductName() == null || productDTO.getProductName().trim().isEmpty()) {
             throw new IllegalArgumentException("Product Name cannot be null or empty.");
         }
-        if (product.getBasePrice() <= 0) {
+        if (productDTO.getBasePrice() <= 0) {
             throw new IllegalArgumentException("Base Price must be positive.");
         }
-        if (product.getCurrentPrice() <= 0) {
+        if (productDTO.getCurrentPrice() <= 0) {
             throw new IllegalArgumentException("Current Price must be positive.");
         }
-        if (product.getStockQuantity() < 0) {
+        if (productDTO.getStockQuantity() < 0) {
             throw new IllegalArgumentException("Stock Quantity cannot be negative.");
         }
-        if (product.getProductType() == null) {
+        if (productDTO.getProductType() == null) {
             throw new IllegalArgumentException("Product Type cannot be null.");
         }
-        if (product.getCreatedAt() == null) {
+        if (productDTO.getCreatedAt() == null) {
             throw new IllegalArgumentException("CreatedAt timestamp cannot be null.");
         }
 

@@ -1,19 +1,19 @@
-package com.cardhaven.cardhaven.model.beans;
+package com.cardhaven.cardhaven.model.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Category implements Serializable {
+public class CategoryDTO implements Serializable {
     private int id;
     private String name;
     private Integer parentId;
     private String type;
     private String description;
 
-    public Category() {
+    public CategoryDTO() {
     }
 
-    public Category(int id, String name, Integer parentId, String type, String description) {
+    public CategoryDTO(int id, String name, Integer parentId, String type, String description) {
         this.id = id;
         this.name = name;
         this.parentId = parentId;
@@ -76,8 +76,8 @@ public class Category implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
-        Category category = (Category) o;
-        return id == category.id && Objects.equals(name, category.name) && Objects.equals(parentId, category.parentId) && Objects.equals(type, category.type) && Objects.equals(description, category.description);
+        CategoryDTO categoryDTO = (CategoryDTO) o;
+        return id == categoryDTO.id && Objects.equals(name, categoryDTO.name) && Objects.equals(parentId, categoryDTO.parentId) && Objects.equals(type, categoryDTO.type) && Objects.equals(description, categoryDTO.description);
     }
 
 }

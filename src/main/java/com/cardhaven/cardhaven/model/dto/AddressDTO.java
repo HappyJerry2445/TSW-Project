@@ -1,9 +1,9 @@
-package com.cardhaven.cardhaven.model.beans; // Adjust package as needed
+package com.cardhaven.cardhaven.model.dto; // Adjust package as needed
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Address implements Serializable {
+public class AddressDTO implements Serializable {
     private int addressID;
     private int userID; // Foreign key to User table
     private String streetAddress;
@@ -15,10 +15,10 @@ public class Address implements Serializable {
     private boolean isDefault;
 
     // Constructors
-    public Address() {
+    public AddressDTO() {
     }
 
-    public Address(int addressID, int userID, String streetAddress, String city, String state, String postalCode, String country, AddressType addressType, boolean isDefault) {
+    public AddressDTO(int addressID, int userID, String streetAddress, String city, String state, String postalCode, String country, AddressType addressType, boolean isDefault) {
         this.addressID = addressID;
         this.userID = userID;
         this.streetAddress = streetAddress;
@@ -107,16 +107,16 @@ public class Address implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Address address = (Address) o;
-        return addressID == address.addressID &&
-                userID == address.userID &&
-                isDefault == address.isDefault &&
-                Objects.equals(streetAddress, address.streetAddress) &&
-                Objects.equals(city, address.city) &&
-                Objects.equals(state, address.state) &&
-                Objects.equals(postalCode, address.postalCode) &&
-                Objects.equals(country, address.country) &&
-                addressType == address.addressType;
+        AddressDTO addressDTO = (AddressDTO) o;
+        return addressID == addressDTO.addressID &&
+                userID == addressDTO.userID &&
+                isDefault == addressDTO.isDefault &&
+                Objects.equals(streetAddress, addressDTO.streetAddress) &&
+                Objects.equals(city, addressDTO.city) &&
+                Objects.equals(state, addressDTO.state) &&
+                Objects.equals(postalCode, addressDTO.postalCode) &&
+                Objects.equals(country, addressDTO.country) &&
+                addressType == addressDTO.addressType;
     }
 
     @Override

@@ -1,10 +1,10 @@
 // Accessory.java
-package com.cardhaven.cardhaven.model.beans;
+package com.cardhaven.cardhaven.model.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Accessory implements Serializable {
+public class AccessoryDTO implements Serializable {
     private int accessoryId; // Foreign key to Product
     private String accessoryType; // ENUM ('Sleeves', 'Binders', 'Dice', 'Playmats', 'Boxes')
     private String material;
@@ -12,10 +12,10 @@ public class Accessory implements Serializable {
     private String dimensions;
     private String compatibility;
 
-    public Accessory() {
+    public AccessoryDTO() {
     }
 
-    public Accessory(int accessoryId, String accessoryType, String material, String color, String dimensions, String compatibility) {
+    public AccessoryDTO(int accessoryId, String accessoryType, String material, String color, String dimensions, String compatibility) {
         this.accessoryId = accessoryId;
         this.accessoryType = accessoryType;
         this.material = material;
@@ -89,13 +89,13 @@ public class Accessory implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Accessory accessory = (Accessory) o;
-        return accessoryId == accessory.accessoryId &&
-                Objects.equals(accessoryType, accessory.accessoryType) &&
-                Objects.equals(material, accessory.material) &&
-                Objects.equals(color, accessory.color) &&
-                Objects.equals(dimensions, accessory.dimensions) &&
-                Objects.equals(compatibility, accessory.compatibility);
+        AccessoryDTO accessoryDTO = (AccessoryDTO) o;
+        return accessoryId == accessoryDTO.accessoryId &&
+                Objects.equals(accessoryType, accessoryDTO.accessoryType) &&
+                Objects.equals(material, accessoryDTO.material) &&
+                Objects.equals(color, accessoryDTO.color) &&
+                Objects.equals(dimensions, accessoryDTO.dimensions) &&
+                Objects.equals(compatibility, accessoryDTO.compatibility);
     }
 
     @Override

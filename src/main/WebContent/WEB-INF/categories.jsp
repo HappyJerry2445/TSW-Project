@@ -39,12 +39,12 @@
         <th>Tipo</th>
     </tr>
 
-    <c:forEach items="${categories}" var="category">
+    <c:forEach items="${categories}" var="categoryDTO">
         <tr>
-            <td>${category.id}</td>
-            <td>${category.name}</td>
-            <td>${category.parentId}</td>
-            <td>${category.type}</td>
+            <td>${categoryDTO.id}</td>
+            <td>${categoryDTO.name}</td>
+            <td>${categoryDTO.parentId}</td>
+            <td>${categoryDTO.type}</td>
         </tr>
     </c:forEach>
 </table>

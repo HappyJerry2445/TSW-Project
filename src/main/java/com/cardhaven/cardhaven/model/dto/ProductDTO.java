@@ -1,10 +1,10 @@
-package com.cardhaven.cardhaven.model.beans;
+package com.cardhaven.cardhaven.model.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Product implements Serializable {
+public class ProductDTO implements Serializable {
 
     private int productId;
     private String sku;
@@ -17,11 +17,11 @@ public class Product implements Serializable {
     private LocalDateTime lastUpdated;
     private boolean isActive;
 
-    public Product() {
+    public ProductDTO() {
     }
 
 
-    public Product(int productId, String sku, String productName, double basePrice, double currentPrice, int stockQuantity, ProductType productType, LocalDateTime createdAt, LocalDateTime lastUpdated, boolean isActive) {
+    public ProductDTO(int productId, String sku, String productName, double basePrice, double currentPrice, int stockQuantity, ProductType productType, LocalDateTime createdAt, LocalDateTime lastUpdated, boolean isActive) {
         this.productId = productId;
         this.sku = sku;
         this.productName = productName;
@@ -134,8 +134,8 @@ public class Product implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return productId == product.productId && Double.compare(basePrice, product.basePrice) == 0 && Double.compare(currentPrice, product.currentPrice) == 0 && stockQuantity == product.stockQuantity && isActive == product.isActive && Objects.equals(sku, product.sku) && Objects.equals(productName, product.productName) && productType == product.productType && Objects.equals(createdAt, product.createdAt) && Objects.equals(lastUpdated, product.lastUpdated);
+        ProductDTO productDTO = (ProductDTO) o;
+        return productId == productDTO.productId && Double.compare(basePrice, productDTO.basePrice) == 0 && Double.compare(currentPrice, productDTO.currentPrice) == 0 && stockQuantity == productDTO.stockQuantity && isActive == productDTO.isActive && Objects.equals(sku, productDTO.sku) && Objects.equals(productName, productDTO.productName) && productType == productDTO.productType && Objects.equals(createdAt, productDTO.createdAt) && Objects.equals(lastUpdated, productDTO.lastUpdated);
     }
 
     public enum ProductType {

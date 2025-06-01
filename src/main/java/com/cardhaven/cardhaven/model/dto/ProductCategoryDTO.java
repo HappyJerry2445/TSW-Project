@@ -1,24 +1,24 @@
 // ProductCategory.java
-package com.cardhaven.cardhaven.model.beans;
+package com.cardhaven.cardhaven.model.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class ProductCategory implements Serializable {
+public class ProductCategoryDTO implements Serializable {
     private ProductCategoryKey key;
 
-    public ProductCategory(int productId, int categoryId) {
+    public ProductCategoryDTO(int productId, int categoryId) {
         this.key = new ProductCategoryKey(productId, categoryId);
     }
 
-    public ProductCategory() {
+    public ProductCategoryDTO() {
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProductCategory that = (ProductCategory) o;
+        ProductCategoryDTO that = (ProductCategoryDTO) o;
         return Objects.equals(key, that.key);
     }
 

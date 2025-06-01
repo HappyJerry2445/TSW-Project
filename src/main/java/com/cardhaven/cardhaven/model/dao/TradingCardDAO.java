@@ -1,7 +1,7 @@
 // TradingCardDAO.java
 package com.cardhaven.cardhaven.model.dao;
 
-import com.cardhaven.cardhaven.model.beans.TradingCard;
+import com.cardhaven.cardhaven.model.dto.TradingCardDTO;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class TradingCardDAO implements GenericDAO<TradingCard, Integer> {
+public class TradingCardDAO implements GenericDAO<TradingCardDTO, Integer> {
 
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
             "CardID", "CardSet", "CardNumber", "Rarity", "CardCondition", "Artist", "YearPublished"
@@ -35,48 +35,48 @@ public class TradingCardDAO implements GenericDAO<TradingCard, Integer> {
      * It's assumed that a `Product` entry has already been created and its ID is set in the `TradingCard` object
      * before calling this save method for a new trading card.
      *
-     * @param tradingCard The TradingCard object to save.
+     * @param tradingCardDTO The TradingCard object to save.
      * @throws SQLException             if a database access error occurs.
      * @throws IllegalArgumentException if critical trading card fields are null or empty/invalid.
      */
     @Override
-    public void save(TradingCard tradingCard) throws SQLException {
-        if (tradingCard == null || tradingCard.getCardId() == 0 ||
-                tradingCard.getCardSet() == null || tradingCard.getCardSet().trim().isEmpty() ||
-                tradingCard.getCardNumber() == null || tradingCard.getCardNumber().trim().isEmpty() ||
-                tradingCard.getRarity() == null || tradingCard.getRarity().trim().isEmpty() ||
-                tradingCard.getCardCondition() == null || tradingCard.getCardCondition().trim().isEmpty()) {
+    public void save(TradingCardDTO tradingCardDTO) throws SQLException {
+        if (tradingCardDTO == null || tradingCardDTO.getCardId() == 0 ||
+                tradingCardDTO.getCardSet() == null || tradingCardDTO.getCardSet().trim().isEmpty() ||
+                tradingCardDTO.getCardNumber() == null || tradingCardDTO.getCardNumber().trim().isEmpty() ||
+                tradingCardDTO.getRarity() == null || tradingCardDTO.getRarity().trim().isEmpty() ||
+                tradingCardDTO.getCardCondition() == null || tradingCardDTO.getCardCondition().trim().isEmpty()) {
             throw new IllegalArgumentException("TradingCard, CardID (must be set), CardSet, CardNumber, Rarity, or CardCondition cannot be null or empty/zero.");
         }
 
         // Check if the trading card already exists to decide between INSERT and UPDATE
-        boolean exists = getById(tradingCard.getCardId()) != null;
+        boolean exists = getById(tradingCardDTO.getCardId()) != null;
 
         String sql;
         if (!exists) { // New trading card (INSERT)
             sql = "INSERT INTO TradingCard (CardID, CardSet, CardNumber, Rarity, CardCondition, CardText, Artist, YearPublished) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement ps = connection.prepareStatement(sql)) {
-                ps.setInt(1, tradingCard.getCardId()); // CardID is the PK, must be set
-                ps.setString(2, tradingCard.getCardSet());
-                ps.setString(3, tradingCard.getCardNumber());
-                ps.setString(4, tradingCard.getRarity());
-                ps.setString(5, tradingCard.getCardCondition());
+                ps.setInt(1, tradingCardDTO.getCardId()); // CardID is the PK, must be set
+                ps.setString(2, tradingCardDTO.getCardSet());
+                ps.setString(3, tradingCardDTO.getCardNumber());
+                ps.setString(4, tradingCardDTO.getRarity());
+                ps.setString(5, tradingCardDTO.getCardCondition());
                 // Handle nullable CardText
-                if (tradingCard.getCardText() != null && !tradingCard.getCardText().trim().isEmpty()) {
-                    ps.setString(6, tradingCard.getCardText());
+                if (tradingCardDTO.getCardText() != null && !tradingCardDTO.getCardText().trim().isEmpty()) {
+                    ps.setString(6, tradingCardDTO.getCardText());
                 } else {
                     ps.setNull(6, java.sql.Types.LONGVARCHAR);
                 }
                 // Handle nullable Artist
-                if (tradingCard.getArtist() != null && !tradingCard.getArtist().trim().isEmpty()) {
-                    ps.setString(7, tradingCard.getArtist());
+                if (tradingCardDTO.getArtist() != null && !tradingCardDTO.getArtist().trim().isEmpty()) {
+                    ps.setString(7, tradingCardDTO.getArtist());
                 } else {
                     ps.setNull(7, java.sql.Types.VARCHAR);
                 }
                 // Handle nullable YearPublished
-                if (tradingCard.getYearPublished() != null) {
-                    ps.setInt(8, tradingCard.getYearPublished());
+                if (tradingCardDTO.getYearPublished() != null) {
+                    ps.setInt(8, tradingCardDTO.getYearPublished());
                 } else {
                     ps.setNull(8, java.sql.Types.INTEGER);
                 }
@@ -90,29 +90,29 @@ public class TradingCardDAO implements GenericDAO<TradingCard, Integer> {
             sql = "UPDATE TradingCard SET CardSet = ?, CardNumber = ?, Rarity = ?, CardCondition = ?, CardText = ?, Artist = ?, YearPublished = ? WHERE CardID = ?";
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement ps = connection.prepareStatement(sql)) {
-                ps.setString(1, tradingCard.getCardSet());
-                ps.setString(2, tradingCard.getCardNumber());
-                ps.setString(3, tradingCard.getRarity());
-                ps.setString(4, tradingCard.getCardCondition());
+                ps.setString(1, tradingCardDTO.getCardSet());
+                ps.setString(2, tradingCardDTO.getCardNumber());
+                ps.setString(3, tradingCardDTO.getRarity());
+                ps.setString(4, tradingCardDTO.getCardCondition());
                 // Handle nullable CardText
-                if (tradingCard.getCardText() != null && !tradingCard.getCardText().trim().isEmpty()) {
-                    ps.setString(5, tradingCard.getCardText());
+                if (tradingCardDTO.getCardText() != null && !tradingCardDTO.getCardText().trim().isEmpty()) {
+                    ps.setString(5, tradingCardDTO.getCardText());
                 } else {
                     ps.setNull(5, java.sql.Types.LONGVARCHAR);
                 }
                 // Handle nullable Artist
-                if (tradingCard.getArtist() != null && !tradingCard.getArtist().trim().isEmpty()) {
-                    ps.setString(6, tradingCard.getArtist());
+                if (tradingCardDTO.getArtist() != null && !tradingCardDTO.getArtist().trim().isEmpty()) {
+                    ps.setString(6, tradingCardDTO.getArtist());
                 } else {
                     ps.setNull(6, java.sql.Types.VARCHAR);
                 }
                 // Handle nullable YearPublished
-                if (tradingCard.getYearPublished() != null) {
-                    ps.setInt(7, tradingCard.getYearPublished());
+                if (tradingCardDTO.getYearPublished() != null) {
+                    ps.setInt(7, tradingCardDTO.getYearPublished());
                 } else {
                     ps.setNull(7, java.sql.Types.INTEGER);
                 }
-                ps.setInt(8, tradingCard.getCardId());
+                ps.setInt(8, tradingCardDTO.getCardId());
 
                 ps.executeUpdate();
             }
@@ -153,23 +153,23 @@ public class TradingCardDAO implements GenericDAO<TradingCard, Integer> {
      * @throws IllegalArgumentException if the card ID is null or not positive.
      */
     @Override
-    public TradingCard getById(Integer cardId) throws SQLException {
+    public TradingCardDTO getById(Integer cardId) throws SQLException {
         if (cardId == null || cardId <= 0) {
             throw new IllegalArgumentException("CardID must be a positive integer.");
         }
 
         String sql = "SELECT CardID, CardSet, CardNumber, Rarity, CardCondition, CardText, Artist, YearPublished FROM TradingCard WHERE CardID = ?";
-        TradingCard tradingCard = null;
+        TradingCardDTO tradingCardDTO = null;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, cardId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    tradingCard = extractTradingCardFromResultSet(rs);
+                    tradingCardDTO = extractTradingCardFromResultSet(rs);
                 }
             }
         }
-        return tradingCard;
+        return tradingCardDTO;
     }
 
     /**
@@ -180,8 +180,8 @@ public class TradingCardDAO implements GenericDAO<TradingCard, Integer> {
      * @throws SQLException if a database access error occurs.
      */
     @Override
-    public Collection<TradingCard> getAll(String order) throws SQLException {
-        Collection<TradingCard> tradingCards = new ArrayList<>();
+    public Collection<TradingCardDTO> getAll(String order) throws SQLException {
+        Collection<TradingCardDTO> tradingCardDTOS = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT CardID, CardSet, CardNumber, Rarity, CardCondition, CardText, Artist, YearPublished FROM TradingCard");
         String actualOrderColumn = DEFAULT_ORDER_COLUMN;
 
@@ -199,10 +199,10 @@ public class TradingCardDAO implements GenericDAO<TradingCard, Integer> {
              PreparedStatement ps = connection.prepareStatement(sql.toString());
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                tradingCards.add(extractTradingCardFromResultSet(rs));
+                tradingCardDTOS.add(extractTradingCardFromResultSet(rs));
             }
         }
-        return tradingCards;
+        return tradingCardDTOS;
     }
 
     @Override
@@ -217,23 +217,23 @@ public class TradingCardDAO implements GenericDAO<TradingCard, Integer> {
      * @return A populated TradingCard object.
      * @throws SQLException if a database access error occurs.
      */
-    private TradingCard extractTradingCardFromResultSet(ResultSet rs) throws SQLException {
-        TradingCard tradingCard = new TradingCard();
-        tradingCard.setCardId(rs.getInt("CardID"));
-        tradingCard.setCardSet(rs.getString("CardSet"));
-        tradingCard.setCardNumber(rs.getString("CardNumber"));
-        tradingCard.setRarity(rs.getString("Rarity"));
-        tradingCard.setCardCondition(rs.getString("CardCondition"));
-        tradingCard.setCardText(rs.getString("CardText")); // This can be null
-        tradingCard.setArtist(rs.getString("Artist")); // This can be null
+    private TradingCardDTO extractTradingCardFromResultSet(ResultSet rs) throws SQLException {
+        TradingCardDTO tradingCardDTO = new TradingCardDTO();
+        tradingCardDTO.setCardId(rs.getInt("CardID"));
+        tradingCardDTO.setCardSet(rs.getString("CardSet"));
+        tradingCardDTO.setCardNumber(rs.getString("CardNumber"));
+        tradingCardDTO.setRarity(rs.getString("Rarity"));
+        tradingCardDTO.setCardCondition(rs.getString("CardCondition"));
+        tradingCardDTO.setCardText(rs.getString("CardText")); // This can be null
+        tradingCardDTO.setArtist(rs.getString("Artist")); // This can be null
 
         // Handle nullable YearPublished
         int yearPublished = rs.getInt("YearPublished");
         if (rs.wasNull()) {
-            tradingCard.setYearPublished(null);
+            tradingCardDTO.setYearPublished(null);
         } else {
-            tradingCard.setYearPublished(yearPublished);
+            tradingCardDTO.setYearPublished(yearPublished);
         }
-        return tradingCard;
+        return tradingCardDTO;
     }
 }

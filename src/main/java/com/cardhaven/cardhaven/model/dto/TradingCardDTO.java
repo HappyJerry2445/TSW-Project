@@ -1,10 +1,10 @@
 // TradingCard.java
-package com.cardhaven.cardhaven.model.beans;
+package com.cardhaven.cardhaven.model.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class TradingCard implements Serializable {
+public class TradingCardDTO implements Serializable {
     private int cardId; // Foreign key to Product
     private String cardSet;
     private String cardNumber;
@@ -14,10 +14,10 @@ public class TradingCard implements Serializable {
     private String artist;
     private Integer yearPublished; // YEAR type in SQL is usually int in Java
 
-    public TradingCard() {
+    public TradingCardDTO() {
     }
 
-    public TradingCard(int cardId, String cardSet, String cardNumber, String rarity, String cardCondition, String cardText, String artist, Integer yearPublished) {
+    public TradingCardDTO(int cardId, String cardSet, String cardNumber, String rarity, String cardCondition, String cardText, String artist, Integer yearPublished) {
         this.cardId = cardId;
         this.cardSet = cardSet;
         this.cardNumber = cardNumber;
@@ -111,7 +111,7 @@ public class TradingCard implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TradingCard that = (TradingCard) o;
+        TradingCardDTO that = (TradingCardDTO) o;
         return cardId == that.cardId &&
                 Objects.equals(cardSet, that.cardSet) &&
                 Objects.equals(cardNumber, that.cardNumber) &&
