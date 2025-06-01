@@ -180,3 +180,29 @@ CREATE TABLE Review
     FOREIGN KEY (UserID) REFERENCES "User" (UserID) ON DELETE CASCADE,
     INDEX idx_reviews_product (ProductID)
 );
+
+CREATE TABLE Cart
+(
+    CartID      INT PRIMARY KEY AUTO_INCREMENT,
+    UserID      INT NOT NULL,
+    CreatedAt   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    LastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserID) REFERENCES User (UserID) ON DELETE CASCADE,
+    UNIQUE (UserID),
+    INDEX idx_cart_user (UserID)
+);
+
+CREATE TABLE CartItem
+(
+    CartItemID INT PRIMARY KEY AUTO_INCREMENT,
+    CartID     INT NOT NULL,
+    ProductID  INT NOT NULL,
+    VartiantID INT,
+    Quantity   INT NOT NULL CHECK ( Quantity > 0 ),
+    AddedAT    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (CartID) REFERENCES Cart (CartID),
+    FOREIGN KEY (ProductID) REFERENCES Product (ProductID),
+    FOREIGN KEY (VartiantID) REFERENCES ProductVariant (VariantID),
+    UNIQUE KEY unq_cart_product_variant (CartID, ProductID, VartiantID)
+);
+
