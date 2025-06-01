@@ -182,3 +182,26 @@ header .container {
     font-weight: bold;
     color: var(--accent-bright);
 }
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+}
+
+.main-nav ul li {
+    margin-left: calc(var(--spacing-unit) * 1.5);
+}
+
+.main-nav ul li a {
+    color: var(--text-light);
+    font-weight: 600;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid transparent;
+}
+
+/* TODO: Add active to header */
+.main-nav ul li a:hover, .main-nav ul li a.active {
+    color: var(--accent-bright);
+    border-bottom-color: var(--accent-bright);
+}
+
