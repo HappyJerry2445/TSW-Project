@@ -175,3 +175,10 @@ header .container {
     align-items: center;
 }
 
+
+.logo {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--accent-bright);
+}
