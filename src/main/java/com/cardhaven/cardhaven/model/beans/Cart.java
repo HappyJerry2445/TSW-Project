@@ -8,18 +8,16 @@ public class Cart implements Serializable {
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
     private int cartId;
-    private Integer userId; // Null for guest carts
-    private String sessionId; // Null for registered user carts
+    private int userId;
 
     public Cart() {
     }
 
-    public Cart(LocalDateTime createdAt, LocalDateTime lastUpdated, int cartId, Integer userId, String sessionId) {
+    public Cart(LocalDateTime createdAt, LocalDateTime lastUpdated, int cartId, Integer userId) {
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
         this.cartId = cartId;
         this.userId = userId;
-        this.sessionId = sessionId;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -46,20 +44,12 @@ public class Cart implements Serializable {
         this.cartId = cartId;
     }
 
-    public Integer getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
     }
 
     @Override
@@ -69,7 +59,6 @@ public class Cart implements Serializable {
                 ", lastUpdated=" + lastUpdated +
                 ", cartId=" + cartId +
                 ", userId=" + userId +
-                ", sessionId='" + sessionId + '\'' +
                 '}';
     }
 
@@ -77,11 +66,11 @@ public class Cart implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Cart cart = (Cart) o;
-        return cartId == cart.cartId && Objects.equals(createdAt, cart.createdAt) && Objects.equals(lastUpdated, cart.lastUpdated) && Objects.equals(userId, cart.userId) && Objects.equals(sessionId, cart.sessionId);
+        return cartId == cart.cartId && Objects.equals(createdAt, cart.createdAt) && Objects.equals(lastUpdated, cart.lastUpdated) && Objects.equals(userId, cart.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(createdAt, lastUpdated, cartId, userId, sessionId);
+        return Objects.hash(createdAt, lastUpdated, cartId, userId);
     }
 }
