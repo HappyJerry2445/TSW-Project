@@ -353,6 +353,20 @@ footer {
     padding-bottom: calc(var(--spacing-unit) * 2);
 }
 
+.section-title {
+    text-align: center;
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+    font-size: 2.2rem; /* Already defined in h2, but can be specific */
+    position: relative;
+}
 
-
+.section-title::after {
+    content: '';
+    display: block;
+    width: 70px;
+    height: 4px;
+    background-color: var(--accent-bright);
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+}
 
