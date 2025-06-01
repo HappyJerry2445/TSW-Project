@@ -1,0 +1,31 @@
+/* Variable declaration */
+:root {
+    --primary-dark: #03256c;
+    --primary-blue: #1768ac;
+    --secondary-blue: #2541b2;
+    --accent-bright: #06bee1;
+    --text-light: #ffffff;
+    --text-dark: #333333;
+    --background-light: #ffffff;
+    --background-grey: #f4f6f8;
+    --danger-red: #e74c3c;
+    --success-green: #2ecc71;
+
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Open Sans', sans-serif;
+
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --box-shadow-light: 0 2px 8px rgba(0, 0, 0, 0.07);
+    --box-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    --container-width: 1200px;
+    --spacing-unit: 1rem; /* 16px by default */
+}
+
+/* Basic Reset & Defaults */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
