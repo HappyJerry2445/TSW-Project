@@ -134,4 +134,27 @@ img {
     color: var(--text-light);
 }
 
+/* Forms basic styling */
+input[type="text"],
+input[type="email"],
+input[type="search"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+    padding: calc(var(--spacing-unit) * 0.6);
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius-sm);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    width: 100%;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(23, 104, 172, 0.2);
+}
+
 
