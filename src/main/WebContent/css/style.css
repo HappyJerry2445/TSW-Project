@@ -29,3 +29,21 @@
     margin: 0;
     padding: 0;
 }
+
+body {
+    font-family: var(--font-body);
+    color: var(--text-dark);
+    background-color: var(--background-light);
+    line-height: 1.6;
+    font-size: 16px; /* Base font size */
+}
+
+
+.container {
+    width: 90%;
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-unit);
+}
+
+
