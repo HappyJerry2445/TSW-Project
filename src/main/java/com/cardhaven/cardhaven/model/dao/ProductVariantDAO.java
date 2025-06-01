@@ -8,21 +8,21 @@ import java.util.*;
 
 public class ProductVariantDAO implements GenericDAO<ProductVariant, Integer> {
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
-           "VariantId", "ProductId", "VariantName", "Attributes", "AdditionalPrice", "Stock"
+            "VariantId", "ProductId", "VariantName", "Attributes", "AdditionalPrice", "Stock"
     );
     private static final String DEFAULT_ORDER_COLUMN = "VariantId";
 
     private final DataSource dataSource;
 
     public ProductVariantDAO(DataSource dataSource) {
-        this.dataSource = Objects.requireNonNull(dataSource,"DataSource cannot be null.");
+        this.dataSource = Objects.requireNonNull(dataSource, "DataSource cannot be null.");
     }
 
     public void save(ProductVariant productVariant) throws SQLException {
         validateProductVariant(productVariant);
 
         String sql;
-        if(productVariant.getVariantId() == 0) {
+        if (productVariant.getVariantId() == 0) {
             sql = "INSERT INTO ProductVariant (VariantId, ProductId, VariantName, Attributes, AdditionalPrice, Stock) VALUES (?, ?, ?, ?, ?, ?)";
             try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setInt(1, productVariant.getVariantId());
@@ -60,7 +60,7 @@ public class ProductVariantDAO implements GenericDAO<ProductVariant, Integer> {
     }
 
     public boolean delete(Integer id) throws SQLException {
-        if(id == null || id <= 0) {
+        if (id == null || id <= 0) {
             throw new IllegalArgumentException("Product Variant id cannot be null or zero.");
         }
 
@@ -113,7 +113,7 @@ public class ProductVariantDAO implements GenericDAO<ProductVariant, Integer> {
     }
 
     public List<String> getAllowedOrderColumns() {
-        return ALLOWED_ORDER_COLUMNS;
+        return new ArrayList<>(ALLOWED_ORDER_COLUMNS);
     }
 
     private ProductVariant extractProductVariantFromResulSet(ResultSet rs) throws SQLException {
@@ -129,7 +129,7 @@ public class ProductVariantDAO implements GenericDAO<ProductVariant, Integer> {
     }
 
     private void validateProductVariant(ProductVariant productVariant) {
-        if(productVariant == null) {
+        if (productVariant == null) {
             throw new IllegalArgumentException("Product variant cannot be null.");
         }
 

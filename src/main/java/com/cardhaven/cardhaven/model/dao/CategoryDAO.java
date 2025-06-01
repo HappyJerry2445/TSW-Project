@@ -190,7 +190,7 @@ public class CategoryDAO implements GenericDAO<Category, Integer> {
 
     @Override
     public List<String> getAllowedOrderColumns() {
-        return ALLOWED_ORDER_COLUMNS;
+        return new ArrayList<>(ALLOWED_ORDER_COLUMNS);
     }
 
     /**

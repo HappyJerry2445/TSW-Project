@@ -125,7 +125,8 @@ public class ProductImageDAO implements GenericDAO<ProductImage, Integer> {
     }
 
     public List<String> getAllowedOrderColumns() {
-        return ALLOWED_ORDER_COLUMNS;
+
+        return new ArrayList<>(ALLOWED_ORDER_COLUMNS);
     }
 
     private ProductImage extractProductImageFromResultSet(ResultSet rs) throws SQLException {

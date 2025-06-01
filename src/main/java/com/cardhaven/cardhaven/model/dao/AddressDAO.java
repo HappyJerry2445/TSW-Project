@@ -187,9 +187,10 @@ public class AddressDAO implements GenericDAO<Address, Integer> {
         return addresses;
     }
 
+
     @Override
     public List<String> getAllowedOrderColumns() {
-        return ALLOWED_ORDER_COLUMNS;
+        return new ArrayList<>(ALLOWED_ORDER_COLUMNS);
     }
 
     /**

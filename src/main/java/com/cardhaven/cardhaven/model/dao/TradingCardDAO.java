@@ -207,7 +207,7 @@ public class TradingCardDAO implements GenericDAO<TradingCard, Integer> {
 
     @Override
     public List<String> getAllowedOrderColumns() {
-        return ALLOWED_ORDER_COLUMNS;
+        return new ArrayList<>(ALLOWED_ORDER_COLUMNS);
     }
 
     /**
