@@ -10,7 +10,7 @@ import java.util.*;
 public class AddressDAO implements GenericDAO<AddressDTO, Integer> {
 
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
-            "AddressID", "UserID", "City", "Country", "AddressType", "IsDefault"
+            "AddressID", "UserID", "StreetAddress", "City", "State", "PostalCode", "Country", "AddressType", "IsDefault"
     );
     private static final String DEFAULT_ORDER_COLUMN = "AddressID";
 
