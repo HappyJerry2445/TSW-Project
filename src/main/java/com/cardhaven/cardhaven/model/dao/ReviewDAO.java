@@ -88,7 +88,7 @@ public class ReviewDAO implements GenericDAO<ReviewDTO, Integer>{
 
 		}
 
-		public ReviewDTO getdById(Integer reviewID) throws SQLException {
+		public ReviewDTO getById(Integer reviewID) throws SQLException {
 			if(reviewID == null || reviewID <= 0) {
 				throw new IllegalArgumentException("Review ID cannot be null or zero or greater than zero");
 			}
