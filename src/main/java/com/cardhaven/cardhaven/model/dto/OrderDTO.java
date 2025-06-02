@@ -11,7 +11,7 @@ public class OrderDTO implements Serializable {
     private int orderId;    //PK
     private int userId;        //FK of User
     private LocalDateTime orderDate;
-    private String orderStatus; //Enum
+    private OrderStatus orderStatus; //Enum
     private int shippingAddressId;        //FK to ShippingAddress
     private int billingAddressId;        //FK to BillingAddress
     private int totalAmount;
@@ -20,13 +20,14 @@ public class OrderDTO implements Serializable {
 
     }
 
-    public OrderDTO(int orderId, int userId, LocalDateTime orderDate, String orderStatus, int shippingAddressId, int billingAddressId, int totalAmount) {
+    public OrderDTO(int orderId, int userId, LocalDateTime orderDate, OrderStatus orderStatus, int shippingAddressId, int billingAddressId, int totalAmount) {
         this.orderId = orderId;
         this.userId = userId;
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;
         this.shippingAddressId = shippingAddressId;
         this.billingAddressId = billingAddressId;
+        this.totalAmount = totalAmount;
     }
 
     public int getOrderId() {
@@ -53,11 +54,11 @@ public class OrderDTO implements Serializable {
         this.orderDate = orderDate;
     }
 
-    public String getOrderStatus() {
+    public OrderStatus getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String orderStatus) {
+    public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 
@@ -110,5 +111,13 @@ public class OrderDTO implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(orderId, userId, orderDate, orderStatus, shippingAddressId, billingAddressId, totalAmount);
+    }
+
+    public enum OrderStatus{
+        Pending,
+        Processing,
+        Shipped,
+        Delivered,
+        Cancelled
     }
 }
