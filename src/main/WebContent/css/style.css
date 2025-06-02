@@ -171,9 +171,11 @@ header {
 }
 
 header .container {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
     justify-content: space-between;
     align-items: center;
+    gap: var(--spacing-unit);
 }
 
 
@@ -187,6 +189,7 @@ header .container {
 .main-nav ul {
     list-style: none;
     display: flex;
+    align-items: center;
 }
 
 .main-nav ul li {
@@ -274,6 +277,7 @@ footer {
     color: var(--text-light-grey); /* Lighter grey for footer text */
     padding: calc(var(--spacing-unit) * 3) 0 calc(var(--spacing-unit) * 1.5);
     margin-top: calc(var(--spacing-unit) * 3);
+    margin-bottom: 0;
 }
 
 .footer-columns {
@@ -306,10 +310,14 @@ footer {
     color: var(--text-light);
 }
 
+.social-icons {
+    display: flex;
+    gap: var(--spacing-unit);
+}
+
 .social-icons a {
     color: var(--text-light-grey);
     font-size: 1.5rem;
-    margin-right: var(--spacing-unit);
 }
 
 .social-icons a:hover {
@@ -372,8 +380,19 @@ footer {
 
 /* Responsive (Basic) */
 @media (max-width: 992px) {
-    .main-nav {
-        display: none; /* TODO: To be handled by JS for mobile menu */
+
+    .logo {
+        grid-area: logo;
+        text-align: center;
+    }
+
+    .search-bar {
+        grid-area: search-bar;
+        margin-right: 0;
+    }
+
+    .header-icons {
+        grid-area: header-icons;
     }
 
     .mobile-menu-toggle {
@@ -383,17 +402,23 @@ footer {
         color: var(--text-light);
         font-size: 1.5rem;
         cursor: pointer;
+        grid-area: mobile-menu-toggle;
     }
 
     header .container {
-        flex-wrap: wrap; /* Allow search bar to wrap if needed */
+        grid-template-columns: auto auto auto;
+        grid-template-areas:
+                "mobile-menu-toggle logo header-icons"
+                "search-bar search-bar search-bar";
     }
 
-    .header-actions .search-bar {
-        order: 3; /* Move search bar below logo/nav on small screens if it wraps */
-        width: 100%;
-        margin-top: 0.5rem;
-        margin-right: 0;
+    .main-nav {
+        display: none; /* TODO: To be handled by JS for mobile menu */
+    }
+
+
+    .header-actions {
+        display: contents;
     }
 }
 
@@ -416,7 +441,7 @@ footer {
     }
 
     .social-icons {
-        text-align: center;
+        justify-content: center;
     }
 }
 

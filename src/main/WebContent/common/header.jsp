@@ -19,13 +19,15 @@
                 <input type="search" placeholder="Cerca prodotti..." aria-label="Cerca">
                 <button type="submit" aria-label="Invia ricerca"><i class="fas fa-search"></i></button>
             </form>
-            <!-- TODO: pagina account -->
-            <a href="#" aria-label="Il mio account" class="action-icon"><i class="fas fa-user"></i></a>
-            <!-- TODO: pagina carrello -->
-            <a href="#cart" aria-label="Carrello" class="action-icon cart-icon">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-count">0</span>
-            </a>
+            <div class="header-icons">
+                <!-- TODO: pagina account -->
+                <a href="#" aria-label="Il mio account" class="action-icon account-icon"><i class="fas fa-user"></i></a>
+                <!-- TODO: pagina carrello -->
+                <a href="#cart" aria-label="Carrello" class="action-icon cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
         </div>
         <!-- TODO: pagina menu -->
         <button class="mobile-menu-toggle" aria-label="Apri menu">
