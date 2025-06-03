@@ -241,10 +241,14 @@ header .container {
     cursor: pointer;
 }
 
+.header-icons {
+    display: flex;
+    gap: var(--spacing-unit);
+}
+
 .action-icon {
     color: var(--text-light);
     font-size: 1.3rem;
-    margin-left: var(--spacing-unit);
     position: relative;
 }
 
@@ -378,8 +382,10 @@ footer {
     border-radius: 2px;
 }
 
+
 /* Responsive (Basic) */
 @media (max-width: 992px) {
+
 
     .logo {
         grid-area: logo;
@@ -393,6 +399,7 @@ footer {
 
     .header-icons {
         grid-area: header-icons;
+        justify-self: end;
     }
 
     .mobile-menu-toggle {
@@ -403,10 +410,11 @@ footer {
         font-size: 1.5rem;
         cursor: pointer;
         grid-area: mobile-menu-toggle;
+        justify-self: start;
     }
 
     header .container {
-        grid-template-columns: auto auto auto;
+        grid-template-columns: 1fr auto 1fr;
         grid-template-areas:
                 "mobile-menu-toggle logo header-icons"
                 "search-bar search-bar search-bar";

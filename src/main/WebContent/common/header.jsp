@@ -21,7 +21,8 @@
             </form>
             <div class="header-icons">
                 <!-- TODO: pagina account -->
-                <a href="/common/login.jsp" aria-label="Il mio account" class="action-icon account-icon"><i class="fas fa-user"></i></a>
+                <a href="/login.jsp" aria-label="Il mio account" class="action-icon account-icon"><i
+                        class="fas fa-user"></i></a>
                 <!-- TODO: pagina carrello -->
                 <a href="#cart" aria-label="Carrello" class="action-icon cart-icon">
                     <i class="fas fa-shopping-cart"></i>
