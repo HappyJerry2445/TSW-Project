@@ -21,7 +21,7 @@
             </form>
             <div class="header-icons">
                 <!-- TODO: pagina account -->
-                <a href="${pageContext.request.contextPath}/login" aria-label="Il mio account"
+                <a href="${pageContext.request.contextPath}/common/profile" aria-label="Il mio account"
                    class="action-icon account-icon"><i
                         class="fas fa-user"></i></a>
                 <!-- TODO: pagina carrello -->
