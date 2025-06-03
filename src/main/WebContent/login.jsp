@@ -16,9 +16,9 @@
 <jsp:include page="common/header.jsp"/>
 
 <main>
-    <div class="center-child mt-2">
+    <div class="center-child mt-3">
 
-        <div class="card">
+        <div id="login-card" class="card">
             <h2 class="section-title">Accedi al tuo account</h2>
 
             <% List<String> errors = (List<String>) request.getAttribute("errors"); %>
