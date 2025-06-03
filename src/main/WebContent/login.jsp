@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-<jsp:include page="common/header.jsp"/>
+<jsp:include page="./components/header.jsp"/>
 
 <main>
     <div class="center-child mt-3">
@@ -55,6 +55,6 @@
 
 </main>
 
-<jsp:include page="common/footer.jsp"/>
+<jsp:include page="./components/footer.jsp"/>
 </body>
 </html>
