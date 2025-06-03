@@ -10,10 +10,10 @@
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css" type="text/css">
-    <jsp:include page="components/common_head.jsp"/>
+    <jsp:include page="../components/common_head.jsp"/>
 </head>
 <body>
-<jsp:include page="./components/header.jsp"/>
+<jsp:include page="../components/header.jsp"/>
 
 <main>
     <div class="center-child mt-3">
@@ -55,6 +55,6 @@
 
 </main>
 
-<jsp:include page="./components/footer.jsp"/>
+<jsp:include page="../components/footer.jsp"/>
 </body>
 </html>
