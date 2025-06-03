@@ -21,15 +21,13 @@
         <div id="login-card" class="card">
             <h2 class="section-title">Accedi al tuo account</h2>
 
-            <% List<String> errors = (List<String>) request.getAttribute("errors"); %>
-            <% if (errors != null && !errors.isEmpty()) { %>
-            <div class="alert alert-danger">
-                <% for (String error : errors) { %>
-                <p><%= error %>
-                </p>
-                <% } %>
-            </div>
-            <% } %>
+            <c:if test="${not empty errors}">
+                <div class="alert alert-danger">
+                    <c:forEach var="error" items="${errors}">
+                        <p>${error}</p>
+                    </c:forEach>
+                </div>
+            </c:if>
 
             <form action="login" method="post">
                 <div class="mb-1">
