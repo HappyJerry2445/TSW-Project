@@ -1,0 +1,13 @@
+#login-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--spacing-unit);
+}
+
+#login-links a {
+    font-size: 0.9rem;
+}
+
+#login-links a:hover {
+    text-decoration: underline;
+}

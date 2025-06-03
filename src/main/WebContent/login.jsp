@@ -7,6 +7,7 @@
     <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;family=Open+Sans:wght@400;600&amp;display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -14,39 +15,45 @@
 <body>
 <jsp:include page="common/header.jsp"/>
 
-<div class="login-container">
-    <h2 class="section-title">Accedi al tuo account</h2>
+<main>
+    <div class="center-child mt-2">
 
-    <% List<String> errors = (List<String>) request.getAttribute("errors"); %>
-    <% if (errors != null && !errors.isEmpty()) { %>
-    <div class="alert alert-danger">
-        <% for (String error : errors) { %>
-        <p><%= error %>
-        </p>
-        <% } %>
-    </div>
-    <% } %>
+        <div class="card">
+            <h2 class="section-title">Accedi al tuo account</h2>
 
-    <form action="Login" method="post" class="login-form">
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input id="email" type="email" name="email" class="form-input" placeholder="Inserisci la tua email">
+            <% List<String> errors = (List<String>) request.getAttribute("errors"); %>
+            <% if (errors != null && !errors.isEmpty()) { %>
+            <div class="alert alert-danger">
+                <% for (String error : errors) { %>
+                <p><%= error %>
+                </p>
+                <% } %>
+            </div>
+            <% } %>
+
+            <form action="login" method="post">
+                <div class="mb-1">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" name="email" class="form-input" placeholder="Inserisci la tua email">
+                </div>
+
+                <div class="mb-1">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" name="password" class="form-input"
+                           placeholder="Inserisci la tua password">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Accedi</button>
+            </form>
+
+            <div id="login-links">
+                <a href="#">Password dimenticata?</a>
+                <a href="#">Registrati</a>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input id="password" type="password" name="password" class="form-input"
-                   placeholder="Inserisci la tua password">
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-block">Accedi</button>
-    </form>
-
-    <div class="login-links">
-        <a href="#">Password dimenticata?</a>
-        <a href="#">Registrati</a>
     </div>
-</div>
+
+</main>
 
 <jsp:include page="common/footer.jsp"/>
 </body>
