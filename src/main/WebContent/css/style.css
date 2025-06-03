@@ -226,11 +226,11 @@ header .container {
 .header-actions {
     display: flex;
     align-items: center;
+    gap: calc(var(--spacing-unit) * 2);
 }
 
 .search-bar {
     display: flex;
-    margin-right: var(--spacing-unit);
 }
 
 .search-bar input[type="search"] {
