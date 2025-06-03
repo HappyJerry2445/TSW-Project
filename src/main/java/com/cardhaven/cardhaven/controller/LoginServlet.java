@@ -20,7 +20,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         List<String> errors = new ArrayList<>();
-        RequestDispatcher dispatcherToLoginPage = request.getRequestDispatcher("login.jsp");
+        RequestDispatcher dispatcherToLoginPage = request.getRequestDispatcher("/WEB-INF/login.jsp");
 
         if (email == null || email.trim().isEmpty()) {
             errors.add("Email cannot be empty");
