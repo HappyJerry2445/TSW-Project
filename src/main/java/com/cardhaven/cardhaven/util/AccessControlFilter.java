@@ -1,5 +1,6 @@
 package com.cardhaven.cardhaven.util;
 
+import com.cardhaven.cardhaven.model.dto.UserDTO;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpFilter;
@@ -14,14 +15,14 @@ public class AccessControlFilter extends HttpFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         var httpReq = (HttpServletRequest) req;
         var httpRes = (HttpServletResponse) res;
-        var isAdmin = (Boolean) httpReq.getSession().getAttribute("isAdmin");
+        var user = (UserDTO) httpReq.getSession().getAttribute("loggedInUser");
         var path = httpReq.getServletPath();
         System.out.println(path);
-        if (path.contains("/common/") && isAdmin == null) {
+        if (path.contains("/common/") && user == null) {
             httpRes.sendRedirect(httpReq.getContextPath() + "/login");
             return;
         }
-        if (path.contains("/admin/") && (isAdmin == null || !isAdmin)) {
+        if (path.contains("/admin/") && (user == null || !user.getRole().equals(UserDTO.Role.Admin))) {
             httpRes.sendRedirect(httpReq.getContextPath() + "/login");
             return;
         }

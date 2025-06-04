@@ -12,6 +12,7 @@
     --color-neutral-base: #DEE2E6; /* Default border color */
     --color-neutral-dark: #6C757D; /* For secondary text/icons */
     --color-neutral-darkest: #212529; /* For main text */
+    --color-neutral-darkest-transparent: rgba(33, 37, 41, 0.5); /* For main text */
 
     /* Text Colors (derived from neutrals) */
     --color-text-default: var(--color-neutral-darkest); /* Formerly --color-text-dark */
@@ -264,7 +265,7 @@ header .container {
     padding: 0.5rem 0.8rem;
     border: none;
     border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
-    background-color: var(--color-accent-secondary); /* Changed from --color-secondary to the darker accent shade */
+    background-color: var(--color-neutral-darkest-transparent); /* Changed from --color-secondary to the darker accent shade */
     color: var(--color-text-inverted); /* Changed from --color-text-light */
     min-width: 200px;
 }

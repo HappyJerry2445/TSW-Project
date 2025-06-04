@@ -2,6 +2,9 @@
 package com.cardhaven.cardhaven.model.dao; // Adjust package as needed
 
 import com.cardhaven.cardhaven.model.dto.UserDTO;
+import com.password4j.Argon2Function;
+import com.password4j.Password;
+import com.password4j.types.Argon2;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -176,6 +179,11 @@ public class UserDAO implements GenericDAO<UserDTO, Integer> {
             }
         }
         return userDTOS;
+    }
+
+    public boolean verifyPassword(String plainTextPassword, String storedHashPassword) {
+        var argon2id = Argon2Function.getInstance(19, 2, 1, 32, Argon2.ID);
+        return Password.check(plainTextPassword, storedHashPassword).with(argon2id);
     }
 
     @Override
