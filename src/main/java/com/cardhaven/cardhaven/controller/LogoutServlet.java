@@ -27,7 +27,11 @@ public class LogoutServlet extends HttpServlet {
         HttpSession session = req.getSession(false);
         if (session != null) {
             session.invalidate();
+            session = req.getSession(true);
+            session.setAttribute("notificationMessage", "Logout effetuato con successo");
+            session.setAttribute("notificationType", "info");
         }
+
         resp.sendRedirect(req.getContextPath() + "/");
     }
 }

@@ -475,21 +475,26 @@ footer {
 #notification-container {
     position: fixed;
     top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000; /* Ensure it's above other content */
-    width: 80%; /* Or adjust as needed */
-    max-width: 600px;
-    pointer-events: none; /* Allows clicks to pass through if no notifications */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+    max-width: 100%;
+
+    z-index: 2000;
+    pointer-events: none;
 }
 
 .notification {
     background-color: #f8d7da; /* Default for error */
     color: #721c24;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: var(--spacing-unit);
+    padding-right: calc(var(--spacing-unit) * 1.7);
+    margin-bottom: var(--spacing-unit);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--color-shadow-md);
     opacity: 0; /* Start hidden for animation */
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
     transform: translateY(-20px);

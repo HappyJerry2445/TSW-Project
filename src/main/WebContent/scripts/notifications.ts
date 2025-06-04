@@ -3,7 +3,7 @@
 
     function createNotificationElement(message: string, type: string) {
         const notification = document.createElement('div');
-        notification.classList.add('notifcation', type);
+        notification.classList.add('notification', type);
         notification.innerHTML = `
             <span>${message}</span>
             <span class="notification-close">&times;</span>
@@ -20,6 +20,7 @@
         });
 
         if (duration > 0) {
+            console.log(duration);
             setTimeout(() => {
                 hideNotification(notification);
             }, duration);
@@ -43,4 +44,4 @@
         info: (message, duration) => showNotification(message, 'info', duration),
         warning: (message, duration) => showNotification(message, 'warning', duration),
     };
-})
+})()

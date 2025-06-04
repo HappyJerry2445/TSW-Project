@@ -68,6 +68,8 @@ public class LoginServlet extends HttpServlet {
         var session = request.getSession();
         user.setLastLogin(LocalDateTime.now());
         session.setAttribute("loggedInUser", user);
+        session.setAttribute("notificationMessage", "Login effetuato con successo");
+        session.setAttribute("notificationType", "info");
         try {
             userDao.save(user);
         } catch (SQLException e) {

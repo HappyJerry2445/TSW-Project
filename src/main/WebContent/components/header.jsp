@@ -1,5 +1,23 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<script defer src="${pageContext.request.contextPath}/scripts/notifications.js"></script>
+<c:if test="${not empty notificationMessage}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            <c:if test="${not empty notificationType}">
+            notify.${notificationType}('${notificationMessage}');
+            </c:if>
+            <c:if test="${empty notificationType}">
+            notify.info('${notificationMessage}');
+            </c:if>
+        });
+    </script>
+    <%
+        request.getSession().removeAttribute("notificationMessage");
+        request.getSession().removeAttribute("notificationType");
+    %>
+</c:if>
 <div id="notification-container"></div>
 <header>
     <div class="container">

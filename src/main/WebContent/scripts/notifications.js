@@ -2,7 +2,7 @@
     var notificationContainer = document.getElementById('notification-container');
     function createNotificationElement(message, type) {
         var notification = document.createElement('div');
-        notification.classList.add('notifcation', type);
+        notification.classList.add('notification', type);
         notification.innerHTML = "\n            <span>".concat(message, "</span>\n            <span class=\"notification-close\">&times;</span>\n        ");
         return notification;
     }
@@ -15,6 +15,7 @@
             notification.classList.add('show');
         });
         if (duration > 0) {
+            console.log(duration);
             setTimeout(function () {
                 hideNotification(notification);
             }, duration);
@@ -35,4 +36,4 @@
         info: function (message, duration) { return showNotification(message, 'info', duration); },
         warning: function (message, duration) { return showNotification(message, 'warning', duration); },
     };
-});
+})();
