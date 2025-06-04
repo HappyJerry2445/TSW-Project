@@ -21,11 +21,18 @@
             </form>
             <div class="header-icons">
                 <!-- TODO: pagina account -->
-                <a href="${pageContext.request.contextPath}/common/profile" aria-label="Il mio account"
-                   class="action-icon account-icon"><i
-                        class="fas fa-user"></i></a>
+                <a id="account-icon" href="${pageContext.request.contextPath}/common/profile"
+                   aria-label="Il mio account"
+                   class="action-icon">
+                    <i class="fas fa-user"></i></a>
+                <c:if test="${not empty loggedInUser}">
+                    <a id="logout-icon" href="${pageContext.request.getContextPath()}/logout" aria-label="Logout"
+                       class="action-icon">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </a>
+                </c:if>
                 <!-- TODO: pagina carrello -->
-                <a href="#cart" aria-label="Carrello" class="action-icon cart-icon">
+                <a id="cart-icon" href="#cart" aria-label="Carrello" class="action-icon">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count">0</span>
                 </a>

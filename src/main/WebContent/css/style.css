@@ -286,6 +286,7 @@ header .container {
 .header-icons {
     display: flex;
     gap: var(--spacing-unit);
+    align-items: center;
 }
 
 .action-icon {
@@ -298,7 +299,7 @@ header .container {
     color: var(--color-accent-vibrant); /* Changed from --color-accent */
 }
 
-.cart-icon .cart-count {
+#cart-icon .cart-count {
     position: absolute;
     top: -8px;
     right: -10px;
@@ -539,4 +540,11 @@ footer {
     .social-icons {
         justify-content: center;
     }
+}
+
+@media (max-width: 470px) {
+    .logo {
+        font-size: 1.5rem;
+    }
+
 }
