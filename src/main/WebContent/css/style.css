@@ -472,6 +472,60 @@ footer {
 }
 
 
+#notification-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000; /* Ensure it's above other content */
+    width: 80%; /* Or adjust as needed */
+    max-width: 600px;
+    pointer-events: none; /* Allows clicks to pass through if no notifications */
+}
+
+.notification {
+    background-color: #f8d7da; /* Default for error */
+    color: #721c24;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    opacity: 0; /* Start hidden for animation */
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transform: translateY(-20px);
+    position: relative;
+    pointer-events: auto; /* Re-enable pointer events for the notification itself */
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.notification.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.notification.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.notification.warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.notification-close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
 /* Responsive (Basic) */
 @media (max-width: 992px) {
 
