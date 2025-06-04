@@ -1,25 +1,47 @@
 /* Variable declaration */
 :root {
-    --primary-dark: #03256c;
-    --primary-blue: #1768ac;
-    --secondary-blue: #2541b2;
-    --accent-bright: #06bee1;
-    --text-light: #ffffff;
-    --text-light-grey: #bdc3c7;
-    --text-dark: #333333;
-    --background-light: #ffffff;
-    --background-grey: #f4f6f8;
-    --danger-red: #e74c3c;
-    --success-green: #2ecc71;
+    /* Brand Colors */
+    --color-primary-dark: #1A2A40; /* Formerly --color-dark */
+    --color-primary-light: #FFFFFF; /* Retains --color-background-light */
+    --color-accent-vibrant: #007BFF; /* New primary brand accent (was --color-primary #3465A4, changing to a more vibrant blue) */
+    --color-accent-secondary: #0056B3; /* Darker shade of vibrant accent */
 
+    /* Neutral Colors */
+    --color-neutral-lightest: #F8F9FA; /* For very light backgrounds */
+    --color-neutral-light: #E9ECEF; /* For subtle background/borders */
+    --color-neutral-base: #DEE2E6; /* Default border color */
+    --color-neutral-dark: #6C757D; /* For secondary text/icons */
+    --color-neutral-darkest: #212529; /* For main text */
+
+    /* Text Colors (derived from neutrals) */
+    --color-text-default: var(--color-neutral-darkest); /* Formerly --color-text-dark */
+    --color-text-secondary: var(--color-neutral-dark); /* Formerly --color-text-light-grey, now a darker grey */
+    --color-text-inverted: #F0F0F0; /* Formerly --color-text-light, for text on dark backgrounds */
+
+    /* Background Colors */
+    --color-bg-body: var(--color-primary-light); /* Main page background */
+    --color-bg-card: #FFFFFF; /* Card backgrounds */
+    --color-bg-light-grey: var(--color-neutral-lightest); /* Formerly --color-background-grey, adjusted */
+
+    /* Status Colors */
+    --color-status-error: #DC3545; /* Formerly --color-danger-red */
+    --color-status-success: #28A745; /* Formerly --color-success-green */
+    --color-status-warning: #FFC107; /* New, for warning messages */
+    --color-status-info: #17A2B8; /* New, for info messages */
+
+    /* Borders & Shadows */
+    --color-border-default: var(--color-neutral-base);
+    --color-shadow-light: 0 2px 8px rgba(0, 0, 0, 0.07);
+    --color-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --color-shadow-strong: 0 4px 12px rgba(0, 0, 0, 0.17); /* Existing */
+
+
+    /* Fonts & Spacing (no change to these values, just re-arranged slightly) */
     --font-heading: 'Montserrat', sans-serif;
     --font-body: 'Open Sans', sans-serif;
 
     --border-radius-sm: 4px;
     --border-radius-md: 8px;
-    --box-shadow-light: 0 2px 8px rgba(0, 0, 0, 0.07);
-    --box-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --box-shadow-strong: 0 4px 12px rgba(0, 0, 0, 0.17);
 
     --container-width: 1200px;
     --spacing-unit: 1rem; /* 16px by default */
@@ -34,8 +56,8 @@
 
 body {
     font-family: var(--font-body);
-    color: var(--text-dark);
-    background-color: var(--background-light);
+    color: var(--color-text-default); /* Changed from --color-text-dark */
+    background-color: var(--color-bg-body); /* Changed from --color-background-light */
     line-height: 1.6;
     font-size: 16px; /* Base font size */
 }
@@ -49,18 +71,18 @@ body {
 }
 
 a {
-    color: var(--primary-blue);
+    color: var(--color-accent-vibrant); /* Changed from --color-primary */
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 a:hover {
-    color: var(--accent-bright);
+    color: var(--color-accent-secondary); /* Changed from --color-accent, now using a darker accent shade */
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    color: var(--primary-dark);
+    color: var(--color-primary-dark); /* Changed from --color-dark */
     line-height: 1.3;
     margin-bottom: calc(var(--spacing-unit) * 0.75);
 }
@@ -109,38 +131,43 @@ img {
 }
 
 .btn-primary {
-    background-color: var(--primary-blue);
-    color: var(--text-light);
+    background-color: var(--color-accent-vibrant); /* Changed from --color-primary */
+    color: var(--color-text-inverted); /* Changed from --color-text-light */
 }
 
 .btn-primary:hover {
-    background-color: var(--secondary-blue);
+    background-color: var(--color-accent-secondary); /* Changed from --color-secondary */
     transform: translateY(-2px);
-    box-shadow: var(--box-shadow-light);
-    color: var(--text-light);
+    box-shadow: var(--color-shadow-light);
+    color: var(--color-text-inverted); /* Changed from --color-text-light */
 }
 
 .btn-accent {
-    background-color: var(--accent-bright);
-    color: var(--primary-dark);
+    /* The old --color-accent was gold. The new accent is the vibrant blue. */
+    /* This button should now use the original accent color or a complementary one. */
+    /* Let's make this use a more muted, but still distinct accent for secondary actions. */
+    background-color: var(--color-neutral-light); /* Using a light neutral for a softer accent button */
+    color: var(--color-text-default); /* Changed from --color-dark */
+    border: 1px solid var(--color-neutral-base);
 }
 
 .btn-accent:hover {
-    background-color: #05a8c7; /* Slightly darker accent */
+    background-color: var(--color-neutral-base); /* Slightly darker neutral on hover */
+    /* Removed the hardcoded color #05a8c7, which was derived from the old accent */
     transform: translateY(-2px);
-    box-shadow: var(--box-shadow-light);
-    color: var(--primary-dark);
+    box-shadow: var(--color-shadow-light);
+    color: var(--color-text-default); /* Changed from --color-dark */
 }
 
 .btn-outline {
     background-color: transparent;
-    color: var(--primary-blue);
-    border: 2px solid var(--primary-blue);
+    color: var(--color-accent-vibrant); /* Changed from --color-primary */
+    border: 2px solid var(--color-accent-vibrant); /* Changed from --color-primary */
 }
 
 .btn-outline:hover {
-    background-color: var(--primary-blue);
-    color: var(--text-light);
+    background-color: var(--color-accent-vibrant); /* Changed from --color-primary */
+    color: var(--color-text-inverted); /* Changed from --color-text-light */
 }
 
 /* Forms basic styling */
@@ -152,7 +179,7 @@ input[type="number"],
 textarea,
 select {
     padding: calc(var(--spacing-unit) * 0.6);
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-border-default); /* Changed from #ccc */
     border-radius: var(--border-radius-sm);
     font-family: var(--font-body);
     font-size: 1rem;
@@ -162,21 +189,21 @@ select {
 
 input:focus, textarea:focus, select:focus {
     outline: none;
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 2px rgba(23, 104, 172, 0.2);
+    border-color: var(--color-accent-vibrant); /* Changed from --color-primary */
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2); /* Adjusted to match new --color-accent-vibrant */
 }
 
 label {
     margin-bottom: calc(var(--spacing-unit) * 0.5);
     font-weight: 600;
-    color: var(--primary-dark);
+    color: var(--color-text-default); /* Changed from --color-dark */
 }
 
 
 /* Header */
 header {
-    background-color: var(--primary-dark);
-    color: var(--text-light);
+    background-color: var(--color-primary-dark); /* Changed from --color-dark */
+    color: var(--color-text-inverted); /* Changed from --color-text-light */
     padding: var(--spacing-unit) 0;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: sticky;
@@ -197,7 +224,7 @@ header .container {
     font-family: var(--font-heading);
     font-size: 1.8rem;
     font-weight: bold;
-    color: var(--accent-bright);
+    color: var(--color-accent-vibrant); /* Changed from --color-accent, now using the primary vibrant accent */
 }
 
 .main-nav ul {
@@ -211,7 +238,7 @@ header .container {
 }
 
 .main-nav ul li a {
-    color: var(--text-light);
+    color: var(--color-text-inverted); /* Changed from --color-text-light */
     font-weight: 600;
     padding: 0.5rem 0;
     border-bottom: 2px solid transparent;
@@ -219,8 +246,8 @@ header .container {
 
 /* TODO: Add active to header */
 .main-nav ul li a:hover, .main-nav ul li a.active {
-    color: var(--accent-bright);
-    border-bottom-color: var(--accent-bright);
+    color: var(--color-accent-vibrant); /* Changed from --color-accent */
+    border-bottom-color: var(--color-accent-vibrant); /* Changed from --color-accent */
 }
 
 .header-actions {
@@ -237,18 +264,18 @@ header .container {
     padding: 0.5rem 0.8rem;
     border: none;
     border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
-    background-color: var(--secondary-blue);
-    color: var(--text-light);
+    background-color: var(--color-accent-secondary); /* Changed from --color-secondary to the darker accent shade */
+    color: var(--color-text-inverted); /* Changed from --color-text-light */
     min-width: 200px;
 }
 
 .search-bar input[type="search"]::placeholder {
-    color: var(--text-light-grey);
+    color: var(--color-text-inverted); /* Changed from --color-text-light-grey */
 }
 
 .search-bar button {
-    background-color: var(--accent-bright);
-    color: var(--primary-dark);
+    background-color: var(--color-accent-vibrant); /* Changed from --color-accent */
+    color: var(--color-primary-dark); /* Changed from --color-dark */
     border: none;
     padding: 0.5rem 0.8rem;
     border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
@@ -261,21 +288,21 @@ header .container {
 }
 
 .action-icon {
-    color: var(--text-light);
+    color: var(--color-text-inverted); /* Changed from --color-text-light */
     font-size: 1.3rem;
     position: relative;
 }
 
 .action-icon:hover {
-    color: var(--accent-bright);
+    color: var(--color-accent-vibrant); /* Changed from --color-accent */
 }
 
 .cart-icon .cart-count {
     position: absolute;
     top: -8px;
     right: -10px;
-    background-color: var(--accent-bright);
-    color: var(--primary-dark);
+    background-color: var(--color-accent-vibrant); /* Changed from --color-accent */
+    color: var(--color-primary-dark); /* Changed from --color-dark */
     border-radius: 50%;
     font-size: 0.7rem;
     font-weight: bold;
@@ -291,8 +318,8 @@ header .container {
 
 /* Footer */
 footer {
-    background-color: var(--primary-dark);
-    color: var(--text-light-grey); /* Lighter grey for footer text */
+    background-color: var(--color-primary-dark); /* Changed from --color-dark */
+    color: var(--color-text-secondary); /* Changed from --color-text-light-grey */
     padding: calc(var(--spacing-unit) * 3) 0 calc(var(--spacing-unit) * 1.5);
     margin-top: calc(var(--spacing-unit) * 3);
     margin-bottom: 0;
@@ -307,7 +334,7 @@ footer {
 
 .footer-column h4 {
     font-family: var(--font-heading);
-    color: var(--accent-bright);
+    color: var(--color-accent-vibrant); /* Changed from --color-accent */
     margin-bottom: var(--spacing-unit);
     font-size: 1.2rem;
 }
@@ -321,11 +348,11 @@ footer {
 }
 
 .footer-column ul li a {
-    color: var(--text-light-grey);
+    color: var(--color-text-secondary); /* Changed from --color-text-light-grey */
 }
 
 .footer-column ul li a:hover {
-    color: var(--text-light);
+    color: var(--color-text-inverted); /* Changed from --color-text-light */
 }
 
 .social-icons {
@@ -334,12 +361,12 @@ footer {
 }
 
 .social-icons a {
-    color: var(--text-light-grey);
+    color: var(--color-text-secondary); /* Changed from --color-text-light-grey */
     font-size: 1.5rem;
 }
 
 .social-icons a:hover {
-    color: var(--accent-bright);
+    color: var(--color-accent-vibrant); /* Changed from --color-accent */
 }
 
 /* Helper classes */
@@ -407,7 +434,7 @@ footer {
     display: block;
     width: 70px;
     height: 4px;
-    background-color: var(--accent-bright);
+    background-color: var(--color-accent-vibrant); /* Changed from --color-accent */
     margin: 0.5rem auto 0;
     border-radius: 2px;
 }
@@ -420,18 +447,18 @@ footer {
 
 .card {
     padding: calc(var(--spacing-unit) * 2);
-    background-color: var(--background-light);
+    background-color: var(--color-bg-card); /* Changed from --color-background-light */
     border-radius: var(--border-radius-md);
-    box-shadow: var(--box-shadow-strong);
+    box-shadow: var(--color-shadow-strong);
 }
 
 .alert-danger {
-    background-color: rgba(231, 76, 60, 0.1);
-    color: var(--danger-red);
+    background-color: rgba(220, 53, 69, 0.1); /* Adjusted to match --color-status-error */
+    color: var(--color-status-error); /* Changed from --color-danger-red */
     padding: var(--spacing-unit);
     border-radius: var(--border-radius-sm);
     margin-bottom: var(--spacing-unit);
-    border-left: 4px solid var(--danger-red);
+    border-left: 4px solid var(--color-status-error); /* Changed from --color-danger-red */
 }
 
 .alert-danger p {
@@ -466,7 +493,7 @@ footer {
         display: block;
         background: none;
         border: none;
-        color: var(--text-light);
+        color: var(--color-text-inverted); /* Changed from --color-text-light */
         font-size: 1.5rem;
         cursor: pointer;
         grid-area: mobile-menu-toggle;
@@ -512,5 +539,3 @@ footer {
         justify-content: center;
     }
 }
-
-
