@@ -73,7 +73,7 @@ public class LoginServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        response.sendRedirect("/");
+        response.sendRedirect(request.getContextPath() + "/");
     }
 
     @Override
