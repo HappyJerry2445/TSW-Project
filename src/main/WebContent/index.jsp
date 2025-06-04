@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
+    <script src=""
     <jsp:include page="components/common_head.jsp"/>
 </head>
 <body>
