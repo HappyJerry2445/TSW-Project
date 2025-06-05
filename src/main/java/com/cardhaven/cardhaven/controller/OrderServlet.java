@@ -26,11 +26,11 @@ public class OrderServlet extends HttpServlet {
         request.setAttribute("errors", errors); // Initialize errors attribute early
 
         // Unified JSP paths
-        String ordersListPagePath = "/WEB-INF/jsp/common/orders.jsp";
-        String loginPagePath = request.getContextPath() + "/login.jsp";
+        String ordersListPagePath = "/WEB-INF/views/orders.jsp";
+        String loginPagePath = "/WEB-INF/views/login.jsp"; // Changed to use WEB-INF path
 
         if (!isUserAuthenticated(session)) {
-            response.sendRedirect(loginPagePath);
+            request.getRequestDispatcher(loginPagePath).forward(request, response);
             return;
         }
 
@@ -47,7 +47,7 @@ public class OrderServlet extends HttpServlet {
 
         if (loggedInUser == null) { // Should ideally be caught by isUserAuthenticated
             errors.add("Sessione utente non valida. Effettua nuovamente il login.");
-            response.sendRedirect(loginPagePath); // Redirect to login as session state is unexpected
+            request.getRequestDispatcher(loginPagePath).forward(request, response);
             return;
         }
 
