@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class UserDAO implements GenericDAO<UserDTO, Integer> {
+    private static final Argon2Function ARGON_2_ID = Argon2Function.getInstance(19, 2, 1, 32, Argon2.ID);
 
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
             "UserID", "FirstName", "LastName", "Email", "CreatedAt", "LastLogin", "Role"
@@ -182,8 +183,7 @@ public class UserDAO implements GenericDAO<UserDTO, Integer> {
     }
 
     public boolean verifyPassword(String plainTextPassword, String storedHashPassword) {
-        var argon2id = Argon2Function.getInstance(19, 2, 1, 32, Argon2.ID);
-        return Password.check(plainTextPassword, storedHashPassword).with(argon2id);
+        return Password.check(plainTextPassword, storedHashPassword).with(ARGON_2_ID);
     }
 
     @Override
@@ -244,5 +244,9 @@ public class UserDAO implements GenericDAO<UserDTO, Integer> {
         // Assuming your Role enum has a valueOf method that matches the DB string
         userDTO.setRole(UserDTO.Role.valueOf(rs.getString("Role")));
         return userDTO;
+    }
+
+    public String hashPassword(String password) {
+        return Password.hash(password).addRandomSalt().with(ARGON_2_ID).getResult();
     }
 }
