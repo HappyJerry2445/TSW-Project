@@ -1,5 +1,9 @@
 /* Specific styles for the user profile page */
 
+.profile-card {
+    max-width: 800px;
+    margin: auto;
+}
 
 .profile-details p {
     margin-bottom: 0.8rem;
@@ -14,34 +18,38 @@
 }
 
 .profile-actions {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
     gap: var(--spacing-unit); /* Example from style.css */
     justify-content: center;
+    align-items: center;
     margin-top: calc(var(--spacing-unit) * 2);
+    grid-template-columns: repeat(2, 1fr);
 }
 
 .profile-actions .btn {
-    flex-grow: 1; /* Allow buttons to grow */
-    max-width: 250px; /* Limit button width */
+    height: 100%;
+    text-align: center;
 }
 
-/* Responsive adjustments for profile page */
-@media (max-width: 768px) {
-    .profile-card {
-        margin: 1rem;
-        padding: 1.5rem;
-        box-shadow: none; /* Similar to user-auth-card on mobile */
-    }
 
-    .profile-details strong {
-        width: auto; /* Remove fixed width on smaller screens */
-        display: block;
-        margin-bottom: 0.2rem;
+/* Responsive adjustments for profile page */
+@media (max-width: 1000px) {
+    .profile-card {
+        box-shadow: none;
     }
 
     .profile-actions {
-        flex-direction: column; /* Stack buttons vertically */
-        align-items: stretch;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 630px) {
+    .profile-card {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .profile-actions {
+        grid-template-columns: 1fr;
     }
 }
