@@ -46,7 +46,7 @@
 
             <div class="user-auth-links">
                 <a href="#">Password dimenticata?</a>
-                <a href="#">Registrati</a>
+                <a href="${pageContext.request.contextPath}/register">Registrati</a>
             </div>
         </div>
     </div>
