@@ -1,0 +1,78 @@
+/* src/main/webapp/css/orders.css */
+
+/* Container for the entire orders page content within the main tag */
+.orders-page-container {
+    max-width: 960px; /* Adjust as needed */
+    margin: 0 auto; /* Center the content */
+    padding: 20px;
+    background-color: #f9f9f9; /* Light background for the content area */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Table styling */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    border-collapse: collapse; /* Ensures borders are neat */
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6; /* Light grey border for rows */
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6; /* Heavier border for table header */
+    background-color: #e9ecef; /* Light grey background for header */
+    color: #495057;
+    text-align: left; /* Align header text to the left */
+}
+
+/* Striped rows for better readability - assumes you have .table-striped in JSP */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Hover effect for table rows - assumes you have .table-hover in JSP */
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+}
+
+/* Responsive wrapper for the table */
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto; /* Allows horizontal scrolling on small screens */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Styling for action buttons in the table */
+.table .btn { /* General button styling if not using a framework like Bootstrap */
+    padding: 0.375rem 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    color: #fff;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+}
+
+.table .btn-info { /* Specific styling for info button */
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.table .btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+}
