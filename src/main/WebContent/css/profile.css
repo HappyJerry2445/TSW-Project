@@ -1,0 +1,47 @@
+/* Specific styles for the user profile page */
+
+
+.profile-details p {
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.profile-details strong {
+    color: var(--color-primary-dark); /* Example from style.css */
+    display: block;
+    width: 150px; /* Align labels */
+}
+
+.profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-unit); /* Example from style.css */
+    justify-content: center;
+    margin-top: calc(var(--spacing-unit) * 2);
+}
+
+.profile-actions .btn {
+    flex-grow: 1; /* Allow buttons to grow */
+    max-width: 250px; /* Limit button width */
+}
+
+/* Responsive adjustments for profile page */
+@media (max-width: 768px) {
+    .profile-card {
+        margin: 1rem;
+        padding: 1.5rem;
+        box-shadow: none; /* Similar to user-auth-card on mobile */
+    }
+
+    .profile-details strong {
+        width: auto; /* Remove fixed width on smaller screens */
+        display: block;
+        margin-bottom: 0.2rem;
+    }
+
+    .profile-actions {
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: stretch;
+    }
+}
