@@ -5,16 +5,15 @@
     margin: auto;
 }
 
-.profile-details p {
-    margin-bottom: 0.8rem;
+.profile-details p, .profile-details div, .profile-details *::placeholder {
+    margin-bottom: calc(var(--spacing-unit) * 0.8);
     font-size: 1.1rem;
     line-height: 1.5;
 }
 
-.profile-details strong {
+.profile-details strong, .profile-details label {
     color: var(--color-primary-dark); /* Example from style.css */
     display: block;
-    width: 150px; /* Align labels */
 }
 
 .profile-actions {

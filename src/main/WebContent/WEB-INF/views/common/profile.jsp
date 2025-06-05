@@ -12,7 +12,6 @@
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user-auth.css" type="text/css">
-    <%-- Potresti voler includere un CSS specifico per il profilo se necessario --%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css" type="text/css">
     <jsp:include page="/components/common_head.jsp"/>
 </head>
@@ -25,34 +24,60 @@
             <h2 class="section-title">Il Mio Profilo</h2>
 
             <c:if test="${not empty loggedInUser}">
-                <div class="profile-details">
-                    <p><strong>Nome:</strong> ${loggedInUser.firstName}</p>
-                    <p><strong>Cognome:</strong> ${loggedInUser.lastName}</p>
-                    <p><strong>Email:</strong> ${loggedInUser.email}</p>
-                    <p><strong>Ruolo:</strong> ${loggedInUser.role}</p>
-                    <p><strong>Data di Registrazione:</strong>
-                        <%
-                            UserDTO user = (UserDTO) session.getAttribute("loggedInUser");
-                            Locale userLocale = Locale.ITALY;
-                            DateTimeFormatter
-                                    formatter = DateTimeFormatter.ofPattern("EEEE, d MMMM, yyyy 'alle' hh:mm", userLocale);
-                            String formattedDate = user.getCreatedAt().format(formatter);
-                            formattedDate = formattedDate.substring(0, 1).toUpperCase() + formattedDate.substring(1);
-                        %>
-                        <%=formattedDate%>
-                    </p>
-                </div>
+                <form action="${pageContext.request.contextPath}/common/edit-profile" method="post">
+                    <div class="profile-details">
+                        <div class="mb-1">
+                            <label for="firstName">Nome:</label>
+                            <input id="firstName" type="text" name="firstName" class="form-input"
+                                   placeholder="Inserisci il tuo nome"
+                                   value="${not empty submittedFirstName ? submittedFirstName : loggedInUser.firstName}"
+                                   disabled required>
+                        </div>
+                        <div class="mb-1">
+                            <label for="lastName">Cognome:</label>
+                            <input id="lastName" type="text" name="lastName" class="form-input"
+                                   placeholder="Inserisci il tuo cognome"
+                                   value="${not empty submittedLastName ? submittedLastName : loggedInUser.lastName}"
+                                   disabled required>
+                        </div>
+                        <div class="mb-1">
+                            <label for="email">Email:</label>
+                            <input id="email" type="email" name="email" class="form-input"
+                                   placeholder="Inserisci la tua email"
+                                   value="${not empty submittedEmail ? submittedEmail : loggedInUser.email}" disabled
+                                   required>
+                        </div>
+                        <p><strong>Ruolo:</strong> ${loggedInUser.role}</p>
+                        <p><strong>Data di Registrazione:</strong>
+                            <%
+                                UserDTO user = (UserDTO) session.getAttribute("loggedInUser");
+                                Locale userLocale = Locale.ITALY;
+                                DateTimeFormatter
+                                        formatter = DateTimeFormatter.ofPattern("EEEE, d MMMM, yyyy 'alle' hh:mm", userLocale);
+                                String formattedDate = user.getCreatedAt().format(formatter);
+                                formattedDate = formattedDate.substring(0, 1).toUpperCase() + formattedDate.substring(1);
+                            %>
+                            <%=formattedDate%>
+                        </p>
+                    </div>
 
-                <div class="profile-actions mt-2">
-                    <a href="${pageContext.request.contextPath}/common/edit-profile" class="btn btn-primary">Modifica
-                        Profilo</a>
-                    <a href="${pageContext.request.contextPath}/common/change-password" class="btn btn-outline">Cambia
-                        Password</a>
-                        <%-- Aggiungi altri link per la gestione dell'account, es. indirizzi, ordini --%>
-                    <a href="${pageContext.request.contextPath}/common/addresses" class="btn btn-accent">I Miei
-                        Indirizzi</a>
-                    <a href="${pageContext.request.contextPath}/common/orders" class="btn btn-accent">I Miei Ordini</a>
-                </div>
+                    <!-- TODO: Change profile actions accordingly -->
+                    <div class="profile-actions mt-2">
+                        <button type="button" id="edit-button" class="btn btn-primary" onclick="editProfile()">Modifica
+                            Profilo
+                        </button>
+                        <button type="submit" id="save-button" class="btn btn-primary d-none">
+                            Salva Profilo
+                        </button>
+                        <a href="${pageContext.request.contextPath}/common/change-password" class="btn btn-outline">Cambia
+                            Password</a>
+                            <%-- Aggiungi altri link per la gestione dell'account, es. indirizzi, ordini --%>
+                        <a href="${pageContext.request.contextPath}/common/addresses" class="btn btn-accent">I Miei
+                            Indirizzi</a>
+                        <a href="${pageContext.request.contextPath}/common/orders" class="btn btn-accent">I Miei
+                            Ordini</a>
+                    </div>
+                </form>
             </c:if>
             <c:if test="${empty loggedInUser}">
                 <p class="text-center">Nessun utente loggato. Effettua l'accesso per visualizzare il tuo profilo.</p>
@@ -65,5 +90,6 @@
 </main>
 
 <jsp:include page="/components/footer.jsp"/>
+<script src="/scripts/profile.js"></script>
 </body>
 </html>

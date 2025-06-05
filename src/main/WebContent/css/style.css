@@ -424,6 +424,10 @@ footer {
     padding-bottom: calc(var(--spacing-unit) * 3);
 }
 
+.d-none {
+    display: none;
+}
+
 .section-title {
     text-align: center;
     margin-bottom: calc(var(--spacing-unit) * 2.5);
