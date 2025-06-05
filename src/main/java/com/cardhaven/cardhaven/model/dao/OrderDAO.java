@@ -140,7 +140,7 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
 		}
 
 		List<OrderDTO> orderDTOS = new ArrayList<>();
-		String sql = "SELECT OrderID, UserID, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount FROM Order WHERE UserID = ?";
+		String sql = "SELECT OrderID, UserID, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount FROM `Order` WHERE UserID = ?";
 		try(Connection conn = dataSource.getConnection();
 			 PreparedStatement ps = conn.prepareStatement(sql)){
 			ps.setInt(1, userID);
