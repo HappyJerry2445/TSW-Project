@@ -9,16 +9,16 @@
 <head>
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css" type="text/css">
-    <jsp:include page="../components/common_head.jsp"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user-auth.css" type="text/css">
+    <jsp:include page="../../components/common_head.jsp"/>
 </head>
 <body>
-<jsp:include page="../components/header.jsp"/>
+<jsp:include page="../../components/header.jsp"/>
 
 <main>
     <div class="center-child mt-3">
 
-        <div id="login-card" class="card">
+        <div class="card user-auth-card">
             <h2 class="section-title">Accedi al tuo account</h2>
 
             <c:if test="${not empty errors}">
@@ -29,7 +29,7 @@
                 </div>
             </c:if>
 
-            <form action="login" method="post">
+            <form action="${pageContext.request.contextPath}/login" method="post">
                 <div class="mb-1">
                     <label for="email">Email</label>
                     <input id="email" type="email" name="email" class="form-input" placeholder="Inserisci la tua email">
@@ -44,7 +44,7 @@
                 <button type="submit" class="btn btn-primary btn-block">Accedi</button>
             </form>
 
-            <div id="login-links">
+            <div class="user-auth-links">
                 <a href="#">Password dimenticata?</a>
                 <a href="#">Registrati</a>
             </div>
@@ -53,6 +53,6 @@
 
 </main>
 
-<jsp:include page="../components/footer.jsp"/>
+<jsp:include page="../../components/footer.jsp"/>
 </body>
 </html>

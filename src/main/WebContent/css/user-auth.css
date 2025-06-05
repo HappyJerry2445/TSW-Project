@@ -1,19 +1,19 @@
-#login-links {
+.user-auth-links {
     display: flex;
     justify-content: space-between;
     margin-top: var(--spacing-unit);
 }
 
-#login-links a {
+.user-auth-links a {
     font-size: 0.9rem;
 }
 
-#login-links a:hover {
+.user-auth-links a:hover {
     text-decoration: underline;
 }
 
 @media (max-width: 768px) {
-    #login-card {
+    .user-auth-card {
         box-shadow: none;
     }
 }

@@ -29,7 +29,7 @@ public class LoginServlet extends HttpServlet {
         System.out.println("email: " + email);
 
         List<String> errors = new ArrayList<>();
-        RequestDispatcher dispatcherToLoginPage = request.getRequestDispatcher("/WEB-INF/login.jsp");
+        RequestDispatcher dispatcherToLoginPage = request.getRequestDispatcher("/WEB-INF/views/login.jsp");
 
         if (email == null || email.trim().isEmpty()) {
             errors.add("Il campo email non può essere vuoto");
@@ -80,7 +80,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        var dispatcher = req.getRequestDispatcher("/WEB-INF/login.jsp");
+        var dispatcher = req.getRequestDispatcher("/WEB-INF/views/login.jsp");
         dispatcher.forward(req, resp);
     }
 }
