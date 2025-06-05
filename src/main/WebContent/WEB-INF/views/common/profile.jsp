@@ -24,7 +24,7 @@
             <h2 class="section-title">Il Mio Profilo</h2>
 
             <c:if test="${not empty loggedInUser}">
-                <form action="${pageContext.request.contextPath}/common/edit-profile" method="post">
+                <form action="${pageContext.request.contextPath}/common/profile" method="post">
                     <div class="profile-details">
                         <div class="mb-1">
                             <label for="firstName">Nome:</label>
