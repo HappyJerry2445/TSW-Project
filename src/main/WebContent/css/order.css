@@ -1,0 +1,77 @@
+
+/* Container for the entire orders page content within the main tag */
+.orders-page-container {
+    max-width: 960px; /* Adjust as needed */
+    margin: 0 auto; /* Center the content */
+    padding: calc(var(--spacing-unit)*2);
+    background-color: var(--color-bg-light-grey); /* Light background for the content area */
+    border-radius: 8px;
+    box-shadow: var(--color-shadow-light);
+}
+
+/* Table styling */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: var(--color-neutral-darkest);
+    border-collapse: collapse; /* Ensures borders are neat */
+}
+
+.table th,
+.table td {
+    padding: calc(var(--spacing-unit)*0.75);
+    vertical-align: top;
+    border-top: 1px solid var(--color-neutral-base); /* Light grey border for rows */
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid var(--color-neutral-base); /* Heavier border for table header */
+    background-color: var(--color-neutral-light); /* Light grey background for header */
+    color: var(--color-table-thead);
+    text-align: left; /* Align header text to the left */
+}
+
+/* Striped rows for better readability - assumes you have .table-striped in JSP */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--color-shadow-md);
+}
+
+/* Hover effect for table rows - assumes you have .table-hover in JSP */
+.table-hover tbody tr:hover {
+    background-color: var(--color-shadow-light);
+}
+
+/* Responsive wrapper for the table */
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto; /* Allows horizontal scrolling on small screens */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Styling for action buttons in the table */
+.table .btn { /* General button styling if not using a framework like Bootstrap */
+    padding: calc(var(--spacing-unit)*0.375) calc(var(--spacing-unit) *0.75);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    color: var(--color-primary-light);
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+}
+
+table .btn-info { /* Specific styling for info button */
+    background-color: var(--color-status-info);
+    border-color: var(--color-status-info);
+}
+
+.table .btn-info:hover {
+    background-color: var(--color-status-info-hover);
+    border-color: var(--color-status-info-hover);
+}
