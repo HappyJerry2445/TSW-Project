@@ -12,19 +12,17 @@ public class OrderItemDTO implements Serializable {
 	private Integer variantID;
 	private int quantity;
 	private BigDecimal unitPrice;
-	private LocalDateTime addedAt;
 
 	public OrderItemDTO() {
 	}
 
-	public OrderItemDTO(int orderItemID, int orderID, Integer productID, Integer variantID, int quantity, BigDecimal unitPrice, LocalDateTime addedAt) {
+	public OrderItemDTO(int orderItemID, int orderID, Integer productID, Integer variantID, int quantity, BigDecimal unitPrice) {
 		this.orderItemID = orderItemID;
 		this.orderID = orderID;
 		this.productID = productID;
 		this.variantID = variantID;
 		this.quantity = quantity;
 		this.unitPrice = unitPrice;
-		this.addedAt = addedAt;
 	}
 
 	public int getOrderItemID() {
@@ -75,13 +73,6 @@ public class OrderItemDTO implements Serializable {
 		this.unitPrice = unitPrice;
 	}
 
-	public LocalDateTime getAddedAt() {
-		return addedAt;
-	}
-
-	public void setAddedAt(LocalDateTime addedAt) {
-		this.addedAt = addedAt;
-	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -93,13 +84,12 @@ public class OrderItemDTO implements Serializable {
 				quantity == that.quantity &&
 				Objects.equals(productID, that.productID) &&
 				Objects.equals(variantID, that.variantID) &&
-				Objects.equals(unitPrice, that.unitPrice) &&
-				Objects.equals(addedAt, that.addedAt);
+				Objects.equals(unitPrice, that.unitPrice);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(orderItemID, orderID, productID, variantID, quantity, unitPrice, addedAt);
+		return Objects.hash(orderItemID, orderID, productID, variantID, quantity, unitPrice);
 	}
 
 	@Override
@@ -111,7 +101,6 @@ public class OrderItemDTO implements Serializable {
 				", variantID=" + variantID +
 				", quantity=" + quantity +
 				", unitPrice=" + unitPrice +
-				", addedAt=" + addedAt +
 				'}';
 	}
 }
