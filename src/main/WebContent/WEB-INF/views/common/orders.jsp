@@ -11,7 +11,7 @@
 <head>
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user-auth.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/order.css" type="text/css">
     <jsp:include page="../../../components/common_head.jsp"/>
 </head>
 <body>
@@ -31,7 +31,7 @@
 
         <c:choose>
             <c:when test="${empty orders and empty errors}">
-                <div class="user-auth-links" role="alert">
+                <div class="links" role="alert">
                     <p class="mb-1">🛒 Nessun ordine trovato. <a href="#">Inizia a fare acquisti!</a>
                     </p>
                 </div>

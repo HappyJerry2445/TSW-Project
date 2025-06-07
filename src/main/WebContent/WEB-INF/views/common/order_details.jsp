@@ -10,7 +10,7 @@
 <head>
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user-auth.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/order.css" type="text/css">
     <jsp:include page="../../../components/common_head.jsp"/>
 </head>
 <body>
@@ -48,7 +48,7 @@
             </table>
         </div>
 
-        <div class="user-auth-links">
+        <div class="links">
             <a href="<c:url value="${pageContext.request.contextPath}/common/orders"/>" class="btn btn-secondary">Torna agli ordini</a>
         </div>
     </div>
