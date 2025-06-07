@@ -173,4 +173,20 @@ public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
 
 		return orderItemDTO;
 	}
+
+	public List<OrderItemDTO> getOrderItemsByOrderId(int orderId) throws SQLException {
+		List<OrderItemDTO> items = new ArrayList<>();
+		String sql = "SELECT * FROM OrderItem WHERE OrderID = ?";
+		try (Connection conn = dataSource.getConnection();
+			 PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setInt(1, orderId);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					OrderItemDTO item = extractOrderItemFromResultSet(rs);
+					items.add(item);
+				}
+			}
+		}
+		return items;
+	}
 }
