@@ -8,6 +8,7 @@
 
 <c:set var="pageTitle" value="Profilo Utente" scope="request"/>
 
+<!-- TODO: Improve edit function (No real update if no change and ajax) -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
