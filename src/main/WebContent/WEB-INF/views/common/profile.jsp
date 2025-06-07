@@ -1,7 +1,3 @@
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="java.util.Locale" %>
-<%@ page import="com.cardhaven.cardhaven.model.dto.UserDTO" %>
-<%@ page import="com.cardhaven.cardhaven.util.DateTimeFormatterUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="my" uri="/WEB-INF/functions" %>
@@ -14,7 +10,6 @@
 <head>
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user-auth.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css" type="text/css">
     <jsp:include page="/components/common_head.jsp"/>
 </head>
