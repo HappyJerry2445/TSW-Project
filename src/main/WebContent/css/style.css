@@ -27,6 +27,8 @@
 
     /* Status Colors */
     --color-status-error: #DC3545; /* Formerly --color-danger-red */
+    --color-status-error-dark: #C82333; /* A slightly darker shade for hover/active states */
+
     --color-status-success: #28A745; /* Formerly --color-success-green */
     --color-status-warning: #FFC107; /* New, for warning messages */
     --color-status-info: #17A2B8; /* New, for info messages */
@@ -126,6 +128,7 @@ img {
     font-size: 1rem;
 }
 
+
 .btn-block {
     display: block;
     width: 100%;
@@ -136,6 +139,34 @@ img {
 .btn-primary {
     background-color: var(--color-accent-vibrant); /* Changed from --color-primary */
     color: var(--color-text-inverted); /* Changed from --color-text-light */
+}
+
+/* Add to your style.css, perhaps near other button styles */
+.btn-secondary {
+    background-color: var(--color-neutral-dark);
+    color: var(--color-primary-light);
+    border: 1px solid var(--color-neutral-dark); /* Optional: a subtle border matching the background */
+}
+
+/* Optional: Hover effect for secondary button */
+.btn-secondary:hover {
+    color: var(--color-primary-light);
+    background-color: var(--color-neutral-darkest); /* Slightly darker on hover */
+    border-color: var(--color-neutral-darkest);
+}
+
+/* Add to your style.css, perhaps near other button styles */
+.btn-danger {
+    background-color: var(--color-status-error);
+    color: var(--color-primary-light);
+    border: 1px solid var(--color-status-error); /* Optional: a subtle border matching the background */
+}
+
+/* Optional: Hover effect for danger button */
+.btn-danger:hover {
+    color: var(--color-primary-light);
+    background-color: var(--color-status-error-dark); /* A slightly darker red for hover, if not defined as a variable */
+    border-color: var(--color-status-error-dark);
 }
 
 .btn-primary:hover {
