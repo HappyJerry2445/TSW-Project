@@ -90,7 +90,7 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
             throw new SQLException("UserID, OrderID cannot be 0 or less");
         }
 
-        String sql = "SELECT OrderID, UserID, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount FROM `Order` WHERE OrderID = ?";
+        String sql = "SELECT OrderID, UserID, OrderDate, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount FROM `Order` WHERE OrderID = ?";
         OrderDTO orderDTO = null;
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
