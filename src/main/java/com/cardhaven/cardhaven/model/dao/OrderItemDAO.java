@@ -10,7 +10,7 @@ import java.util.*;
 public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
 
 	private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
-			"OrderItemID", "OrderID", "ProductID", "VariantID", "Quantity", "UnitPrice"
+			"OrderItemID", "OrderID", "ProductID", "VariantID", "Quantity", "UnitPrice", "AddedAT"
 	);
 	private static final String DEFAULT_ORDER_COLUMN = "OrderItemID";
 
@@ -29,7 +29,7 @@ public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
 
 		String sql;
 		if (orderItemDTO.getOrderItemID() == 0) {
-			sql = "INSERT INTO OrderItem (OrderID, ProductID, VariantID, Quantity, UnitPrice) VALUES (?, ?, ?, ?, ?)";
+			sql = "INSERT INTO OrderItem (OrderID, ProductID, VariantID, Quantity, UnitPrice, AddedAT) VALUES (?, ?, ?, ?, ?, ?)";
 			try (Connection connection = dataSource.getConnection();
 				 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 				ps.setInt(1, orderItemDTO.getOrderID());
@@ -45,6 +45,7 @@ public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
 				}
 				ps.setInt(4, orderItemDTO.getQuantity());
 				ps.setBigDecimal(5, orderItemDTO.getUnitPrice());
+				ps.setTimestamp(6, (orderItemDTO.getAddedAt() != null) ? Timestamp.valueOf(orderItemDTO.getAddedAt()) : Timestamp.valueOf(LocalDateTime.now()));
 
 				int affectedRows = ps.executeUpdate();
 				if (affectedRows == 0) {
@@ -104,7 +105,7 @@ public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
 			throw new IllegalArgumentException("OrderItemID must be a positive integer.");
 		}
 
-		String sql = "SELECT OrderItemID, OrderID, ProductID, VariantID, Quantity, UnitPrice FROM OrderItem WHERE OrderItemID = ?";
+		String sql = "SELECT OrderItemID, OrderID, ProductID, VariantID, Quantity, UnitPrice, AddedAT FROM OrderItem WHERE OrderItemID = ?";
 		OrderItemDTO orderItemDTO = null;
 		try (Connection connection = dataSource.getConnection();
 			 PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -121,7 +122,7 @@ public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
 	@Override
 	public Collection<OrderItemDTO> getAll(String order) throws SQLException {
 		Collection<OrderItemDTO> orderItems = new ArrayList<>();
-		StringBuilder sql = new StringBuilder("SELECT OrderItemID, OrderID, ProductID, VariantID, Quantity, UnitPrice FROM OrderItem");
+		StringBuilder sql = new StringBuilder("SELECT OrderItemID, OrderID, ProductID, VariantID, Quantity, UnitPrice, AddedAT FROM OrderItem");
 
 		String actualOrderColumn = DEFAULT_ORDER_COLUMN;
 		if (order != null && !order.trim().isEmpty()) {
@@ -171,23 +172,10 @@ public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
 		orderItemDTO.setQuantity(rs.getInt("Quantity"));
 		orderItemDTO.setUnitPrice(rs.getBigDecimal("UnitPrice"));
 
-
-		return orderItemDTO;
-	}
-
-	public List<OrderItemDTO> getOrderItemsByOrderId(int orderId) throws SQLException {
-		List<OrderItemDTO> items = new ArrayList<>();
-		String sql = "SELECT * FROM OrderItem WHERE OrderID = ?";
-		try (Connection conn = dataSource.getConnection();
-			 PreparedStatement ps = conn.prepareStatement(sql)) {
-			ps.setInt(1, orderId);
-			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					OrderItemDTO item = extractOrderItemFromResultSet(rs);
-					items.add(item);
-				}
-			}
+		Timestamp addedAtTimestamp = rs.getTimestamp("AddedAT");
+		if (addedAtTimestamp != null) {
+			orderItemDTO.setAddedAt(addedAtTimestamp.toLocalDateTime());
 		}
-		return items;
+		return orderItemDTO;
 	}
 }
