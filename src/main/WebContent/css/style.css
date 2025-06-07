@@ -319,6 +319,13 @@ header .container {
 
 
 /* Footer */
+body {
+    display: grid;
+    grid-auto-rows: auto 1fr auto;
+    grid-template-columns: 100%;
+    min-height: 100vh;
+}
+
 footer {
     background-color: var(--color-primary-dark); /* Changed from --color-dark */
     color: var(--color-text-secondary); /* Changed from --color-text-light-grey */
