@@ -19,7 +19,7 @@
 
 <main class="container mt-3 mb-3">
     <div class="orders-page-container">
-        <h1 class="section-title">I Tuoi Ordini</h1>
+        <h1 class="section-title">I Miei Ordini</h1>
 
         <c:if test="${not empty errors}">
             <div class="alert-danger" role="alert">

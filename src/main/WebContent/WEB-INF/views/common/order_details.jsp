@@ -48,8 +48,8 @@
             </table>
         </div>
 
-        <div class="links">
-            <a href="<c:url value="${pageContext.request.contextPath}/common/orders"/>" class="btn btn-secondary">Torna agli ordini</a>
+        <div class="text-center links">
+            <a href="<c:url value="${pageContext.request.contextPath}/common/orders"/>" class="btn btn-primary">Torna agli ordini</a>
         </div>
     </div>
 </main>
