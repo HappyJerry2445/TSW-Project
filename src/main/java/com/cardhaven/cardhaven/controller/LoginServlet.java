@@ -75,7 +75,13 @@ public class LoginServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        response.sendRedirect(request.getContextPath() + "/");
+        String redirectUrl = (String) session.getAttribute("redirectAfterLogin");
+        if (redirectUrl != null && !redirectUrl.trim().isEmpty()) {
+            session.removeAttribute("redirectAfterLogin"); // Remove the attribute after use
+            response.sendRedirect(redirectUrl);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/");
+        }
     }
 
     @Override
