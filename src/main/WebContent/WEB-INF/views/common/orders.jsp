@@ -11,7 +11,7 @@
 <head>
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/orders.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user-auth.css" type="text/css">
     <jsp:include page="../../../components/common_head.jsp"/>
 </head>
 <body>
@@ -22,17 +22,17 @@
         <h1 class="section-title">I Tuoi Ordini</h1>
 
         <c:if test="${not empty errors}">
-            <div class="alert alert-danger" role="alert">
+            <div class="alert-danger" role="alert">
                 <c:forEach var="error" items="${errors}">
-                    <p class="mb-0">${error}</p>
+                    <p class="mb-1">${error}</p>
                 </c:forEach>
             </div>
         </c:if>
 
         <c:choose>
             <c:when test="${empty orders and empty errors}">
-                <div class="alert alert-info" role="alert">
-                    <p class="mb-0">🛒 Nessun ordine trovato. <a href="#" class="alert-link">Inizia a fare acquisti!</a>
+                <div class="user-auth-links" role="alert">
+                    <p class="mb-1">🛒 Nessun ordine trovato. <a href="#">Inizia a fare acquisti!</a>
                     </p>
                 </div>
             </c:when>
@@ -60,7 +60,7 @@
                                                         minFractionDigits="2" maxFractionDigits="2"/></td>
                                 <td>
                                     <a href="<c:url value='/common/orders/${order.orderId}'/>"
-                                       class="btn btn-sm btn-info">Dettagli</a>
+                                       class="btn btn-info">Dettagli</a>
                                 </td>
                             </tr>
                         </c:forEach>
