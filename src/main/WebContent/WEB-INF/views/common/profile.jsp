@@ -1,8 +1,10 @@
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.Locale" %>
 <%@ page import="com.cardhaven.cardhaven.model.dto.UserDTO" %>
+<%@ page import="com.cardhaven.cardhaven.util.DateTimeFormatterUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="my" uri="/WEB-INF/functions" %>
 
 <c:set var="pageTitle" value="Profilo Utente" scope="request"/>
 
@@ -49,15 +51,11 @@
                         </div>
                         <p><strong>Ruolo:</strong> ${loggedInUser.role}</p>
                         <p><strong>Data di Registrazione:</strong>
-                            <%
-                                UserDTO user = (UserDTO) session.getAttribute("loggedInUser");
-                                Locale userLocale = Locale.ITALY;
-                                DateTimeFormatter
-                                        formatter = DateTimeFormatter.ofPattern("EEEE, d MMMM, yyyy 'alle' hh:mm", userLocale);
-                                String formattedDate = user.getCreatedAt().format(formatter);
-                                formattedDate = formattedDate.substring(0, 1).toUpperCase() + formattedDate.substring(1);
-                            %>
-                            <%=formattedDate%>
+                            <c:set var="rawFormattedDate"
+                                   value="${my:formatDateTimePattern(sessionScope.loggedInUser.createdAt, \"EEEE, d MMMM, yyyy \'alle\' hh:mm\")}"/>
+                            <c:set var="finalFormattedDate" value="${my:capitalize(rawFormattedDate)}"/>
+
+                            <c:out value="${finalFormattedDate}"/>
                         </p>
                     </div>
 

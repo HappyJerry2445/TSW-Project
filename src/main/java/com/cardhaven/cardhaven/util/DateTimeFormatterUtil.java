@@ -25,4 +25,12 @@ public class DateTimeFormatterUtil {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return dateTime.format(formatter);
     }
+
+    public static String capitalizeFirstLetter(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+        // Handle potential leading spaces if necessary, but typically formatters don't produce them.
+        return text.substring(0, 1).toUpperCase() + text.substring(1);
+    }
 }
