@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> <%-- For date formatting --%>
+<%@ taglib uri="/WEB-INF/functions" prefix="my" %>
+
 
 <c:set var="pageTitle" value="I Miei Ordini" scope="request"/>
 
@@ -10,10 +12,10 @@
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/orders.css" type="text/css">
-    <jsp:include page="../../components/common_head.jsp"/>
+    <jsp:include page="../../../components/common_head.jsp"/>
 </head>
 <body>
-<jsp:include page="../../components/header.jsp"/>
+<jsp:include page="../../../components/header.jsp"/>
 
 <main class="container mt-3 mb-3">
     <div class="orders-page-container">
@@ -30,12 +32,14 @@
         <c:choose>
             <c:when test="${empty orders and empty errors}">
                 <div class="alert alert-info" role="alert">
-                    <p class="mb-0">🛒 Nessun ordine trovato. <a href="#" class="alert-link">Inizia a fare acquisti!</a></p>
+                    <p class="mb-0">🛒 Nessun ordine trovato. <a href="#" class="alert-link">Inizia a fare acquisti!</a>
+                    </p>
                 </div>
             </c:when>
             <c:when test="${not empty orders}">
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover"><thead>
+                    <table class="table table-striped table-hover">
+                        <thead>
                         <tr>
                             <th scope="col">ID Ordine</th>
                             <th scope="col">Data</th>
@@ -49,13 +53,14 @@
                             <tr>
                                 <td>#<c:out value="${order.orderId}"/></td>
                                 <td>
-                                        <%-- Assuming order.orderDate is a java.util.Date or similar; format it --%>
-                                    <fmt:formatDate value="${order.orderDate}" type="BOTH" dateStyle="medium" timeStyle="short"/>
+                                    <c:out value="${my:formatDateTime(order.orderDate)}"/>
                                 </td>
                                 <td><c:out value="${order.orderStatus}"/></td>
-                                <td>€ <fmt:formatNumber value="${order.totalAmount}" type="currency" currencyCode="EUR" minFractionDigits="2" maxFractionDigits="2"/></td>
+                                <td>€ <fmt:formatNumber value="${order.totalAmount}" type="currency" currencyCode="EUR"
+                                                        minFractionDigits="2" maxFractionDigits="2"/></td>
                                 <td>
-                                    <a href="<c:url value='/common/orders/${order.orderId}'/>" class="btn btn-sm btn-info">Dettagli</a>
+                                    <a href="<c:url value='/common/orders/${order.orderId}'/>"
+                                       class="btn btn-sm btn-info">Dettagli</a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -67,6 +72,6 @@
     </div>
 </main>
 
-<jsp:include page="../../components/footer.jsp" />
+<jsp:include page="../../../components/footer.jsp"/>
 </body>
 </html>

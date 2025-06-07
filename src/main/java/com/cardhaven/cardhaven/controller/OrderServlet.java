@@ -2,15 +2,15 @@ package com.cardhaven.cardhaven.controller;
 
 import com.cardhaven.cardhaven.model.dao.OrderDAO;
 import com.cardhaven.cardhaven.model.dto.OrderDTO;
-import com.cardhaven.cardhaven.model.dto.UserDTO; // Required for casting session attribute
-import jakarta.servlet.RequestDispatcher;
+import com.cardhaven.cardhaven.model.dto.UserDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import javax.sql.DataSource; // Required for DAO initialization
+
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class OrderServlet extends HttpServlet {
         request.setAttribute("errors", errors); // Initialize errors attribute early
 
         // Unified JSP paths
-        String ordersListPagePath = "/WEB-INF/views/orders.jsp";
+        String ordersListPagePath = "/WEB-INF/views/common/orders.jsp";
         String loginPagePath = "/WEB-INF/views/login.jsp"; // Changed to use WEB-INF path
 
         if (!isUserAuthenticated(session)) {
