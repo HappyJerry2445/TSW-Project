@@ -1,4 +1,3 @@
-
 /* Container for the entire orders page content within the main tag */
 .orders-page-container {
     max-width: 960px; /* Adjust as needed */
@@ -74,4 +73,90 @@ table .btn-info { /* Specific styling for info button */
 .table .btn-info:hover {
     background-color: var(--color-status-info-hover);
     border-color: var(--color-status-info-hover);
+}
+
+.order-info-section {
+    background-color: var(--color-neutral-lightest);
+    padding: calc(var(--spacing-unit)*2);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid var(--color-neutral-base);
+}
+
+.order-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.order-item-card {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-neutral-base);
+    border-radius: 8px;
+    padding: calc(var(--spacing-unit)*2);
+    box-shadow: var(--color-shadow-light);
+    transition: box-shadow 0.2s ease;
+}
+
+.order-item-card:hover {
+    box-shadow: var(--color-shadow-md);
+}
+
+.product-name {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--color-neutral-darkest);
+    margin-bottom: 8px;
+}
+
+.quantity-value {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: var(--color-table-thead);
+}
+
+.unit-price, .item-total {
+    font-weight: 600;
+}
+
+.unit-price {
+    color: var(--color-neutral-dark);
+}
+
+.item-total {
+    color: var(--color-status-success);
+    font-size: 1.1em;
+}
+
+.order-summary {
+    margin-top: 30px;
+}
+
+.summary-box {
+    background-color: var(--color-neutral-lightest);
+    padding: calc(var(--spacing-unit)*2);
+    border-radius: 8px;
+    border: 1px solid var(--color-neutral-base);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.summary-row.total-row {
+    border-top: 2px solid #dee2e6;
+    padding-top: calc(var(--spacing-unit));
+    margin-top: 10px;
+    font-size: 1.1em;
+}
+
+
+.align-items-center {
+    align-items: center;
+}
+
+.text-right {
+    text-align: right;
 }
