@@ -17,7 +17,7 @@
     /* Text Colors (derived from neutrals) */
     --color-text-default: var(--color-neutral-darkest); /* Formerly --color-text-dark */
     --color-text-secondary: var(--color-neutral-dark); /* Formerly --color-text-light-grey, now a darker grey */
-    --color-table-thead : #495057;
+    --color-table-thead: #495057;
     --color-text-inverted: #F0F0F0; /* Formerly --color-text-light, for text on dark backgrounds */
 
     /* Background Colors */
@@ -171,6 +171,13 @@ img {
 .btn-outline:hover {
     background-color: var(--color-accent-vibrant); /* Changed from --color-primary */
     color: var(--color-text-inverted); /* Changed from --color-text-light */
+}
+
+.btn-sm {
+    padding: calc(var(--spacing-unit) * 0.375) calc(var(--spacing-unit) * 0.75);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    border-radius: calc(var(--spacing-unit) * 0.25);
 }
 
 /* Forms basic styling */
@@ -433,6 +440,42 @@ footer {
     padding-bottom: calc(var(--spacing-unit) * 3);
 }
 
+.m-1 {
+    margin: calc(var(--spacing-unit));
+}
+
+.m-2 {
+    margin: calc(var(--spacing-unit) * 2);
+}
+
+.m-3 {
+    margin: calc(var(--spacing-unit) * 3);
+}
+
+.p-1 {
+    padding: calc(var(--spacing-unit));
+}
+
+.p-2 {
+    padding: calc(var(--spacing-unit) * 2);
+}
+
+.p-3 {
+    padding: calc(var(--spacing-unit) * 3);
+}
+
+.rounded-sm {
+    border-radius: var(--border-radius-sm); /* Uses a variable if defined, otherwise a default value */
+}
+
+.rounded-md {
+    border-radius: var(--border-radius-md);
+}
+
+.border {
+    border: 1px solid var(--color-neutral-base); /* Uses the default border color from your variables */
+}
+
 .d-none {
     display: none;
 }
@@ -648,7 +691,7 @@ footer {
 
 .table thead th {
     vertical-align: bottom;
-    border-bottom: 2px solid  var(--color-neutral-base); /* Heavier border for table header */
+    border-bottom: 2px solid var(--color-neutral-base); /* Heavier border for table header */
     background-color: var(--color-neutral-light); /* Light grey background for header */
     color: var(--color-table-thead);
     text-align: left; /* Align header text to the left */
