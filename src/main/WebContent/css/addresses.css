@@ -52,7 +52,7 @@
     border-radius: var(--border-radius-sm);
     margin-bottom: calc(var(--spacing-unit));
 
-    background-color: var(--color-status-success);
+    background-color: var(--color-accent-vibrant);
     color: var(--color-primary-light);
 }
 
