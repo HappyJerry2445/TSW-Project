@@ -1,26 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<script defer src="${pageContext.request.contextPath}/scripts/notifications.js"></script>
-<%--@elvariable id="notificationType" type="java.lang.String"--%>
-<%--@elvariable id="notificationMessage" type="java.lang.String"--%>
-<c:if test="${not empty notificationMessage}">
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            <c:if test="${not empty notificationType}">
-            notify.<c:out value="${notificationType}"/>('<c:out value="${notificationMessage}"/>');
-            </c:if>
-            <c:if test="${empty notificationType}">
-            notify.info('<c:out value="${notificationMessage}"/>');
-            </c:if>
-        });
-    </script>
-    <%
-        request.getSession().removeAttribute("notificationMessage");
-        request.getSession().removeAttribute("notificationType");
-    %>
-</c:if>
-<div id="notification-container"></div>
+<jsp:include page="/components/notification.jsp"/>
 <header>
     <div class="container">
         <a href="${pageContext.request.contextPath}/" class="logo">CardHaven</a>
