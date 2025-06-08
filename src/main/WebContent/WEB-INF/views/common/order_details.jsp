@@ -134,12 +134,12 @@
                     </div>
                 </div>
             </div>
-
-            <div class="text-center links mt-3">
-                <a href="${pageContext.request.contextPath}/common/orders" class="btn btn-primary">Torna agli ordini</a>
-            </div>
         </div>
 </main>
+
+<div class="text-center mt-3">
+    <a href="${pageContext.request.contextPath}/common/orders" class="btn btn-primary">Torna agli ordini</a>
+</div>
 
 <jsp:include page="/components/footer.jsp"/>
 </body>

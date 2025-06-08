@@ -66,6 +66,11 @@
             </c:when>
         </c:choose>
     </div>
+
+    <div class="text-center mt-3">
+        <a href="${pageContext.request.contextPath}/common/profile" class="btn btn-primary">Torna al
+            Profilo</a>
+    </div>
 </main>
 
 <jsp:include page="/components/footer.jsp"/>
