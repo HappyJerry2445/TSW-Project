@@ -5,11 +5,13 @@
 <c:if test="${not empty notificationMessage}">
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            <%--@elvariable id="notificationType" type="java.lang.String"--%>
+            <%--@elvariable id="notificationMessage" type="java.lang.String"--%>
             <c:if test="${not empty notificationType}">
-            notify.${notificationType}('${notificationMessage}');
+            notify.<c:out value="${notificationType}"/>('<c:out value="${notificationMessage}"/>');
             </c:if>
             <c:if test="${empty notificationType}">
-            notify.info('${notificationMessage}');
+            notify.info('<c:out value="${notificationMessage}"/>');
             </c:if>
         });
     </script>
