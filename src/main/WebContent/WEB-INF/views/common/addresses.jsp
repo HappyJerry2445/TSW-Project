@@ -9,6 +9,7 @@
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/addresses.css" type="text/css">
     <%-- Reusing profile.css for general card styling --%>
     <jsp:include page="/components/common_head.jsp"/>
 </head>
@@ -36,18 +37,33 @@
                 <c:when test="${not empty addresses}">
                     <div class="address-list"> <%-- This class will need minimal, if any, specific styling. Maybe just a flexbox or grid for layout if needed. --%>
                         <c:forEach var="address" items="${addresses}">
-                            <div class="address-item mt-3 p-1 border rounded-md"> <%-- 'mb-3', 'p-3', 'border', 'rounded' are likely utility classes from style.css or a framework emulated by it. --%>
-                                <p><strong>Tipo:</strong> <c:out value="${address.addressType}"/></p>
-                                <p><c:out value="${address.streetAddress}"/></p>
-                                <p><c:out value="${address.city}"/>, <c:if test="${not empty address.state}"><c:out
-                                        value="${address.state}"/>, </c:if>
-                                    <c:out value="${address.postalCode}"/></p>
-                                <p><c:out value="${address.country}"/></p>
-                                <p>
-                                    <c:if test="${address.isDefault()}">
-                                        <span class="badge bg-success">Predefinito</span> <%-- 'badge' and 'bg-success' are likely utility classes from style.css. --%>
-                                    </c:if>
-                                </p>
+                            <div class="address-item mt-3 rounded-md"> <%-- 'mb-3', 'p-3', 'border', 'rounded' are likely utility classes from style.css or a framework emulated by it. --%>
+                                <c:if test="${address.isDefault()}">
+                                    <span class="badge bg-success">Predefinito</span> <%-- 'badge' and 'bg-success' are likely utility classes from style.css. --%>
+                                </c:if>
+                                <div class="address-details">
+                                    <p class="address-field">
+                                        <span class="address-label">Tipo:</span>
+                                        <span class="address-value"><c:out value="${address.addressType}"/></span>
+                                    </p>
+                                    <p class="address-field">
+                                        <span class="address-label">Indirizzo:</span>
+                                        <span class="address-value"><c:out value="${address.streetAddress}"/></span>
+                                    </p>
+                                    <p class="address-field">
+                                        <span class="address-label">Città/Stato/CAP:</span>
+                                        <span class="address-value">
+                                        <c:out value="${address.city}"/>,
+                                        <c:if test="${not empty address.state}"><c:out value="${address.state}"/>,
+                                        </c:if>
+                                        <c:out value="${address.postalCode}"/>
+                                    </span>
+                                    </p>
+                                    <p class="address-field">
+                                        <span class="address-label">Nazione:</span>
+                                        <span class="address-value"><c:out value="${address.country}"/></span>
+                                    </p>
+                                </div>
                                 <div class="address-actions mt-2"> <%-- 'mt-2' likely a utility class. 'address-actions' could be styled if multiple buttons need specific layout. --%>
                                     <a href="${pageContext.request.contextPath}/common/addresses/edit?id=${address.addressID}"
                                        class="btn btn-secondary btn-sm">Modifica</a> <%-- 'btn', 'btn-secondary', 'btn-sm' are expected in style.css. --%>

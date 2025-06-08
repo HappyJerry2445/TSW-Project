@@ -1,0 +1,72 @@
+/* Stili specifici per la lista degli indirizzi */
+
+.address-list {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 1.2);
+}
+
+.address-item {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-neutral-base);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--color-shadow-light);
+    padding: calc(var(--spacing-unit) * 1.5);
+    transition: box-shadow 0.2s ease;
+    overflow: hidden;
+}
+
+.address-item:hover {
+    box-shadow: var(--color-shadow-md);
+}
+
+.address-details {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: start;
+    gap: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit));
+}
+
+.address-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing-unit) * 0.75); /* Spaziatura tra i bottoni */
+    margin-top: calc(var(--spacing-unit) * 1.5); /* Spazio sopra i bottoni */
+}
+
+.badge {
+    display: inline-block;
+    padding: calc(var(--spacing-unit) * 0.3) calc(var(--spacing-unit) * 0.6);
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--border-radius-sm);
+}
+
+.badge.bg-success {
+    padding: calc(var(--spacing-unit) * 0.4) calc(var(--spacing-unit) * 0.8);
+    font-size: 0.8em;
+    border-radius: var(--border-radius-sm);
+    margin-bottom: calc(var(--spacing-unit));
+
+    background-color: var(--color-status-success);
+    color: var(--color-primary-light);
+}
+
+.address-field {
+    display: contents;
+}
+
+.address-label {
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    padding-right: calc(var(--spacing-unit) * 0.5);
+}
+
+.address-value {
+    color: var(--color-text-default);
+}
+

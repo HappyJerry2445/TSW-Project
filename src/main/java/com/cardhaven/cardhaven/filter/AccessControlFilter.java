@@ -1,4 +1,4 @@
-package com.cardhaven.cardhaven.util;
+package com.cardhaven.cardhaven.filter;
 
 import com.cardhaven.cardhaven.model.dto.UserDTO;
 import jakarta.servlet.*;
