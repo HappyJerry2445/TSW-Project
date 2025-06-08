@@ -23,7 +23,7 @@
 <div id="notification-container"></div>
 <header>
     <div class="container">
-        <a href="/" class="logo">CardHaven</a>
+        <a href="${pageContext.request.contextPath}/" class="logo">CardHaven</a>
         <nav class="main-nav">
             <ul>
                 <!-- TODO: Sezione placeholder -->
@@ -45,6 +45,7 @@
                    aria-label="Il mio account"
                    class="action-icon">
                     <i class="fas fa-user"></i></a>
+                <%--@elvariable id="userId" type="java.lang.Integer"--%>
                 <c:if test="${not empty userId}">
                     <a id="logout-icon" href="${pageContext.request.getContextPath()}/logout" aria-label="Logout"
                        class="action-icon">
