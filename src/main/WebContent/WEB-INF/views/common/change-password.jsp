@@ -16,12 +16,13 @@
 <jsp:include page="/components/header.jsp"/>
 
 <main>
-    <div class="container mt-3">
+    <div class="center-child mt-3">
         <div class="card user-auth-card change-password-card">
             <h2 class="section-title">Cambia Password</h2>
 
             <jsp:include page="/components/error_message.jsp"/>
 
+            <!-- TODO: Add Regex -->
             <form action="${pageContext.request.contextPath}/common/change-password" method="post"
                   id="changePasswordForm">
                 <div class="mb-1">
