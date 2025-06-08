@@ -56,12 +56,12 @@
                                     </p>
                                 </div>
                                 <div class="address-actions mt-2"> <%-- 'mt-2' likely a utility class. 'address-actions' could be styled if multiple buttons need specific layout. --%>
-                                    <a href="${pageContext.request.contextPath}/common/addresses/edit?id=${address.addressID}"
+                                    <a href="${pageContext.request.contextPath}/common/addresses/edit?addressId=${address.addressID}"
                                        class="btn btn-secondary btn-sm">Modifica</a> <%-- 'btn', 'btn-secondary', 'btn-sm' are expected in style.css. --%>
-                                    <a href="${pageContext.request.contextPath}/common/addresses/delete?id=${address.addressID}"
+                                    <a href="${pageContext.request.contextPath}/common/addresses/delete?addressId=${address.addressID}"
                                        class="btn btn-danger btn-sm">Elimina</a> <%-- 'btn', 'btn-danger', 'btn-sm' are expected in style.css. --%>
                                     <c:if test="${!address.isDefault()}">
-                                        <a href="${pageContext.request.contextPath}/common/addresses/set-default?id=${address.addressID}"
+                                        <a href="${pageContext.request.contextPath}/common/addresses/set-default?addressId=${address.addressID}"
                                            class="btn btn-info btn-sm">Imposta come
                                             Predefinito</a> <%-- 'btn', 'btn-info', 'btn-sm' are expected in style.css. --%>
                                     </c:if>
