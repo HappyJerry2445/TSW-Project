@@ -149,6 +149,29 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
         return productImageDTO;
     }
 
+    public Collection<ProductImageDTO> getImagesByProductId(Integer productId) throws SQLException {
+        if (productId == null || productId <= 0) {
+            throw new IllegalArgumentException("ProductId must be a positive integer.");
+        }
+
+        Collection<ProductImageDTO> images = new ArrayList<>();
+        String sql = "SELECT * FROM ProductImage WHERE ProductId = ? ORDER BY SortOrder, ImageId";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, productId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    images.add(extractProductImageFromResultSet(rs));
+                }
+            }
+        }
+
+        return images;
+    }
+
     private void validateProductImage(ProductImageDTO productImageDTO) {
         if (productImageDTO == null) {
             throw new IllegalArgumentException("ProductImage cannot be null.");
