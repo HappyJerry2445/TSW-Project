@@ -3,12 +3,14 @@ package com.cardhaven.cardhaven.controller;
 import com.cardhaven.cardhaven.model.dao.UserDAO;
 import com.cardhaven.cardhaven.model.dto.UserDTO;
 import com.cardhaven.cardhaven.util.NotificationUtil;
+import com.cardhaven.cardhaven.util.UserLoginUtil;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -84,13 +86,14 @@ public class RegisterServlet extends HttpServlet {
         if (!errors.isEmpty()) {
             req.setAttribute("errors", errors);
             dispatcher.forward(req, resp);
+            return;
         }
         try {
             String hashedPassword = userDAO.hashPassword(password);
             UserDTO newUser = new UserDTO(firstName, lastName, email, hashedPassword);
             userDAO.save(newUser);
             var session = req.getSession();
-            session.setAttribute("loggedInUser", newUser);
+            UserLoginUtil.login(session, newUser);
             NotificationUtil.sendNotification(req, "Registrazione effetuata con successo", "info");
             resp.sendRedirect(req.getContextPath() + "/");
         } catch (SQLException e) {
@@ -104,6 +107,11 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(false); // Get existing session, don't create a new one
+        if (session != null && session.getAttribute("userId") != null) { // Check for the attribute you set on login
+            resp.sendRedirect(req.getContextPath() + "/");
+            return;
+        }
         var dispatcher = req.getRequestDispatcher("/WEB-INF/views/register.jsp");
         dispatcher.forward(req, resp);
     }

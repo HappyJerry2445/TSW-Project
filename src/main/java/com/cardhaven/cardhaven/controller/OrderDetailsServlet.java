@@ -1,14 +1,13 @@
 package com.cardhaven.cardhaven.controller;
 
+import com.cardhaven.cardhaven.model.dao.AddressDAO;
 import com.cardhaven.cardhaven.model.dao.OrderDAO;
 import com.cardhaven.cardhaven.model.dao.OrderItemDAO;
 import com.cardhaven.cardhaven.model.dao.ProductDAO;
-import com.cardhaven.cardhaven.model.dao.AddressDAO;
+import com.cardhaven.cardhaven.model.dto.AddressDTO;
 import com.cardhaven.cardhaven.model.dto.OrderDTO;
 import com.cardhaven.cardhaven.model.dto.OrderItemDTO;
 import com.cardhaven.cardhaven.model.dto.ProductDTO;
-import com.cardhaven.cardhaven.model.dto.AddressDTO;
-import com.cardhaven.cardhaven.model.dto.UserDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,9 +19,9 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 @WebServlet("/common/orders/*")
 public class OrderDetailsServlet extends HttpServlet {
@@ -30,12 +29,7 @@ public class OrderDetailsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         List<String> errors = new ArrayList<>();
-        String loginPagePath = "/WEB-INF/views/login.jsp";
 
-        if (!isUserAuthenticated(session)) {
-            request.getRequestDispatcher(loginPagePath).forward(request, response);
-            return;
-        }
 
         String pathInfo = request.getPathInfo(); // /{orderId}
         if (pathInfo == null || pathInfo.equals("/")) {
@@ -57,11 +51,11 @@ public class OrderDetailsServlet extends HttpServlet {
         ProductDAO productDAO = new ProductDAO(ds);
         AddressDAO addressDAO = new AddressDAO(ds);
 
-        UserDTO user = (UserDTO) session.getAttribute("loggedInUser");
+        var userId = (Integer) session.getAttribute("userId");
 
         try {
             OrderDTO order = orderDAO.getById(orderId);
-            if (order == null || order.getUserId() != user.getId()) {
+            if (order == null || order.getUserId() != userId) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "Ordine non trovato o non autorizzato");
                 return;
             }
@@ -100,7 +94,4 @@ public class OrderDetailsServlet extends HttpServlet {
         }
     }
 
-    private boolean isUserAuthenticated(HttpSession session) {
-        return session != null && session.getAttribute("loggedInUser") != null;
-    }
 }

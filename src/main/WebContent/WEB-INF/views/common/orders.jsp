@@ -12,10 +12,10 @@
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/order.css" type="text/css">
-    <jsp:include page="../../../components/common_head.jsp"/>
+    <jsp:include page="/components/common_head.jsp"/>
 </head>
 <body>
-<jsp:include page="../../../components/header.jsp"/>
+<jsp:include page="/components/header.jsp"/>
 
 <main class="container mt-3 mb-3">
     <div class="orders-page-container">
@@ -72,6 +72,6 @@
     </div>
 </main>
 
-<jsp:include page="../../../components/footer.jsp"/>
+<jsp:include page="/components/footer.jsp"/>
 </body>
 </html>

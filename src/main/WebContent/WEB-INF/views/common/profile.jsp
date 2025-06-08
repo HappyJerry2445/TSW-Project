@@ -48,7 +48,7 @@
                         <p><strong>Ruolo:</strong> ${loggedInUser.role}</p>
                         <p><strong>Data di Registrazione:</strong>
                             <c:set var="rawFormattedDate"
-                                   value="${my:formatDateTimePattern(sessionScope.loggedInUser.createdAt, \"EEEE, d MMMM, yyyy \'alle\' hh:mm\")}"/>
+                                   value="${my:formatDateTimePattern(loggedInUser.createdAt, \"EEEE, d MMMM, yyyy \'alle\' hh:mm\")}"/>
                             <c:set var="finalFormattedDate" value="${my:capitalize(rawFormattedDate)}"/>
 
                             <c:out value="${finalFormattedDate}"/>

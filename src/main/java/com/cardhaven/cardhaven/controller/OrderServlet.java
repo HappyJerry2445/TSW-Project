@@ -2,7 +2,6 @@ package com.cardhaven.cardhaven.controller;
 
 import com.cardhaven.cardhaven.model.dao.OrderDAO;
 import com.cardhaven.cardhaven.model.dto.OrderDTO;
-import com.cardhaven.cardhaven.model.dto.UserDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,12 +26,7 @@ public class OrderServlet extends HttpServlet {
 
         // Unified JSP paths
         String ordersListPagePath = "/WEB-INF/views/common/orders.jsp";
-        String loginPagePath = "/WEB-INF/views/login.jsp"; // Changed to use WEB-INF path
 
-        if (!isUserAuthenticated(session)) {
-            request.getRequestDispatcher(loginPagePath).forward(request, response);
-            return;
-        }
 
         DataSource ds = (DataSource) getServletContext().getAttribute("ds");
         if (ds == null) {
@@ -43,15 +37,7 @@ public class OrderServlet extends HttpServlet {
 
         OrderDAO orderDAO = new OrderDAO(ds); // Local DAO instance
 
-        UserDTO loggedInUser = (UserDTO) session.getAttribute("loggedInUser");
-
-        if (loggedInUser == null) { // Should ideally be caught by isUserAuthenticated
-            errors.add("Sessione utente non valida. Effettua nuovamente il login.");
-            request.getRequestDispatcher(loginPagePath).forward(request, response);
-            return;
-        }
-
-        int userId = loggedInUser.getId();
+        var userId = (Integer) session.getAttribute("userId");
 
         try {
             // --- Logic for displaying the list of all user's orders ---
@@ -64,10 +50,6 @@ public class OrderServlet extends HttpServlet {
         }
     }
 
-    private boolean isUserAuthenticated(HttpSession session) {
-        // Checks for the "loggedInUser" attribute, consistent with LoginServlet.
-        return session != null && session.getAttribute("loggedInUser") != null;
-    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

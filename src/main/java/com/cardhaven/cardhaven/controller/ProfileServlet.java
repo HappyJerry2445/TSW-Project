@@ -24,6 +24,17 @@ public class ProfileServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        var userDAO = new UserDAO((DataSource) getServletContext().getAttribute("ds"));
+        var session = req.getSession();
+
+        var userId = (Integer) session.getAttribute("userId");
+        UserDTO loggedInUser;
+        try {
+            loggedInUser = userDAO.getById(userId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        req.setAttribute("loggedInUser", loggedInUser);
         req.getRequestDispatcher("/WEB-INF/views/common/profile.jsp").forward(req, resp);
     }
 
@@ -31,7 +42,8 @@ public class ProfileServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var userDAO = new UserDAO((DataSource) getServletContext().getAttribute("ds"));
         var session = req.getSession();
-        var loggedInUser = (UserDTO) session.getAttribute("loggedInUser");
+
+        var userId = (Integer) session.getAttribute("userId");
         List<String> errors = new ArrayList<>();
         var firstName = req.getParameter("firstName");
         var lastName = req.getParameter("lastName");
@@ -52,7 +64,7 @@ public class ProfileServlet extends HttpServlet {
             try {
                 UserDTO existingUser = userDAO.getUserByEmail(email);
                 // Se esiste un utente con questa email E il suo ID non è quello dell'utente corrente
-                if (existingUser != null && existingUser.getId() != loggedInUser.getId()) {
+                if (existingUser != null && existingUser.getId() != userId) {
                     errors.add("Questa email è già associata ad un altro account.");
                 }
             } catch (SQLException e) {
@@ -76,6 +88,13 @@ public class ProfileServlet extends HttpServlet {
             return;
         }
 
+        UserDTO loggedInUser;
+        try {
+            loggedInUser = userDAO.getById(userId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         // Aggiorna l'oggetto UserDTO con i nuovi dati
         loggedInUser.setFirstName(firstName);
         loggedInUser.setLastName(lastName);
@@ -89,6 +108,7 @@ public class ProfileServlet extends HttpServlet {
         } catch (SQLException e) {
             errors.add("Errore durante l'aggiornamento del profilo.");
             req.setAttribute("errors", errors);
+            req.setAttribute("loggedInUser", loggedInUser);
             /*
             TODO: Fai per bene
             req.setAttribute("submittedFirstName", firstName);

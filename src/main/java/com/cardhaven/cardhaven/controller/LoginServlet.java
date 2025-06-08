@@ -4,6 +4,7 @@ package com.cardhaven.cardhaven.controller;
 import com.cardhaven.cardhaven.model.dao.UserDAO;
 import com.cardhaven.cardhaven.model.dto.UserDTO;
 import com.cardhaven.cardhaven.util.NotificationUtil;
+import com.cardhaven.cardhaven.util.UserLoginUtil;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -69,7 +70,7 @@ public class LoginServlet extends HttpServlet {
         }
         var session = request.getSession();
         user.setLastLogin(LocalDateTime.now());
-        session.setAttribute("loggedInUser", user);
+        UserLoginUtil.login(session, user);
         NotificationUtil.sendNotification(request, "Login effetuato con successo", "info");
         try {
             userDao.save(user);

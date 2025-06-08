@@ -1,5 +1,6 @@
 package com.cardhaven.cardhaven.controller;
 
+import com.cardhaven.cardhaven.util.NotificationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -28,8 +29,7 @@ public class LogoutServlet extends HttpServlet {
         if (session != null) {
             session.invalidate();
             session = req.getSession(true);
-            session.setAttribute("notificationMessage", "Logout effetuato con successo");
-            session.setAttribute("notificationType", "info");
+            NotificationUtil.sendNotification(req, "Logout effetuato con successo", "info");
         }
 
         resp.sendRedirect(req.getContextPath() + "/");
