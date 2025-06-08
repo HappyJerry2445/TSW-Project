@@ -28,7 +28,7 @@
 }
 
 .address-actions {
-    display: flex;
+    display: grid;
     flex-wrap: wrap;
     gap: calc(var(--spacing-unit) * 0.75); /* Spaziatura tra i bottoni */
     margin-top: calc(var(--spacing-unit) * 1.5); /* Spazio sopra i bottoni */
@@ -68,5 +68,27 @@
 
 .address-value {
     color: var(--color-text-default);
+}
+
+.address-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-unit);
+}
+
+@media (max-width: 768px) {
+    .address-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .address-item {
+        border: none;
+        border-bottom: 1px solid var(--color-neutral-dark);
+        border-radius: 0;
+        box-shadow: none;
+        padding: 0 0 var(--spacing-unit);
+
+    }
+
 }
 

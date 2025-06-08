@@ -85,7 +85,7 @@
                 </c:otherwise>
             </c:choose>
 
-            <div class="text-center mt-3"> <%-- 'text-center', 'mt-3' are utility classes. --%>
+            <div class="address-buttons text-center mt-3"> <%-- 'text-center', 'mt-3' are utility classes. --%>
                 <a href="${pageContext.request.contextPath}/common/addresses/add" class="btn btn-primary">Aggiungi Nuovo
                     Indirizzo</a> <%-- 'btn', 'btn-primary' are expected in style.css. --%>
                 <a href="${pageContext.request.contextPath}/common/profile" class="btn btn-outline">Torna al
