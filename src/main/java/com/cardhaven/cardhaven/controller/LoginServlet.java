@@ -22,6 +22,7 @@ import java.util.List;
 public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         System.out.println("doPost");
 
         String email = request.getParameter("email");
@@ -88,5 +89,6 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var dispatcher = req.getRequestDispatcher("/WEB-INF/views/login.jsp");
         dispatcher.forward(req, resp);
+
     }
 }
