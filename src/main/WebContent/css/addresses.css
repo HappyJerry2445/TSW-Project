@@ -90,5 +90,9 @@
 
     }
 
+    .address-item:hover {
+        box-shadow: none;
+    }
+
 }
 

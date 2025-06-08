@@ -138,6 +138,22 @@ public class AddressDTO implements Serializable {
     // Enum for address types
     public enum AddressType {
         Shipping,
-        Billing
+        Billing;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case Shipping -> {
+                    return "Spedizione";
+                }
+                case Billing -> {
+                    return "Fatturazione";
+                }
+                default -> {
+                    return "";
+                }
+            }
+        }
     }
+
 }
