@@ -43,7 +43,7 @@
                    aria-label="Il mio account"
                    class="action-icon">
                     <i class="fas fa-user"></i></a>
-                <c:if test="${not empty loggedInUser}">
+                <c:if test="${not empty userId}">
                     <a id="logout-icon" href="${pageContext.request.getContextPath()}/logout" aria-label="Logout"
                        class="action-icon">
                         <i class="fa-solid fa-right-from-bracket"></i>
