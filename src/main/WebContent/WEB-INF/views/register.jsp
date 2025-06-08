@@ -21,10 +21,11 @@
         <div class="card user-auth-card">
             <h2 class="section-title">Crea un nuovo account</h2>
 
+            <%--@elvariable id="errors" type="java.util.List<java.lang.String>"--%>
             <c:if test="${not empty errors}">
                 <div class="alert alert-danger">
                     <c:forEach var="error" items="${errors}">
-                        <p>${error}</p>
+                        <p><c:out value="${error}"/></p>
                     </c:forEach>
                 </div>
             </c:if>
@@ -34,20 +35,20 @@
                     <label for="firstName">Nome</label>
                     <input id="firstName" type="text" name="firstName" class="form-input"
                            placeholder="Inserisci il tuo nome"
-                           value="${param.firstName != null ? param.firstName : ''}">
+                           value="<c:out value="${param.firstName != null ? param.firstName : ''}"/>">
                 </div>
 
                 <div class="mb-1">
                     <label for="lastName">Cognome</label>
                     <input id="lastName" type="text" name="lastName" class="form-input"
                            placeholder="Inserisci il tuo cognome"
-                           value="${param.lastName != null ? param.lastName : ''}">
+                           value="<c:out value="${param.lastName != null ? param.lastName : ''}"/>">
                 </div>
 
                 <div class="mb-1">
                     <label for="email">Email</label>
                     <input id="email" type="email" name="email" class="form-input" placeholder="Inserisci la tua email"
-                           value="${param.email != null ? param.email : ''}">
+                           value="<c:out value="${param.email != null ? param.email : ''}"/>">
                 </div>
 
                 <div class="mb-1">

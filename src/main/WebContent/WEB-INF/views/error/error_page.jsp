@@ -2,6 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%-- Set page title based on status code, or a generic title --%>
+<%--@elvariable id="statusCode" type="java.lang.Integer"--%>
 <c:set var="pageTitle">
     <c:choose>
         <c:when test="${statusCode == 404}">Pagina Non Trovata</c:when>
@@ -13,7 +14,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <title>${pageTitle}</title>
+    <title><c:out value="${pageTitle}"/></title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/error.css" type="text/css"> --%>
     <jsp:include page="/components/common_head.jsp"/>
@@ -33,14 +34,16 @@
 
         <p class="mb-2">
             <c:choose>
-                <c:when test="${not empty userMessage}">${userMessage}</c:when>
+                <%--@elvariable id="userMessage" type="java.lang.String"--%>
+                <c:when test="${not empty userMessage}"><c:out value="${userMessage}"/></c:when>
                 <c:otherwise>Siamo spiacenti, qualcosa è andato storto. Per favore, riprova più tardi o torna alla homepage.</c:otherwise>
             </c:choose>
         </p>
 
+        <%--@elvariable id="requestUri" type="java.lang.String"--%>
         <c:if test="${not empty requestUri}">
             <p class="mb-2 text-secondary">
-                Risorsa richiesta: <code>${requestUri}</code>
+                Risorsa richiesta: <code><c:out value="${requestUri}"/></code>
             </p>
         </c:if>
 

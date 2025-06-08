@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="/WEB-INF/functions" prefix="my" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <c:set var="pageTitle" value="Dettagli Ordine" scope="request"/>
 
@@ -20,11 +21,12 @@
     <div class="orders-page-container">
         <h2>Dettagli Ordine #<c:out value="${order.orderId}"/></h2>
 
+        <%--@elvariable id="errors" type="java.util.List<java.lang.String>"--%>
         <c:if test="${not empty errors}">
         <div class="alert alert-danger">
             <ul>
                 <c:forEach var="error" items="${errors}">
-                    <li>${error}</li>
+                    <li><c:out value="${error}"/></li>
                 </c:forEach>
             </ul>
         </div>
@@ -36,10 +38,12 @@
                     <h4>Informazioni Ordine</h4>
                     <p><strong>Data:</strong> <c:out value="${my:formatDateTime(order.orderDate)}"/></p>
                     <p><strong>Stato:</strong> <c:out value="${order.orderStatus}"/></p>
-                    <p><strong>Totale:</strong> € <fmt:formatNumber value="${order.totalAmount}" type="number"
+                    <p><strong>Totale:</strong> € <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}"
+                                                                    type="number"
                                                                     minFractionDigits="2" maxFractionDigits="2"/></p>
                     <p><strong>Indirizzo di Spedizione:</strong>
                         <c:choose>
+                            <%--@elvariable id="shippingAddress" type="java.util.List<com.cardhaven.cardhaven.model.dto.AddressDTO>"--%>
                         <c:when test="${not empty shippingAddress}">
                     <p><c:out value="${shippingAddress.postalCode}"/> <c:out value="${shippingAddress.city}"/>, <c:out
                             value="${shippingAddress.country}"/></p>
@@ -58,9 +62,11 @@
             <h4>Prodotti Ordinati</h4>
             <div>
                 <c:choose>
+                    <%--@elvariable id="orderItems" type="java.util.List<com.cardhaven.cardhaven.model.dto.OrderItemDTO>"--%>
                     <c:when test="${not empty orderItems}">
                         <div class="order-items">
                             <c:forEach var="item" items="${orderItems}">
+                                <%--@elvariable id="productMap" type="java.util.Map<java.lang.Integer, com.cardhaven.cardhaven.model.dto.ProductDTO>"--%>
                                 <c:set var="product" value="${productMap[item.productID]}"/>
                                 <div class="order-item-card">
                                     <div class="row align-items-center">
@@ -89,7 +95,8 @@
                                             <p>
                                                 <strong>Prezzo unitario:</strong><br>
                                                 <span class="unit-price">
-                                                € <fmt:formatNumber value="${item.unitPrice}" type="number"
+                                                € <fmt:formatNumber value="${fn:escapeXml(item.unitPrice)}"
+                                                                    type="number"
                                                                     minFractionDigits="2" maxFractionDigits="2"/>
                                             </span>
                                             </p>
@@ -122,13 +129,15 @@
                     <h5>Riepilogo Ordine</h5>
                     <div class="summary-row">
                         <span>Subtotale:</span>
-                        <span>€ <fmt:formatNumber value="${order.totalAmount}" type="number" minFractionDigits="2"
+                        <span>€ <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}" type="number"
+                                                  minFractionDigits="2"
                                                   maxFractionDigits="2"/></span>
                     </div>
                     <div class="summary-row total-row">
                         <strong>
                             <span>Totale:</span>
-                            <span>€ <fmt:formatNumber value="${order.totalAmount}" type="number" minFractionDigits="2"
+                            <span>€ <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}" type="number"
+                                                      minFractionDigits="2"
                                                       maxFractionDigits="2"/></span>
                         </strong>
                     </div>

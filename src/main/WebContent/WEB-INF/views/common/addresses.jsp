@@ -20,26 +20,29 @@
         <div class="card profile-card"> <%-- Using profile-card for consistent styling --%>
             <h2 class="section-title">I Miei Indirizzi</h2>
 
+            <%--@elvariable id="errors" type="java.util.List<String>"--%>
             <c:if test="${not empty errors}">
                 <div class="alert alert-danger"> <%-- Assuming 'alert' and 'alert-danger' are in style.css or general utility classes --%>
                     <ul>
                         <c:forEach var="error" items="${errors}">
-                            <li>${error}</li>
+                            <li><c:out value="${error}"/></li>
                         </c:forEach>
                     </ul>
                 </div>
             </c:if>
 
             <c:choose>
+                <%--@elvariable id="addresses" type="java.util.List<com.cardhaven.cardhaven.model.dto.AddressDTO>"--%>
                 <c:when test="${not empty addresses}">
                     <div class="address-list"> <%-- This class will need minimal, if any, specific styling. Maybe just a flexbox or grid for layout if needed. --%>
                         <c:forEach var="address" items="${addresses}">
                             <div class="address-item mt-3 p-1 border rounded-md"> <%-- 'mb-3', 'p-3', 'border', 'rounded' are likely utility classes from style.css or a framework emulated by it. --%>
-                                <p><strong>Tipo:</strong> ${address.addressType}</p>
-                                <p>${address.streetAddress}</p>
-                                <p>${address.city}, <c:if test="${not empty address.state}">${address.state}, </c:if>
-                                        ${address.postalCode}</p>
-                                <p>${address.country}</p>
+                                <p><strong>Tipo:</strong> <c:out value="${address.addressType}"/></p>
+                                <p><c:out value="${address.streetAddress}"/></p>
+                                <p><c:out value="${address.city}"/>, <c:if test="${not empty address.state}"><c:out
+                                        value="${address.state}"/>, </c:if>
+                                    <c:out value="${address.postalCode}"/></p>
+                                <p><c:out value="${address.country}"/></p>
                                 <p>
                                     <c:if test="${address.isDefault()}">
                                         <span class="badge bg-success">Predefinito</span> <%-- 'badge' and 'bg-success' are likely utility classes from style.css. --%>

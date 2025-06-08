@@ -21,6 +21,7 @@
         <div class="card profile-card">
             <h2 class="section-title">Il Mio Profilo</h2>
 
+            <%--@elvariable id="loggedInUser" type="com.cardhaven.cardhaven.model.dto.UserDTO"--%>
             <c:if test="${not empty loggedInUser}">
                 <form action="${pageContext.request.contextPath}/common/profile" method="post">
                     <div class="profile-details">
@@ -28,24 +29,28 @@
                             <label for="firstName">Nome:</label>
                             <input id="firstName" type="text" name="firstName" class="form-input"
                                    placeholder="Inserisci il tuo nome"
-                                   value="${not empty submittedFirstName ? submittedFirstName : loggedInUser.firstName}"
+                                <%--@elvariable id="submittedFirstName" type="java.lang.String"--%>
+                                   value="<c:out value="${not empty submittedFirstName ? submittedFirstName : loggedInUser.firstName}"/>"
                                    disabled required>
                         </div>
                         <div class="mb-1">
                             <label for="lastName">Cognome:</label>
                             <input id="lastName" type="text" name="lastName" class="form-input"
                                    placeholder="Inserisci il tuo cognome"
-                                   value="${not empty submittedLastName ? submittedLastName : loggedInUser.lastName}"
+                                <%--@elvariable id="submittedLastName" type="java.lang.String"--%>
+                                   value="<c:out value="${not empty submittedLastName ? submittedLastName : loggedInUser.lastName}"/>"
                                    disabled required>
                         </div>
                         <div class="mb-1">
                             <label for="email">Email:</label>
                             <input id="email" type="email" name="email" class="form-input"
                                    placeholder="Inserisci la tua email"
-                                   value="${not empty submittedEmail ? submittedEmail : loggedInUser.email}" disabled
+                                <%--@elvariable id="submittedEmail" type="java.lang.String"--%>
+                                   value="<c:out value="${not empty submittedEmail ? submittedEmail : loggedInUser.email}"/>"
+                                   disabled
                                    required>
                         </div>
-                        <p><strong>Ruolo:</strong> ${loggedInUser.role}</p>
+                        <p><strong>Ruolo:</strong> <c:out value="${loggedInUser.role}"/></p>
                         <p><strong>Data di Registrazione:</strong>
                             <c:set var="rawFormattedDate"
                                    value="${my:formatDateTimePattern(loggedInUser.createdAt, \"EEEE, d MMMM, yyyy \'alle\' hh:mm\")}"/>
