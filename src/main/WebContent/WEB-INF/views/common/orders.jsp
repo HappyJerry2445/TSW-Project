@@ -21,14 +21,8 @@
     <div class="orders-page-container">
         <h1 class="section-title">I Miei Ordini</h1>
 
-        <%--@elvariable id="errors" type="java.util.List<java.lang.String>"--%>
-        <c:if test="${not empty errors}">
-            <div class="alert-danger" role="alert">
-                <c:forEach var="error" items="${errors}">
-                    <p class="mb-1"><c:out value="${error}"/></p>
-                </c:forEach>
-            </div>
-        </c:if>
+
+        <jsp:include page="/components/error_message.jsp"/>
 
         <c:choose>
             <%--@elvariable id="orders" type="java.util.List<com.cardhaven.cardhaven.model.dto.OrderDTO>"--%>

@@ -21,16 +21,7 @@
         <div class="card profile-card"> <%-- Using profile-card for consistent styling --%>
             <h2 class="section-title">I Miei Indirizzi</h2>
 
-            <%--@elvariable id="errors" type="java.util.List<String>"--%>
-            <c:if test="${not empty errors}">
-                <div class="alert alert-danger"> <%-- Assuming 'alert' and 'alert-danger' are in style.css or general utility classes --%>
-                    <ul>
-                        <c:forEach var="error" items="${errors}">
-                            <li><c:out value="${error}"/></li>
-                        </c:forEach>
-                    </ul>
-                </div>
-            </c:if>
+            <jsp:include page="/components/error_message.jsp"/>
 
             <c:choose>
                 <%--@elvariable id="addresses" type="java.util.List<com.cardhaven.cardhaven.model.dto.AddressDTO>"--%>

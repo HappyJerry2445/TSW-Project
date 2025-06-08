@@ -21,14 +21,7 @@
         <div class="card user-auth-card">
             <h2 class="section-title">Accedi al tuo account</h2>
 
-            <%--@elvariable id="errors" type="java.util.List<java.lang.String>"--%>
-            <c:if test="${not empty errors}">
-                <div class="alert alert-danger">
-                    <c:forEach var="error" items="${errors}">
-                        <p><c:out value="${error}"/></p>
-                    </c:forEach>
-                </div>
-            </c:if>
+            <jsp:include page="/components/error_message.jsp"/>
 
             <form action="${pageContext.request.contextPath}/login" method="post">
                 <div class="mb-1">

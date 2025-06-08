@@ -21,16 +21,7 @@
     <div class="orders-page-container">
         <h2>Dettagli Ordine #<c:out value="${order.orderId}"/></h2>
 
-        <%--@elvariable id="errors" type="java.util.List<java.lang.String>"--%>
-        <c:if test="${not empty errors}">
-        <div class="alert alert-danger">
-            <ul>
-                <c:forEach var="error" items="${errors}">
-                    <li><c:out value="${error}"/></li>
-                </c:forEach>
-            </ul>
-        </div>
-        </c:if>
+        <jsp:include page="/components/error_message.jsp"/>
 
         <div class="order-info-section">
             <div class="row">
