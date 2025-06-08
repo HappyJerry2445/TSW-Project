@@ -2,30 +2,33 @@
 .orders-page-container {
     max-width: 960px; /* Adjust as needed */
     margin: 0 auto; /* Center the content */
-    padding: calc(var(--spacing-unit)*2);
-    background-color: var(--color-bg-light-grey); /* Light background for the content area */
-    border-radius: 8px;
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--border-radius-md);
     box-shadow: var(--color-shadow-light);
+    padding: calc(var(--spacing-unit) * 1.5);
+    transition: box-shadow 0.2s ease;
+    overflow: hidden;
 }
 
 /* Table styling */
 .table {
     width: 100%;
     margin-bottom: 1rem;
-    color: var(--color-neutral-darkest);
+    color: var(--color-text-default);
     border-collapse: collapse; /* Ensures borders are neat */
 }
 
 .table th,
 .table td {
-    padding: calc(var(--spacing-unit)*0.75);
+    padding: calc(var(--spacing-unit) * 0.75);
     vertical-align: top;
-    border-top: 1px solid var(--color-neutral-base); /* Light grey border for rows */
+    border-top: 1px solid var(--color-border-default); /* Light grey border for rows */
 }
 
 .table thead th {
     vertical-align: bottom;
-    border-bottom: 2px solid var(--color-neutral-base); /* Heavier border for table header */
+    border-bottom: 2px solid var(--color-border-default); /* Heavier border for table header */
     background-color: var(--color-neutral-light); /* Light grey background for header */
     color: var(--color-table-thead);
     text-align: left; /* Align header text to the left */
@@ -33,12 +36,12 @@
 
 /* Striped rows for better readability - assumes you have .table-striped in JSP */
 .table-striped tbody tr:nth-of-type(odd) {
-    background-color: var(--color-shadow-md);
+    background-color: var(--color-neutral-lightest);
 }
 
 /* Hover effect for table rows - assumes you have .table-hover in JSP */
 .table-hover tbody tr:hover {
-    background-color: var(--color-shadow-light);
+    background-color: var(--color-bg-light-grey);
 }
 
 /* Responsive wrapper for the table */
@@ -51,10 +54,10 @@
 
 /* Styling for action buttons in the table */
 .table .btn { /* General button styling if not using a framework like Bootstrap */
-    padding: calc(var(--spacing-unit)*0.375) calc(var(--spacing-unit) *0.75);
+    padding: calc(var(--spacing-unit) * 0.375) calc(var(--spacing-unit) * 0.75);
     font-size: 0.9rem;
     line-height: 1.5;
-    border-radius: 0.25rem;
+    border-radius: var(--border-radius-sm);
     text-decoration: none;
     color: var(--color-primary-light);
     display: inline-block;
@@ -63,9 +66,10 @@
     cursor: pointer;
     user-select: none;
     border: 1px solid transparent;
+    transition: all 0.2s ease;
 }
 
-table .btn-info { /* Specific styling for info button */
+.table .btn-info { /* Specific styling for info button */
     background-color: var(--color-status-info);
     border-color: var(--color-status-info);
 }
@@ -76,24 +80,24 @@ table .btn-info { /* Specific styling for info button */
 }
 
 .order-info-section {
-    background-color: var(--color-neutral-lightest);
-    padding: calc(var(--spacing-unit)*2);
-    border-radius: 8px;
-    margin-bottom: 20px;
-    border: 1px solid var(--color-neutral-base);
+    padding: calc(var(--spacing-unit) * 1.5);
+    background-color: var(--color-bg-card);
+    border-radius: var(--border-radius-md);
+    margin-bottom: calc(var(--spacing-unit) * 1.25);
+    border: 1px solid var(--color-border-default);
 }
 
 .order-items {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: var(--spacing-unit);
 }
 
 .order-item-card {
     background-color: var(--color-bg-card);
-    border: 1px solid var(--color-neutral-base);
-    border-radius: 8px;
-    padding: calc(var(--spacing-unit)*2);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--border-radius-md);
+    padding: calc(var(--spacing-unit) * 2);
     box-shadow: var(--color-shadow-light);
     transition: box-shadow 0.2s ease;
 }
@@ -105,8 +109,9 @@ table .btn-info { /* Specific styling for info button */
 .product-name {
     font-size: 1.1em;
     font-weight: 600;
-    color: var(--color-neutral-darkest);
-    margin-bottom: 8px;
+    color: var(--color-text-default);
+    margin-bottom: calc(var(--spacing-unit) * 0.5);
+    font-family: var(--font-heading);
 }
 
 .quantity-value {
@@ -120,7 +125,7 @@ table .btn-info { /* Specific styling for info button */
 }
 
 .unit-price {
-    color: var(--color-neutral-dark);
+    color: var(--color-text-secondary);
 }
 
 .item-total {
@@ -129,29 +134,32 @@ table .btn-info { /* Specific styling for info button */
 }
 
 .order-summary {
-    margin-top: 30px;
+    margin-top: calc(var(--spacing-unit) * 2);
 }
 
 .summary-box {
-    background-color: var(--color-neutral-lightest);
-    padding: calc(var(--spacing-unit)*2);
-    border-radius: 8px;
-    border: 1px solid var(--color-neutral-base);
+    padding: calc(var(--spacing-unit) * 1.5);
+    background-color: var(--color-bg-card);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--color-border-default);
+    box-shadow: var(--color-shadow-light);
 }
 
 .summary-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: calc(var(--spacing-unit) * 0.5);
+    color: var(--color-text-default);
 }
 
 .summary-row.total-row {
-    border-top: 2px solid #dee2e6;
-    padding-top: calc(var(--spacing-unit));
-    margin-top: 10px;
+    border-top: 2px solid var(--color-border-default);
+    padding-top: var(--spacing-unit);
+    margin-top: calc(var(--spacing-unit) * 0.75);
     font-size: 1.1em;
+    font-weight: 600;
+    color: var(--color-text-default);
 }
-
 
 .align-items-center {
     align-items: center;
@@ -159,4 +167,26 @@ table .btn-info { /* Specific styling for info button */
 
 .text-right {
     text-align: right;
+}
+
+@media (max-width: 768px) {
+    .orders-page-container {
+        border: none;
+        border-bottom: 1px solid var(--color-border-default);
+        border-radius: 0;
+        box-shadow: none;
+        padding: 0 0 var(--spacing-unit);
+    }
+
+    .order-items {
+        gap: calc(var(--spacing-unit) * 0.75);
+    }
+
+    .order-item-card {
+        padding: var(--spacing-unit);
+    }
+
+    .summary-box {
+        padding: var(--spacing-unit);
+    }
 }
