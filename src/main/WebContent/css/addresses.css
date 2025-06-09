@@ -1,8 +1,12 @@
 /* Stili specifici per la lista degli indirizzi */
 
+.profile-card {
+    max-width: 1000px;
+}
+
 .address-list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: calc(var(--spacing-unit) * 1.2);
 }
 
@@ -22,14 +26,15 @@
 
 .address-details {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto;
     justify-content: start;
     gap: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit));
 }
 
 .address-actions {
-    display: grid;
+    display: flex;
     flex-wrap: wrap;
+    grid-template-columns: 1fr 1fr;
     gap: calc(var(--spacing-unit) * 0.75); /* Spaziatura tra i bottoni */
     margin-top: calc(var(--spacing-unit) * 1.5); /* Spazio sopra i bottoni */
 }
@@ -47,18 +52,16 @@
 }
 
 .badge.bg-success {
+    text-align: right;
     padding: calc(var(--spacing-unit) * 0.4) calc(var(--spacing-unit) * 0.8);
-    font-size: 0.8em;
     border-radius: var(--border-radius-sm);
     margin-bottom: calc(var(--spacing-unit));
+    align-self: end;
 
     background-color: var(--color-accent-vibrant);
     color: var(--color-primary-light);
 }
 
-.address-field {
-    display: contents;
-}
 
 .address-label {
     font-weight: 600;
@@ -76,11 +79,18 @@
     gap: var(--spacing-unit);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1060px) {
     .address-buttons {
         grid-template-columns: 1fr;
     }
 
+
+    .address-list {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 750px) {
     .address-item {
         border: none;
         border-bottom: 1px solid var(--color-neutral-dark);
@@ -92,6 +102,14 @@
 
     .address-item:hover {
         box-shadow: none;
+    }
+
+    .address-list {
+        grid-template-columns: 1fr;
+    }
+
+    .address-actions > .btn {
+        padding-left: 0;
     }
 
 }

@@ -28,7 +28,7 @@
                 <c:when test="${not empty addresses}">
                     <div class="address-list"> <%-- This class will need minimal, if any, specific styling. Maybe just a flexbox or grid for layout if needed. --%>
                         <c:forEach var="address" items="${addresses}">
-                            <div class="address-item mt-3 rounded-md"> <%-- 'mb-3', 'p-3', 'border', 'rounded' are likely utility classes from style.css or a framework emulated by it. --%>
+                            <div class="address-item rounded-md"> <%-- 'mb-3', 'p-3', 'border', 'rounded' are likely utility classes from style.css or a framework emulated by it. --%>
                                 <c:if test="${address.isDefault()}">
                                     <span class="badge bg-success">Predefinito</span> <%-- 'badge' and 'bg-success' are likely utility classes from style.css. --%>
                                 </c:if>
@@ -38,11 +38,11 @@
                                         <span class="address-value"><c:out value="${address.addressType}"/></span>
                                     </p>
                                     <p class="address-field">
-                                        <span class="address-label">Indirizzo:</span>
+                                        <!--<span class="address-label">Indirizzo:</span>-->
                                         <span class="address-value"><c:out value="${address.streetAddress}"/></span>
                                     </p>
                                     <p class="address-field">
-                                        <span class="address-label">Città/Stato/CAP:</span>
+                                        <!--<span class="address-label">Città/Stato/CAP:</span>-->
                                         <span class="address-value">
                                         <c:out value="${address.city}"/>,
                                         <c:if test="${not empty address.state}"><c:out value="${address.state}"/>,
@@ -51,15 +51,15 @@
                                     </span>
                                     </p>
                                     <p class="address-field">
-                                        <span class="address-label">Nazione:</span>
+                                        <!--<span class="address-label">Nazione:</span>-->
                                         <span class="address-value"><c:out value="${address.country}"/></span>
                                     </p>
                                 </div>
                                 <div class="address-actions mt-2"> <%-- 'mt-2' likely a utility class. 'address-actions' could be styled if multiple buttons need specific layout. --%>
                                     <a href="${pageContext.request.contextPath}/common/addresses/edit?addressId=${address.addressID}"
-                                       class="btn btn-secondary btn-sm">Modifica</a> <%-- 'btn', 'btn-secondary', 'btn-sm' are expected in style.css. --%>
+                                       class="btn  btn-sm">Modifica</a> <%-- 'btn', 'btn-secondary', 'btn-sm' are expected in style.css. --%>
                                     <a href="${pageContext.request.contextPath}/common/addresses/delete?addressId=${address.addressID}"
-                                       class="btn btn-danger btn-sm">Elimina</a> <%-- 'btn', 'btn-danger', 'btn-sm' are expected in style.css. --%>
+                                       class="btn btn-sm">Elimina</a> <%-- 'btn', 'btn-danger', 'btn-sm' are expected in style.css. --%>
                                     <c:if test="${!address.isDefault()}">
                                         <a href="${pageContext.request.contextPath}/common/addresses/set-default?addressId=${address.addressID}"
                                            class="btn btn-info btn-sm">Imposta come
@@ -77,7 +77,8 @@
             </c:choose>
 
             <div class="address-buttons text-center mt-3"> <%-- 'text-center', 'mt-3' are utility classes. --%>
-                <a href="${pageContext.request.contextPath}/common/addresses/add" class="btn btn-primary">Aggiungi Nuovo
+                <a href="${pageContext.request.contextPath}/common/addresses/add" class="btn btn-primary ">Aggiungi
+                    Nuovo
                     Indirizzo</a> <%-- 'btn', 'btn-primary' are expected in style.css. --%>
                 <a href="${pageContext.request.contextPath}/common/profile" class="btn btn-outline">Torna al
                     Profilo</a> <%-- 'btn', 'btn-outline' are expected in style.css. --%>
@@ -89,3 +90,4 @@
 <jsp:include page="/components/footer.jsp"/>
 </body>
 </html>
+
