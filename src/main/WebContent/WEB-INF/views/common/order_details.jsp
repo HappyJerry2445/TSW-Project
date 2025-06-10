@@ -60,7 +60,7 @@
                                 <%--@elvariable id="productMap" type="java.util.Map<java.lang.Integer, com.cardhaven.cardhaven.model.dto.ProductDTO>"--%>
                                 <c:set var="product" value="${productMap[item.productID]}"/>
                                 <div class="order-item-card">
-                                    <div class="row align-items-center">
+                                    <div class="product-content">
                                             <h5 class="product-name">
                                                 <c:choose>
                                                     <c:when test="${not empty product}">
@@ -71,18 +71,20 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </h5>
-                                            <%--TODO aggiungere css--%>
+
+                                            <div class="product-image-container">
                                                 <div>
                                                     <c:set var="image" value="${productImageMap[product.productID]}"/>
                                                     <c:choose>
                                                         <c:when test="${not empty image}">
-                                                            <img src="${image}" alt="Immagine di ${product.productName}"/>
+                                                            <img src="${image}" alt="Immagine di ${product.productName}" class="product-image"/>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <img src="${pageContext.request.contextPath}/imgs/noimage.png" alt="Immagine non disponibile"/>
+                                                            <img src="${pageContext.request.contextPath}/imgs/noimage.png" alt="Immagine non disponibile" class="product-image"/>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </div>
+                                            </div>
                                             <div>
                                         </div>
                                     </div>
