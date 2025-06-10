@@ -5,6 +5,7 @@ import com.cardhaven.cardhaven.model.dto.AddressDTO;
 import com.cardhaven.cardhaven.model.dto.OrderDTO;
 import com.cardhaven.cardhaven.model.dto.OrderItemDTO;
 import com.cardhaven.cardhaven.model.dto.ProductDTO;
+import com.cardhaven.cardhaven.util.NotificationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
@@ -31,7 +32,8 @@ public class OrderDetailsServlet extends HttpServlet {
 
         String pathInfo = request.getPathInfo(); // /{orderId}
         if (pathInfo == null || pathInfo.equals("/")) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID ordine mancante");
+            NotificationUtil.sendNotification(request, "ID ordine mancante.", "error");
+            response.sendRedirect(request.getContextPath() + "/common/orders");
             return;
         }
 
@@ -39,7 +41,8 @@ public class OrderDetailsServlet extends HttpServlet {
         try {
             orderId = Integer.parseInt(pathInfo.substring(1));
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID ordine non valido");
+            NotificationUtil.sendNotification(request, "ID ordine non valido.", "error");
+            response.sendRedirect(request.getContextPath() + "/common/orders");
             return;
         }
 
@@ -55,7 +58,8 @@ public class OrderDetailsServlet extends HttpServlet {
         try {
             OrderDTO order = orderDAO.getById(orderId);
             if (order == null || order.getUserId() != userId) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Ordine non trovato o non autorizzato");
+                NotificationUtil.sendNotification(request, "Ordine non trovato o non autorizzato.", "error");
+                response.sendRedirect(request.getContextPath() + "/common/orders");
                 return;
             }
 
