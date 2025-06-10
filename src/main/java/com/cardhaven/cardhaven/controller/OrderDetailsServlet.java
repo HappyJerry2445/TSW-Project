@@ -1,14 +1,12 @@
 package com.cardhaven.cardhaven.controller;
 
-import com.cardhaven.cardhaven.model.dao.AddressDAO;
-import com.cardhaven.cardhaven.model.dao.OrderDAO;
-import com.cardhaven.cardhaven.model.dao.OrderItemDAO;
-import com.cardhaven.cardhaven.model.dao.ProductDAO;
+import com.cardhaven.cardhaven.model.dao.*;
 import com.cardhaven.cardhaven.model.dto.AddressDTO;
 import com.cardhaven.cardhaven.model.dto.OrderDTO;
 import com.cardhaven.cardhaven.model.dto.OrderItemDTO;
 import com.cardhaven.cardhaven.model.dto.ProductDTO;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,6 +48,7 @@ public class OrderDetailsServlet extends HttpServlet {
         OrderItemDAO orderItemDAO = new OrderItemDAO(ds);
         ProductDAO productDAO = new ProductDAO(ds);
         AddressDAO addressDAO = new AddressDAO(ds);
+        ProductImageDAO productImageDAO = new ProductImageDAO(ds); // Instantiate ProductImageDAO
 
         var userId = (Integer) session.getAttribute("userId");
 
@@ -74,6 +73,17 @@ public class OrderDetailsServlet extends HttpServlet {
                 }
             }
 
+            Map<Integer, String> productImageMap = new HashMap<>();
+            for (ProductDTO product : productMap.values()) {
+                byte[] images = productImageDAO.getImagesByProductId(product.getProductId());
+                ServletOutputStream out = response.getOutputStream();
+                if(images != null){
+                    out.write(images);
+                    response.setContentType("image/jpeg");
+                }
+
+            }
+
             // Recupera l'indirizzo di spedizione
             AddressDTO shippingAddress = null;
             if (order.getShippingAddressId() > 0) {
@@ -84,6 +94,7 @@ public class OrderDetailsServlet extends HttpServlet {
             request.setAttribute("orderItems", items);
             request.setAttribute("productMap", productMap);
             request.setAttribute("shippingAddress", shippingAddress);
+            request.setAttribute("productImageMap", productImageMap); // Add the new map to the request
             request.getRequestDispatcher("/WEB-INF/views/common/order_details.jsp").forward(request, response);
 
         } catch (SQLException ex) {
