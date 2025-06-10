@@ -149,13 +149,13 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
         return productImageDTO;
     }
 
-    public Collection<ProductImageDTO> getImagesByProductId(Integer productId) throws SQLException {
+    public byte[] getImagesByProductId(Integer productId) throws SQLException {
         if (productId == null || productId <= 0) {
             throw new IllegalArgumentException("ProductId must be a positive integer.");
         }
 
-        Collection<ProductImageDTO> images = new ArrayList<>();
-        String sql = "SELECT * FROM ProductImage WHERE ProductId = ? ORDER BY SortOrder, ImageId";
+        byte[] bt = null;
+        String sql = "SELECT ImageData FROM ProductImage WHERE ProductId = ? ORDER BY SortOrder, ImageId";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -164,12 +164,12 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    images.add(extractProductImageFromResultSet(rs));
+                    bt = rs.getBytes("ImageData");
                 }
             }
         }
 
-        return images;
+        return bt;
     }
 
     private void validateProductImage(ProductImageDTO productImageDTO) {
