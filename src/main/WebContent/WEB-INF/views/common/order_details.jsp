@@ -61,8 +61,6 @@
                                 <c:set var="product" value="${productMap[item.productID]}"/>
                                 <div class="order-item-card">
                                     <div class="row align-items-center">
-                                            <%--TODO mettere immagine--%>
-                                        <div>
                                             <h5 class="product-name">
                                                 <c:choose>
                                                     <c:when test="${not empty product}">
@@ -73,6 +71,19 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </h5>
+                                            <%--TODO aggiungere css--%>
+                                                <div>
+                                                    <c:set var="image" value="${productImageMap[product.productID]}"/>
+                                                    <c:choose>
+                                                        <c:when test="${not empty image}">
+                                                            <img src="${image}" alt="Immagine di ${product.productName}"/>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <img src="${pageContext.request.contextPath}/imgs/noimage.png" alt="Immagine non disponibile"/>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </div>
+                                            <div>
                                         </div>
                                     </div>
                                 </div>
