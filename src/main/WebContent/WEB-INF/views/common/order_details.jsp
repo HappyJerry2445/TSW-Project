@@ -74,32 +74,6 @@
                                                 </c:choose>
                                             </h5>
                                         </div>
-
-                                        <div class="text-center">
-                                            <p>
-                                                <strong>Quantità:</strong><br>
-                                                <span class="quantity-value"><c:out value="${item.quantity}"/></span>
-                                            </p>
-                                        </div>
-
-                                        <div class="text-right">
-                                            <p>
-                                                <strong>Prezzo unitario:</strong><br>
-                                                <span class="unit-price">
-                                                € <fmt:formatNumber value="${fn:escapeXml(item.unitPrice)}"
-                                                                    type="number"
-                                                                    minFractionDigits="2" maxFractionDigits="2"/>
-                                            </span>
-                                            </p>
-                                            <p class="total-price">
-                                                <strong>Subtotale:</strong><br>
-                                                <span class="item-total">
-                                                € <fmt:formatNumber value="${item.unitPrice * item.quantity}"
-                                                                    type="number" minFractionDigits="2"
-                                                                    maxFractionDigits="2"/>
-                                            </span>
-                                            </p>
-                                        </div>
                                     </div>
                                 </div>
                             </c:forEach>
@@ -117,21 +91,30 @@
         <div class="order-summary">
             <div class="row">
                 <div class="summary-box">
-                    <h5>Riepilogo Ordine</h5>
-                    <div class="summary-row">
-                        <span>Subtotale:</span>
-                        <span>€ <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}" type="number"
-                                                  minFractionDigits="2"
-                                                  maxFractionDigits="2"/></span>
-                    </div>
-                    <div class="summary-row total-row">
-                        <strong>
+                    <h4>Riepilogo Ordine</h4>
+                    <c:forEach var="item" items="${orderItems}">
+                        <div class="summary-row">
+                            <span>Quantità:</span>
+                            <span class="unit-price"><c:out value="${item.quantity}"/></span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Prezzo unitario:</span>
+                            <span class="unit-price">€ <fmt:formatNumber value="${fn:escapeXml(item.unitPrice)}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Subtotale:</span>
+                            <span class="unit-price">€ <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span>
+                        </div>
+
+                        <div class="summary-row total-row">
                             <span>Totale:</span>
-                            <span>€ <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}" type="number"
-                                                      minFractionDigits="2"
-                                                      maxFractionDigits="2"/></span>
-                        </strong>
-                    </div>
+                            <span class="item-total">€ <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}" type="number"
+                                                                         minFractionDigits="2"
+                                                                         maxFractionDigits="2"/></span>
+                        </div>
+                    </c:forEach>
                 </div>
             </div>
         </div>
