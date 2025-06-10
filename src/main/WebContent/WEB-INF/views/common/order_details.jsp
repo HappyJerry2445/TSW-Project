@@ -74,7 +74,7 @@
                                             <%--TODO test with real images of the product and with more product--%>
                                             <div class="product-image-container">
                                                 <div>
-                                                    <c:set var="image" value="${productImageMap[product.productID]}"/>
+                                                    <c:set var="image" value="${productImageMap[product.productId]}"/>
                                                     <c:choose>
                                                         <c:when test="${not empty image}">
                                                             <img src="${image}" alt="Immagine di ${product.productName}" class="product-image"/>
