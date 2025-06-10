@@ -71,7 +71,7 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </h5>
-
+                                            <%--TODO test with real images of the product and with more product--%>
                                             <div class="product-image-container">
                                                 <div>
                                                     <c:set var="image" value="${productImageMap[product.productID]}"/>
