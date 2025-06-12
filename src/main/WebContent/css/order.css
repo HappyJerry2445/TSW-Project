@@ -1,4 +1,3 @@
-/* Container for the entire orders page content within the main tag */
 .orders-page-container {
     max-width: 960px; /* Adjust as needed */
     margin: 0 auto; /* Center the content */
@@ -215,4 +214,56 @@
     }
 }
 
+.table-cards {
+    display: none;
+}
+
+.card-item {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-unit);
+    margin-bottom: calc(var(--spacing-unit) * 0.75);
+    box-shadow: var(--color-shadow-light);
+}
+
+.card-header {
+    font-weight: 600;
+    color: var(--color-text-default);
+    margin-bottom: calc(var(--spacing-unit) * 0.75);
+    padding-bottom: calc(var(--spacing-unit) * 0.5);
+    border-bottom: 1px solid var(--color-border-default);
+}
+
+.card-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: calc(var(--spacing-unit) * 0.5);
+    padding: calc(var(--spacing-unit) * 0.25) 0;
+}
+
+.card-label {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    flex: 1;
+}
+
+.card-value {
+    color: var(--color-text-default);
+    flex: 1;
+    text-align: right;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+    .table {
+        display: none;
+    }
+
+    .table-cards,
+    .table-stacked,
+    .table-accordion {
+        display: block;
+    }
+}
 /*se necessario nel breve futuro mettere lo stile per le immagini in style */
