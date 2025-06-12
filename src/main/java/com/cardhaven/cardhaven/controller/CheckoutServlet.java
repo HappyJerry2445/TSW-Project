@@ -50,6 +50,42 @@ public class CheckoutServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //TODO
+        var session = request.getSession();
+        var userId = (Integer) session.getAttribute("userId");
+        List<String> errors = new ArrayList<>();
+
+        if (userId == null) {
+            NotificationUtil.sendNotification(request, "Devi essere loggato per accedere al checkout.", "error");
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        String shippingAddressIdStr = request.getParameter("shippingAddressId");
+        String billingAddressIdStr = request.getParameter("billingAddressId");
+
+        // Controlla che l'utente abbia fatto una selezione per entrambi
+        if (shippingAddressIdStr == null || shippingAddressIdStr.isEmpty() ||
+                billingAddressIdStr == null || billingAddressIdStr.isEmpty()) {
+
+            errors.add("Devi selezionare sia un indirizzo di spedizione che uno di fatturazione.");
+
+            return;
+        }
+
+        try {
+            int shippingAddressId = Integer.parseInt(shippingAddressIdStr);
+            int billingAddressId = Integer.parseInt(billingAddressIdStr);
+
+            // Salva gli ID scelti nella sessione per i passi successivi del checkout
+            session.setAttribute("shippingAddressId", shippingAddressId);
+            session.setAttribute("billingAddressId", billingAddressId);
+
+            // Reindirizza al prossimo passo
+            //response.sendRedirect(request.getContextPath() + "/common/checkout/review");
+
+        } catch (NumberFormatException e) {
+            NotificationUtil.sendNotification(request, "La selezione dell'indirizzo non è valida.", "error");
+            doGet(request, response);
+        }
     }
 }
