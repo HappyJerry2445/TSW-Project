@@ -36,8 +36,8 @@
                         <c:choose>
                             <%--@elvariable id="shippingAddress" type="java.util.List<com.cardhaven.cardhaven.model.dto.AddressDTO>"--%>
                         <c:when test="${not empty shippingAddress}">
-                    <p><c:out value="${shippingAddress.postalCode}"/> <c:out value="${shippingAddress.city}"/>, <c:out
-                            value="${shippingAddress.country}"/></p>
+                    <c:out value="${shippingAddress.streetAddress}"/>, <c:out value="${shippingAddress.postalCode}"/>, <c:out value="${shippingAddress.city}"/>, <c:out
+                            value="${shippingAddress.country}"/>
                     </c:when>
                     <c:otherwise>
                         <p>Indirizzo non disponibile</p>
