@@ -33,35 +33,68 @@
                 </div>
             </c:when>
             <c:when test="${not empty orders}">
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover">
-                        <thead>
-                        <tr>
-                            <th scope="col">ID Ordine</th>
-                            <th scope="col">Data</th>
-                            <th scope="col">Stato</th>
-                            <th scope="col">Totale</th>
-                            <th scope="col">Azioni</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach items="${orders}" var="order">
+                <!-- Tabella per desktop -->
+                <div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <!-- Testata tabella -->
+                            <thead>
                             <tr>
-                                <td>#<c:out value="${order.orderId}"/></td>
-                                <td>
-                                    <c:out value="${my:formatDateTime(order.orderDate)}"/>
-                                </td>
-                                <td><c:out value="${order.orderStatus}"/></td>
-                                <td>€ <fmt:formatNumber value="${order.totalAmount}" type="currency" currencyCode="EUR"
-                                                        minFractionDigits="2" maxFractionDigits="2"/></td>
-                                <td>
-                                    <a href="<c:url value='/common/orders/${order.orderId}'/>"
-                                       class="btn btn-info">Dettagli</a>
-                                </td>
+                                <th scope="col">ID Ordine</th>
+                                <th scope="col">Data</th>
+                                <th scope="col">Stato</th>
+                                <th scope="col">Totale</th>
+                                <th scope="col">Azioni</th>
                             </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${orders}" var="order">
+                                <tr>
+                                    <td>#<c:out value="${order.orderId}"/></td>
+                                    <td><c:out value="${my:formatDateTime(order.orderDate)}"/></td>
+                                    <td><c:out value="${order.orderStatus}"/></td>
+                                    <td>€ <fmt:formatNumber value="${order.totalAmount}"
+                                                            type="currency" currencyCode="EUR" minFractionDigits="2" maxFractionDigits="2"/></td>
+                                    <td>
+                                        <a href="<c:url value='/common/orders/${order.orderId}'/>"
+                                           class="btn btn-info">Dettagli</a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Card per mobile -->
+                <div>
+                    <div class="table-cards" id="cards">
+                        <c:forEach items="${orders}" var="order">
+                            <div class="card-item">
+                                <div class="card-header">Ordine #<c:out value="${order.orderId}"/></div>
+                                <div class="card-row">
+                                    <span class="card-label">Data:</span>
+                                    <span class="card-value"><c:out value="${my:formatDateTime(order.orderDate)}"/></span>
+                                </div>
+                                <div class="card-row">
+                                    <span class="card-label">Stato:</span>
+                                    <span class="card-value"><c:out value="${order.orderStatus}"/></span>
+                                </div>
+                                <div class="card-row">
+                                    <span class="card-label">Totale:</span>
+                                    <span class="card-value">€ <fmt:formatNumber value="${order.totalAmount}"
+                                                                                 type="currency" currencyCode="EUR" minFractionDigits="2" maxFractionDigits="2"/></span>
+                                </div>
+                                <div class="card-row">
+                                    <span class="card-label">Azioni:</span>
+                                    <span class="card-value">
+                            <a href="<c:url value='/common/orders/${order.orderId}'/>"
+                               class="btn btn-info">Dettagli</a>
+                        </span>
+                                </div>
+                            </div>
                         </c:forEach>
-                        </tbody>
-                    </table>
+                    </div>
                 </div>
             </c:when>
         </c:choose>
