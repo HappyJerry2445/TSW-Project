@@ -61,7 +61,7 @@
                         <%-- Azioni: pulsanti stilizzati per proseguire o aggiungere un nuovo indirizzo --%>
                     <div class="profile-actions">
                         <a href="${pageContext.request.contextPath}/common/addresses/add" class="btn btn-secondary">Aggiungi Nuovo Indirizzo</a>
-                        <button type="submit" class="btn btn-primary">Prosegui</button>
+                        <button type="submit" class="btn btn-primary">Vai al Riepilogo</button>
                     </div>
                 </form>
             </c:if>
