@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@WebServlet("/common/checkout/*")
-public class CheckoutServlet extends HttpServlet {
+@WebServlet("/common/checkout/shipping")
+public class ShippingServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         var session = request.getSession();
@@ -31,22 +31,16 @@ public class CheckoutServlet extends HttpServlet {
             return;
         }
 
-        String pathInfo = request.getPathInfo();
-        if(pathInfo != null && pathInfo.equals("/shipping")) {
-            try {
-                Collection<AddressDTO> addresses = addressDAO.getAddressesByUserId(userId);
-                request.setAttribute("addresses", addresses);
-            } catch (SQLException e) {
-                errors.add("Errore durante il recupero degli indirizzi.");
-                request.setAttribute("errors", errors);
-                e.printStackTrace();
-            }
-
-            request.getRequestDispatcher("/WEB-INF/views/common/checkout/shipping.jsp").forward(request, response);
-        } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            //response.sendRedirect(request.getContextPath() + "/checkout");
+        try {
+            Collection<AddressDTO> addresses = addressDAO.getAddressesByUserId(userId);
+            request.setAttribute("addresses", addresses);
+        } catch (SQLException e) {
+            errors.add("Errore durante il recupero degli indirizzi.");
+            request.setAttribute("errors", errors);
+            e.printStackTrace();
         }
+
+        request.getRequestDispatcher("/WEB-INF/views/common/checkout/shipping.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -64,11 +58,8 @@ public class CheckoutServlet extends HttpServlet {
         String billingAddressIdStr = request.getParameter("billingAddressId");
 
         // Controlla che l'utente abbia fatto una selezione per entrambi
-        if (shippingAddressIdStr == null || shippingAddressIdStr.isEmpty() ||
-                billingAddressIdStr == null || billingAddressIdStr.isEmpty()) {
-
+        if (shippingAddressIdStr == null || shippingAddressIdStr.isEmpty() || billingAddressIdStr == null || billingAddressIdStr.isEmpty()) {
             errors.add("Devi selezionare sia un indirizzo di spedizione che uno di fatturazione.");
-
             return;
         }
 
@@ -81,7 +72,7 @@ public class CheckoutServlet extends HttpServlet {
             session.setAttribute("billingAddressId", billingAddressId);
 
             // Reindirizza al prossimo passo
-            //response.sendRedirect(request.getContextPath() + "/common/checkout/review");
+            response.sendRedirect(request.getContextPath() + "/common/checkout/review");
 
         } catch (NumberFormatException e) {
             NotificationUtil.sendNotification(request, "La selezione dell'indirizzo non è valida.", "error");
