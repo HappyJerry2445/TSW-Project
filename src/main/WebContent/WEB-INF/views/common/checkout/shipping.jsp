@@ -23,7 +23,7 @@
 
             <c:if test="${not empty addresses}">
 
-                <form action="${pageContext.request.contextPath}/common/checkout/review" method="post">
+                <form action="${pageContext.request.contextPath}/common/checkout/shipping" method="post">
 
                         <%-- SELEZIONE INDIRIZZO SPEDIZIONE --%>
                     <div class="mb-2">
