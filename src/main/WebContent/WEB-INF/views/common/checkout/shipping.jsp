@@ -68,8 +68,8 @@
 
             <%-- Messaggio se non ci sono indirizzi --%>
             <c:if test="${empty addresses}">
-                <div class="alert-danger text-center p-2">
-                    <p>Non hai ancora aggiunto nessun indirizzo.</p>
+                <p class="text-center">Non hai ancora aggiunto nessun indirizzo.</p>
+                <div class="text-center">
                     <a href="${pageContext.request.contextPath}/common/addresses/add" class="btn btn-primary mt-1">Aggiungine uno per proseguire</a>
                 </div>
             </c:if>
