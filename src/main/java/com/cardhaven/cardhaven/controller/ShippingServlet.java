@@ -43,23 +43,34 @@ public class ShippingServlet extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/views/common/checkout/shipping.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         var session = request.getSession();
         var userId = (Integer) session.getAttribute("userId");
-        List<String> errors = new ArrayList<>();
 
         if (userId == null) {
-            NotificationUtil.sendNotification(request, "Devi essere loggato per accedere al checkout.", "error");
+            NotificationUtil.sendNotification(request, "La tua sessione è scaduta. Effettua nuovamente il login.", "error");
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
         String shippingAddressIdStr = request.getParameter("shippingAddressId");
-        String billingAddressIdStr = request.getParameter("billingAddressId");
+        String billingAddressIdStr;
 
-        // Controlla che l'utente abbia fatto una selezione per entrambi
+        // Check if the "sameAsShipping" checkbox was ticked. Its value will be "on" if checked.
+        String sameAsShipping = request.getParameter("sameAsShipping");
+
+        if (sameAsShipping != null && sameAsShipping.equals("on")) {
+            // If the checkbox is checked, the billing address is the same as the shipping address.
+            billingAddressIdStr = shippingAddressIdStr;
+        } else {
+            // Otherwise, get the billing address from its separate dropdown.
+            billingAddressIdStr = request.getParameter("billingAddressId");
+        }
+
+        // Validate that addresses were selected
         if (shippingAddressIdStr == null || shippingAddressIdStr.isEmpty() || billingAddressIdStr == null || billingAddressIdStr.isEmpty()) {
-            errors.add("Devi selezionare sia un indirizzo di spedizione che uno di fatturazione.");
+            NotificationUtil.sendNotification(request, "Devi selezionare un indirizzo di spedizione e fatturazione.", "error");
+            doGet(request, response); // Show the page again with an error
             return;
         }
 
@@ -67,11 +78,11 @@ public class ShippingServlet extends HttpServlet {
             int shippingAddressId = Integer.parseInt(shippingAddressIdStr);
             int billingAddressId = Integer.parseInt(billingAddressIdStr);
 
-            // Salva gli ID scelti nella sessione per i passi successivi del checkout
+            // Save the chosen IDs in the session for the next step
             session.setAttribute("shippingAddressId", shippingAddressId);
             session.setAttribute("billingAddressId", billingAddressId);
 
-            // Reindirizza al prossimo passo
+            // Redirect to the review step
             response.sendRedirect(request.getContextPath() + "/common/checkout/review");
 
         } catch (NumberFormatException e) {
