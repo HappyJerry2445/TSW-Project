@@ -1,13 +1,10 @@
 package com.cardhaven.cardhaven.controller;
 
-import com.cardhaven.cardhaven.model.dao.AddressDAO;
-import com.cardhaven.cardhaven.model.dao.CartDAO;
-import com.cardhaven.cardhaven.model.dao.CartItemDAO;
-import com.cardhaven.cardhaven.model.dto.AddressDTO;
-import com.cardhaven.cardhaven.model.dto.CartDTO;
-import com.cardhaven.cardhaven.model.dto.CartItemDTO;
+import com.cardhaven.cardhaven.model.dao.*;
+import com.cardhaven.cardhaven.model.dto.*;
 import com.cardhaven.cardhaven.util.NotificationUtil;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,12 +14,16 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @WebServlet("/common/checkout/review")
 public class ReviewServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         var session = request.getSession();
+        var userDAO = new UserDAO((DataSource) getServletContext().getAttribute("ds"));
         var userId = (Integer) session.getAttribute("userId");
         var ds = (DataSource) getServletContext().getAttribute("ds");
 
@@ -68,11 +69,48 @@ public class ReviewServlet extends HttpServlet {
                 return;
             }
 
+            UserDTO loggedInUser;
+            try {
+                loggedInUser = userDAO.getById(userId);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            ProductDAO productDAO = new ProductDAO(ds);
+
+            // Recupera i dettagli dei prodotti per ogni item
+            Map<Integer, ProductDTO> productMap = new HashMap<>();
+            for (CartItemDTO item : cartItems) {
+                if (!productMap.containsKey(item.getProductId())){
+                    ProductDTO product = productDAO.getById(item.getProductId());
+                    if (product != null) {
+                        productMap.put(item.getProductId(), product);
+                    }
+                }
+            }
+
+            ProductImageDAO productImageDAO = new ProductImageDAO(ds); // Instantiate ProductImageDAO
+
+            Map<Integer, String> productImageMap = new HashMap<>();
+            for (ProductDTO product : productMap.values()) {
+                byte[] images = productImageDAO.getImagesByProductId(product.getProductId());
+                ServletOutputStream out = response.getOutputStream();
+                if(images != null){
+                    out.write(images);
+                    response.setContentType("image/jpeg");
+                }
+
+            }
+
             // Set attributes for the JSP to display
+            request.setAttribute("loggedInUser", loggedInUser);
             request.setAttribute("shippingAddress", shippingAddress);
             request.setAttribute("billingAddress", billingAddress);
             request.setAttribute("cart", cart);
             request.setAttribute("cartItems", cartItems);
+            request.setAttribute("productMap", productMap);
+            request.setAttribute("productImageMap", productImageMap); // Add the new map to the request
+
 
             // Forward to the review JSP page
             request.getRequestDispatcher("/WEB-INF/views/common/checkout/review.jsp").forward(request, response);
