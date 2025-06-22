@@ -1,0 +1,58 @@
+/*TODO rewatch and in case add generic style in style.css */
+
+.product-item {
+    display: flex;
+    align-items: center;
+    padding: calc(var(--spacing-unit) * 1.875);
+    border-bottom: 1px solid var(--color-border-default);
+    margin-bottom: calc(var(--spacing-unit) * 1.25);
+}
+
+.product-names {
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+.product-item:last-child {
+    border-bottom: none;
+}
+
+.product-image-container {
+    flex-shrink: 0;
+    margin-right: calc(var(--spacing-unit) * 1.875);
+}
+
+.product-image-small {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--color-border-default);
+}
+
+.product-info {
+    color: var(--color-text-secondary);
+    margin-bottom: 0;
+    font-size: 0.9em;
+}
+
+.product-total {
+    flex-shrink: 0;
+    text-align: right;
+    font-weight: 600;
+    font-size: 1.1em;
+    color: var(--color-text-default);
+}
+
+@media (max-width: 768px) {
+    .product-item {
+        flex-direction: column;
+        text-align: center;
+        padding: var(--spacing-unit);
+    }
+
+    .product-image-container {
+        margin-right: 0;
+        margin-bottom: calc(var(--spacing-unit) * 1.25);
+    }
+}
