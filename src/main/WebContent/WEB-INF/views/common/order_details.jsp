@@ -60,31 +60,33 @@
                                 <%--@elvariable id="productMap" type="java.util.Map<java.lang.Integer, com.cardhaven.cardhaven.model.dto.ProductDTO>"--%>
                                 <c:set var="product" value="${productMap[item.productID]}"/>
                                 <div class="order-item-card">
-                                    <div class="product-content">
-                                            <h5 class="product-name">
-                                                <c:choose>
-                                                    <c:when test="${not empty product}">
-                                                        <c:out value="${product.productName}"/>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        Prodotto non disponibile (ID: ${item.productID})
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </h5>
+                                    <div class="product-item">
                                             <%--TODO test with real images of the product and with more product--%>
                                             <div class="product-image-container">
                                                 <div>
                                                     <c:set var="image" value="${productImageMap[product.productId]}"/>
                                                     <c:choose>
                                                         <c:when test="${not empty image}">
-                                                            <img src="${image}" alt="Immagine di ${product.productName}" class="product-image"/>
+                                                            <img src="${image}" alt="Immagine di ${product.productName}" class="product-image-small"/>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <img src="${pageContext.request.contextPath}/imgs/noimage.png" alt="Immagine non disponibile" class="product-image"/>
+                                                            <img src="${pageContext.request.contextPath}/imgs/noimage.png" alt="Immagine non disponibile" class="product-image-small"/>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </div>
                                             </div>
+                                                <div>
+                                                    <h5 class="product-name">
+                                                        <c:choose>
+                                                            <c:when test="${not empty product}">
+                                                                <c:out value="${product.productName}"/>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                Prodotto non disponibile (ID: ${item.productID})
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </h5>
+                                                </div>
                                             <div>
                                         </div>
                                     </div>
