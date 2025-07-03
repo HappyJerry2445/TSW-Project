@@ -9,14 +9,13 @@
 <html lang="it">
 <head>
     <title>${pageTitle}</title>
-    <%--TODO use less style--%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/order.css" type="text/css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css" type="text/css">
     <jsp:include page="/components/common_head.jsp"/>
 </head>
 <body>
+
 <jsp:include page="/components/header.jsp"/>
 
 <main>
@@ -91,7 +90,7 @@
             </div>
 
             <!-- ORDERED PRODUCTS SECTION -->
-            <div class="orders-page-container">
+            <div>
                 <div class="order-info-section">
                     <c:choose>
                         <c:when test="${not empty cartItems}">
@@ -111,7 +110,7 @@
                                             </c:choose>
                                         </div>
                                         <div>
-                                            <h5 class="product-names"><c:out value="${product.productName}"/></h5>
+                                            <h5 class="product-name"><c:out value="${product.productName}"/></h5>
                                             <p class="product-info">
                                                 Quantità: <strong>${item.quantity}</strong><br>
                                                 Prezzo unitario: <strong>€ <fmt:formatNumber value="${product.currentPrice}" type="number" minFractionDigits="2" maxFractionDigits="2"/></strong>
@@ -134,11 +133,11 @@
             </div>
 
             <form action="${pageContext.request.contextPath}/common/checkout/confirm" method="post">
-            <div class="profile-actions mt-3">
-                <a href="#" class="btn btn-secondary">Torna al Carrello</a>
-                    <button type="submit" class="btn btn-primary">Conferma Ordine</button>
-                </form>
-            </div>
+                <div class="profile-actions mt-3">
+                    <a href="#" class="btn btn-secondary">Torna al Carrello</a>
+                        <button type="submit" class="btn btn-primary">Conferma Ordine</button>
+                </div>
+            </form>
         </div>
     </div>
 </main>
