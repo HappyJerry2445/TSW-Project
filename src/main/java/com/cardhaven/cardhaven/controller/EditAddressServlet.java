@@ -57,6 +57,7 @@ public class EditAddressServlet extends HttpServlet {
                 return;
             }
 
+            req.setAttribute("addressTypes", AddressDTO.AddressType.values());
             req.setAttribute("address", address);
             req.getRequestDispatcher("/WEB-INF/views/common/edit-address.jsp").forward(req, resp);
 
@@ -96,13 +97,16 @@ public class EditAddressServlet extends HttpServlet {
             String state = req.getParameter("state");
             String postalCode = req.getParameter("postalCode");
             String country = req.getParameter("country");
+            String addressTypeStr = req.getParameter("addressType");
 
             // Basic validation
             if (addressIdParam == null || addressIdParam.isEmpty() ||
                     street == null || street.isEmpty() ||
                     city == null || city.isEmpty() ||
                     postalCode == null || postalCode.isEmpty() ||
-                    country == null || country.isEmpty()) {
+                    country == null || country.isEmpty() ||
+                    addressTypeStr == null || addressTypeStr.isEmpty()
+            ) {
                 errors.add("Tutti i campi obbligatori dell'indirizzo devono essere compilati.");
             }
 
@@ -111,6 +115,14 @@ public class EditAddressServlet extends HttpServlet {
                 addressId = Integer.parseInt(addressIdParam);
             } catch (NumberFormatException e) {
                 errors.add("ID indirizzo non valido.");
+            }
+
+            AddressDTO.AddressType addressType = null;
+
+            try {
+                addressType = AddressDTO.AddressType.valueOf(addressTypeStr);
+            } catch (IllegalArgumentException e) {
+                errors.add("Tipo di indirizzo non valido.");
             }
 
             // If there are validation errors, set attributes and forward back to form
@@ -146,6 +158,7 @@ public class EditAddressServlet extends HttpServlet {
             updatedAddress.setState(state);
             updatedAddress.setPostalCode(postalCode);
             updatedAddress.setCountry(country);
+            updatedAddress.setAddressType(addressType);
 
             addressDAO.save(updatedAddress);
 

@@ -140,6 +140,7 @@ public class AddressDTO implements Serializable {
         Shipping,
         Billing;
 
+
         @Override
         public String toString() {
             switch (this) {

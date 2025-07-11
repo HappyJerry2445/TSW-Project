@@ -119,6 +119,10 @@
         padding-left: 0;
     }
 
+    .user-auth-card {
+        padding: 0;
+    }
+
     .profile-actions {
         grid-template-columns: 1fr;
     }

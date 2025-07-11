@@ -52,6 +52,19 @@
                            value="<c:out value="${address.country}"/>" required>
                 </div>
 
+                <div class="mb-1">
+                    <label for="addressType">Tipo di indirizzo:</label>
+                    <select id="addressType" name="addressType" class="form-input" required>
+                        <option value="" disabled>Seleziona un tipo</option>
+                        <%--@elvariable id="addressTypes" type="java.util.List<com.cardhaven.cardhaven.model.dto.AddressDTO.AddressType>"--%>
+                        <c:forEach items="${addressTypes}" var="type">
+                            <option value="<c:out value="${type.name()}"/>" ${address.addressType == type ? 'selected' : ''}>
+                                <c:out value="${type}"/>
+                            </option>
+                        </c:forEach>
+                    </select>
+                </div>
+
                 <div class="profile-actions">
                     <button type="submit" class="btn btn-primary">Salva Modifiche</button>
                     <a href="${pageContext.request.contextPath}/common/addresses" class="btn btn-outline">Annulla</a>
