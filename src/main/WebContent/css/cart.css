@@ -4,164 +4,190 @@
   - On desktop, it becomes a standard table.
 */
 
-.cart-table-wrapper {
-    overflow-x: auto; /* Fallback for horizontal scrolling */
+/* General styling for the cart card */
+.card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
 }
 
+.section-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+/* Wrapper to allow for horizontal scrolling on small screens if needed */
+.cart-table-wrapper {
+    overflow-x: auto;
+}
+
+/* --- DESKTOP TABLE STYLES --- */
 .cart-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: var(--spacing-unit);
 }
 
-/* Hide desktop headers by default */
-.cart-table thead {
-    display: none;
-}
-
-/* Style each cart item as a card on mobile */
-.cart-table tbody tr {
-    display: block;
-    margin-bottom: calc(var(--spacing-unit) * 1.5);
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--border-radius-md);
-    padding: var(--spacing-unit);
-    box-shadow: var(--color-shadow-light);
-}
-
+.cart-table th,
 .cart-table td {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: calc(var(--spacing-unit) * 0.5) 0;
-    border-bottom: 1px solid var(--color-neutral-light);
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    /* This is the correct way to vertically align content in a table */
+    vertical-align: middle;
 }
 
-.cart-table tbody tr td:last-child {
-    border-bottom: none;
-}
-
-/* Use data-label to create labels for each piece of data */
-.cart-table td::before {
-    content: attr(data-label);
+.cart-table th {
+    background-color: #f8f9fa;
     font-weight: 600;
-    margin-right: var(--spacing-unit);
+    color: #555;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
 }
 
-/* Special styling for the product name to act as a title for the mobile card */
+/* --- Column Text Alignment --- */
+/* Product name aligned left for readability */
+.cart-table th:first-child,
 .cart-table td[data-label="Prodotto"] {
-    display: block;
-    text-align: center;
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--color-primary-dark);
-    margin-bottom: var(--spacing-unit);
-    padding-bottom: var(--spacing-unit);
+    text-align: left;
 }
 
-.cart-table td[data-label="Prodotto"]::before {
-    display: none; /* Hide the "Prodotto:" label itself */
+/* Price and Total aligned right, which is standard for numbers */
+.cart-table th:nth-child(2), .cart-table td[data-label="Prezzo"],
+.cart-table th:nth-child(4), .cart-table td[data-label="Totale"] {
+    text-align: right;
 }
 
-/* Center and size the quantity input field */
-.cart-table input[type="number"] {
-    width: 70px;
+/* Header text for the centered columns */
+.cart-table th:nth-child(3), .cart-table th:nth-child(5) {
     text-align: center;
 }
 
-/* Ensure forms inside cells are aligned correctly */
-.cart-table td form {
+/* --- Centering Solution --- */
+/* This new class uses flexbox to perfectly center the forms */
+.cell-content-wrapper {
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: calc(var(--spacing-unit) * 0.5);
-    flex-grow: 1;
-    justify-content: flex-end;
+    gap: 0.5rem; /* Provides spacing for quantity input and button */
+    margin: 0 auto; /* Ensures the form itself is centered in the cell */
 }
 
-/* --- Cart Footer --- */
-.cart-footer {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: calc(var(--spacing-unit) * 1.5);
-    padding-top: var(--spacing-unit);
-    border-top: 1px solid var(--color-border-default);
+/* Styling for form elements */
+.cart-table input[type="number"] {
+    width: 60px;
+    text-align: center;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-.cart-footer .btn {
-    width: 100%; /* Full-width button on mobile */
+/* Button styling */
+.btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    color: #fff;
+    transition: background-color 0.2s ease;
 }
 
-
-/* --- Desktop Styles (min-width: 768px) --- */
-@media (min-width: 768px) {
-    /* Restore the standard table layout */
-    .cart-table thead {
-        display: table-header-group;
-    }
-
-    .cart-table th {
-        font-family: var(--font-heading);
-        font-weight: 600;
-        color: var(--color-text-secondary);
-        text-transform: uppercase;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
-        border-bottom: 2px solid var(--color-border-default);
-        padding: calc(var(--spacing-unit) * 0.75);
-        text-align: center;
-    }
-
-    .cart-table tbody tr {
-        display: table-row;
-        margin-bottom: 0;
-        border: none;
-        box-shadow: none;
-        padding: 0;
-    }
-
-    .cart-table tbody tr:nth-child(even) {
-        background-color: var(--color-bg-light-grey);
-    }
-
-    .cart-table tbody tr:hover {
-        background-color: var(--color-neutral-light);
-    }
-
-    .cart-table td {
-        display: table-cell;
-        vertical-align: middle;
-        text-align: center;
-        border-bottom: 1px solid var(--color-border-default);
-    }
-
-    .cart-table td:first-child {
-        text-align: left;
-    }
-
-    .cart-table td::before {
-        display: none; /* Hide the mobile labels */
-    }
-
-    .cart-table td[data-label="Prodotto"] {
-        font-family: var(--font-body);
-        font-size: 1rem;
-        font-weight: normal;
-        color: var(--color-text-default);
-    }
-
-    .cart-footer .btn {
-        width: auto; /* Auto-width button on desktop */
-    }
+.btn-sm {
+    font-size: 0.875rem;
 }
 
-/* --- Button Styles --- */
-/* These styles ensure the update button matches the site's success color scheme */
 .btn-update {
-    background-color: var(--color-status-success);
-    color: var(--color-primary-light);
+    background-color: #007bff;
 }
 
 .btn-update:hover {
-    background-color: var(--color-status-success-dark);
+    background-color: #0056b3;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-primary {
+    background-color: #28a745;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+}
+
+.btn-primary:hover {
+    background-color: #218838;
+}
+
+/* Cart footer */
+.cart-footer {
+    text-align: right;
+    padding-top: 1.5rem;
+    margin-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+/* --- RESPONSIVE STYLES for smaller screens --- */
+@media (max-width: 768px) {
+    .cart-table thead {
+        display: none;
+    }
+
+    .cart-table tr {
+        display: block;
+        margin-bottom: 1.5rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .cart-table td {
+        display: block;
+        text-align: right;
+        padding: 0.75rem 1rem 0.75rem 50%; /* Space for the label */
+        position: relative;
+    }
+
+    .cart-table td:not(:last-child) {
+        border-bottom: 1px solid #eee;
+    }
+
+    .cart-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 1rem;
+        width: calc(50% - 2rem);
+        font-weight: bold;
+        text-align: left;
+        color: #333;
+    }
+
+    /* Make the product name a clear header for each item block */
+    .cart-table td[data-label="Prodotto"] {
+        padding: 1rem;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+        background-color: #f8f9fa;
+    }
+
+    .cart-table td[data-label="Prodotto"]::before {
+        display: none; /* No "Prodotto:" label needed here */
+    }
+
+    /* Adjust the forms to align to the right on mobile */
+    .cell-content-wrapper {
+        justify-content: flex-end;
+    }
+
+    .cart-footer {
+        text-align: center; /* Center checkout button on mobile */
+    }
 }

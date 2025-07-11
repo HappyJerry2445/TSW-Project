@@ -33,8 +33,8 @@
                         <i class="fa-solid fa-right-from-bracket"></i>
                     </a>
                 </c:if>
-                <!-- TODO: pagina carrello -->
-                <a id="cart-icon" href="#cart" aria-label="Carrello" class="action-icon">
+                <a id="cart-icon" href="${pageContext.request.contextPath}/cart" aria-label="Carrello"
+                   class="action-icon">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count">0</span>
                 </a>
