@@ -7,7 +7,6 @@ import com.cardhaven.cardhaven.model.dto.OrderItemDTO;
 import com.cardhaven.cardhaven.model.dto.ProductDTO;
 import com.cardhaven.cardhaven.util.NotificationUtil;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -78,15 +77,15 @@ public class OrderDetailsServlet extends HttpServlet {
             }
 
             Map<Integer, String> productImageMap = new HashMap<>();
-            for (ProductDTO product : productMap.values()) {
-                byte[] images = productImageDAO.getImagesByProductId(product.getProductId());
-                ServletOutputStream out = response.getOutputStream();
-                if (images != null) {
-                    out.write(images);
-                    response.setContentType("image/jpeg");
-                }
-
-            }
+//            for (ProductDTO product : productMap.values()) {
+//                byte[] images = productImageDAO.getImagesByProductId(product.getProductId());
+//                ServletOutputStream out = response.getOutputStream();
+//                if (images != null) {
+//                    out.write(images);
+//                    //response.setContentType("");
+//                }
+//
+//            }
 
             // Recupera l'indirizzo di spedizione
             OrderAddressDTO shippingAddress = null;
