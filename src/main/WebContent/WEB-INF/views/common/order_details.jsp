@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="/WEB-INF/functions" prefix="my" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page buffer="64kb" %>
 
 <c:set var="pageTitle" value="Dettagli Ordine" scope="request"/>
 
@@ -52,11 +53,11 @@
 
         <br>
 
+        <%--@elvariable id="orderItems" type="java.util.List<com.cardhaven.cardhaven.model.dto.OrderItemDTO>"--%>
         <div class="orders-page-container">
             <h4>Prodotti Ordinati</h4>
             <div>
                 <c:choose>
-                    <%--@elvariable id="orderItems" type="java.util.List<com.cardhaven.cardhaven.model.dto.OrderItemDTO>"--%>
                     <c:when test="${not empty orderItems}">
                         <div class="order-items">
                             <c:forEach var="item" items="${orderItems}">
@@ -121,31 +122,30 @@
 
                         <div class="summary-row">
                             <span>Prezzo unitario:</span>
-                            <span class="unit-price">€ <fmt:formatNumber value="${fn:escapeXml(item.unitPrice)}"
-                                                                         type="number" minFractionDigits="2"
-                                                                         maxFractionDigits="2"/></span>
+                            <span class="unit-price"><fmt:formatNumber value="${fn:escapeXml(item.unitPrice)}"
+                                                                       type="currency" currencyCode="EUR"/></span>
                         </div>
-
                         <div class="summary-row">
                             <span>Subtotale:</span>
-                            <span class="unit-price">€ <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}"
-                                                                         type="number" minFractionDigits="2"
-                                                                         maxFractionDigits="2"/></span>
+                            <span class="unit-price"><fmt:formatNumber
+                                    value="${fn:escapeXml(item.quantity * item.unitPrice)}"
+                                    currencyCode="EUR"
+                                    type="currency"/></span>
                         </div>
 
-                        <div class="summary-row total-row">
-                            <span>Totale:</span>
-                            <span class="item-total">€ <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}"
-                                                                         type="number"
-                                                                         minFractionDigits="2"
-                                                                         maxFractionDigits="2"/></span>
-                        </div>
+
                     </c:forEach>
+                    <div class="summary-row total-row">
+                        <span>Totale:</span>
+                        <span class="item-total"><fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}"
+                                                                   currencyCode="EUR"
+                                                                   type="currency"
+                        /></span>
+                    </div>
                 </div>
             </div>
         </div>
 </main>
-<div>Paolo!!!</div>
 
 <div class="text-center mt-3">
     <a href="${pageContext.request.contextPath}/common/orders" class="btn btn-primary">Torna agli ordini</a>

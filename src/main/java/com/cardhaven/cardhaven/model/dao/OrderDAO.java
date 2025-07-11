@@ -162,6 +162,7 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
         orderDTO.setBillingAddressId(rs.getInt("BillingAddressID"));
         orderDTO.setShippingAddressId(rs.getInt("ShippingAddressID"));
         orderDTO.setOrderStatus(OrderDTO.OrderStatus.valueOf(rs.getString("OrderStatus")));
+        orderDTO.setTotalAmount(rs.getBigDecimal("TotalAmount"));
         Timestamp orderDate = rs.getTimestamp("OrderDate");
 
         if (orderDate != null) {

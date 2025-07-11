@@ -1,7 +1,7 @@
 package com.cardhaven.cardhaven.controller;
 
 import com.cardhaven.cardhaven.model.dao.*;
-import com.cardhaven.cardhaven.model.dto.AddressDTO;
+import com.cardhaven.cardhaven.model.dto.OrderAddressDTO;
 import com.cardhaven.cardhaven.model.dto.OrderDTO;
 import com.cardhaven.cardhaven.model.dto.OrderItemDTO;
 import com.cardhaven.cardhaven.model.dto.ProductDTO;
@@ -50,7 +50,7 @@ public class OrderDetailsServlet extends HttpServlet {
         OrderDAO orderDAO = new OrderDAO(ds);
         OrderItemDAO orderItemDAO = new OrderItemDAO(ds);
         ProductDAO productDAO = new ProductDAO(ds);
-        AddressDAO addressDAO = new AddressDAO(ds);
+        OrderAddressDAO addressDAO = new OrderAddressDAO(ds);
         ProductImageDAO productImageDAO = new ProductImageDAO(ds); // Instantiate ProductImageDAO
 
         var userId = (Integer) session.getAttribute("userId");
@@ -89,7 +89,7 @@ public class OrderDetailsServlet extends HttpServlet {
             }
 
             // Recupera l'indirizzo di spedizione
-            AddressDTO shippingAddress = null;
+            OrderAddressDTO shippingAddress = null;
             if (order.getShippingAddressId() > 0) {
                 shippingAddress = addressDAO.getById(order.getShippingAddressId());
             }
