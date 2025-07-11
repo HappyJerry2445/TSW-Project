@@ -12,17 +12,17 @@
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/order.css" type="text/css">
-    <jsp:include page="/components/common_head.jsp"/>
+    <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
-<jsp:include page="/components/header.jsp"/>
+<jsp:include page="/WEB-INF/components/header.jsp"/>
 
 <main class="container mt-3 mb-3">
     <div class="orders-page-container">
         <h1 class="section-title">I Miei Ordini</h1>
 
 
-        <jsp:include page="/components/error_message.jsp"/>
+        <jsp:include page="/WEB-INF/components/error_message.jsp"/>
 
         <c:choose>
             <%--@elvariable id="orders" type="java.util.List<com.cardhaven.cardhaven.model.dto.OrderDTO>"--%>
@@ -110,6 +110,6 @@
     </div>
 </main>
 
-<jsp:include page="/components/footer.jsp"/>
+<jsp:include page="/WEB-INF/components/footer.jsp"/>
 </body>
 </html>

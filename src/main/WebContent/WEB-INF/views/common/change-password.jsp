@@ -10,17 +10,17 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user-auth.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css" type="text/css">
-    <jsp:include page="/components/common_head.jsp"/>
+    <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
-<jsp:include page="/components/header.jsp"/>
+<jsp:include page="/WEB-INF/components/header.jsp"/>
 
 <main>
     <div class="center-child mt-3">
         <div class="card user-auth-card change-password-card">
             <h2 class="section-title">Cambia Password</h2>
 
-            <jsp:include page="/components/error_message.jsp"/>
+            <jsp:include page="/WEB-INF/components/error_message.jsp"/>
 
             <!-- TODO: Add Regex -->
             <form action="${pageContext.request.contextPath}/common/change-password" method="post"
@@ -48,7 +48,7 @@
     </div>
 </main>
 
-<jsp:include page="/components/footer.jsp"/>
+<jsp:include page="/WEB-INF/components/footer.jsp"/>
 <script src="${pageContext.request.contextPath}/scripts/change-password.js"></script>
 </body>
 </html>

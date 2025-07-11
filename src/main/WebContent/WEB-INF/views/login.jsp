@@ -10,10 +10,10 @@
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user-auth.css" type="text/css">
-    <jsp:include page="/components/common_head.jsp"/>
+    <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
-<jsp:include page="/components/header.jsp"/>
+<jsp:include page="/WEB-INF/components/header.jsp"/>
 
 <main>
     <div class="center-child mt-3">
@@ -21,7 +21,7 @@
         <div class="card user-auth-card">
             <h2 class="section-title">Accedi al tuo account</h2>
 
-            <jsp:include page="/components/error_message.jsp"/>
+            <jsp:include page="/WEB-INF/components/error_message.jsp"/>
 
             <form action="${pageContext.request.contextPath}/login" method="post">
                 <div class="mb-1">
@@ -47,6 +47,6 @@
 
 </main>
 
-<jsp:include page="/components/footer.jsp"/>
+<jsp:include page="/WEB-INF/components/footer.jsp"/>
 </body>
 </html>

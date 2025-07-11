@@ -11,10 +11,10 @@
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css" type="text/css">
-    <jsp:include page="/components/common_head.jsp"/>
+    <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
-<jsp:include page="/components/header.jsp"/>
+<jsp:include page="/WEB-INF/components/header.jsp"/>
 
 <main>
     <div class="container mt-3">
@@ -88,7 +88,7 @@
     </div>
 </main>
 
-<jsp:include page="/components/footer.jsp"/>
+<jsp:include page="/WEB-INF/components/footer.jsp"/>
 <script src="/scripts/profile.js"></script>
 </body>
 </html>

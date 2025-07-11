@@ -10,17 +10,17 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/user-auth.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/addresses.css" type="text/css">
-    <jsp:include page="/components/common_head.jsp"/>
+    <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
-<jsp:include page="/components/header.jsp"/>
+<jsp:include page="/WEB-INF/components/header.jsp"/>
 
 <main>
     <div class="container mt-3">
         <div class="card user-auth-card">
             <h2 class="section-title">Modifica Indirizzo</h2>
 
-            <jsp:include page="/components/error_message.jsp"/>
+            <jsp:include page="/WEB-INF/components/error_message.jsp"/>
 
             <%--@elvariable id="address" type="com.cardhaven.cardhaven.model.dto.AddressDTO"--%>
             <form action="${pageContext.request.contextPath}/common/addresses/edit" method="post">
@@ -61,7 +61,7 @@
     </div>
 </main>
 
-<jsp:include page="/components/footer.jsp"/>
+<jsp:include page="/WEB-INF/components/footer.jsp"/>
 <%-- No specific JavaScript needed for this form, basic HTML5 validation will do --%>
 </body>
 </html>

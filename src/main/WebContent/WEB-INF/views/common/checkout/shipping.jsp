@@ -10,16 +10,16 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/addresses.css" type="text/css">
-    <jsp:include page="/components/common_head.jsp"/>
+    <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
-<jsp:include page="/components/header.jsp"/>
+<jsp:include page="/WEB-INF/components/header.jsp"/>
 
 <main>
     <div class="container mt-3 mb-3">
         <div class="card profile-card p-3">
             <h2 class="section-title">Seleziona gli indirizzi da utilizzare per il tuo ordine</h2>
-            <jsp:include page="/components/error_message.jsp"/>
+            <jsp:include page="/WEB-INF/components/error_message.jsp"/>
 
             <c:if test="${not empty addresses}">
 
@@ -32,7 +32,8 @@
                             <%-- Il tag <select> eredita gli stili base dei form da style.css --%>
                         <select id="shipping-address" name="shippingAddressId" required>
                             <c:forEach var="address" items="${addresses}">
-                                <option value="${address.addressID}" <c:if test="${address.isDefault()}">selected</c:if>>
+                                <option value="${address.addressID}"
+                                        <c:if test="${address.isDefault()}">selected</c:if>>
                                     <c:out value="${address.streetAddress}, ${address.city}, ${address.postalCode}"/>
                                     <c:if test="${address.isDefault()}"> (Predefinito)</c:if>
                                 </option>
@@ -40,27 +41,32 @@
                         </select>
                     </div>
 
-                                <%-- CHECKBOX "SAME AS SHIPPING" --%>
-                            <div class="mb-3">
-                                <input type="checkbox" id="same-as-shipping" name="sameAsShipping" checked>
-                                <label for="same-as-shipping">L'indirizzo di fatturazione è lo stesso di quello di spedizione.</label>
-                            </div>
+                        <%-- CHECKBOX "SAME AS SHIPPING" --%>
+                    <div class="mb-3">
+                        <input type="checkbox" id="same-as-shipping" name="sameAsShipping" checked>
+                        <label for="same-as-shipping">L'indirizzo di fatturazione è lo stesso di quello di
+                            spedizione.</label>
+                    </div>
 
-                                <%-- SELEZIONE INDIRIZZO FATTURAZIONE (controllato da JS) --%>
-                            <div class="mb-3" id="billing-address-container">
-                                <label for="billing-address">Indirizzo di Fatturazione:</label>
-                                <select id="billing-address" name="billingAddressId" required>
-                                    <c:forEach var="address" items="${addresses}">
-                                        <option value="${address.addressID}" <c:if test="${address.isDefault()}">selected</c:if>>
-                                            <c:out value="${address.streetAddress}, ${address.city}"/> (<c:out value="${address.addressType}"/>)<c:if test="${address.isDefault()}"> (Predefinito)</c:if>
-                                        </option>
-                                    </c:forEach>
-                                </select>
-                            </div>
+                        <%-- SELEZIONE INDIRIZZO FATTURAZIONE (controllato da JS) --%>
+                    <div class="mb-3" id="billing-address-container">
+                        <label for="billing-address">Indirizzo di Fatturazione:</label>
+                        <select id="billing-address" name="billingAddressId" required>
+                            <c:forEach var="address" items="${addresses}">
+                                <option value="${address.addressID}"
+                                        <c:if test="${address.isDefault()}">selected</c:if>>
+                                    <c:out value="${address.streetAddress}, ${address.city}"/> (<c:out
+                                        value="${address.addressType}"/>)<c:if
+                                        test="${address.isDefault()}"> (Predefinito)</c:if>
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
 
                         <%-- Azioni: pulsanti stilizzati per proseguire o aggiungere un nuovo indirizzo --%>
                     <div class="profile-actions">
-                        <a href="${pageContext.request.contextPath}/common/addresses/add" class="btn btn-secondary">Aggiungi Nuovo Indirizzo</a>
+                        <a href="${pageContext.request.contextPath}/common/addresses/add" class="btn btn-secondary">Aggiungi
+                            Nuovo Indirizzo</a>
                         <button type="submit" class="btn btn-primary">Vai al Riepilogo</button>
                     </div>
                 </form>
@@ -70,14 +76,15 @@
             <c:if test="${empty addresses}">
                 <p class="text-center">Non hai ancora aggiunto nessun indirizzo.</p>
                 <div class="text-center">
-                    <a href="${pageContext.request.contextPath}/common/addresses/add" class="btn btn-primary mt-1">Aggiungine uno per proseguire</a>
+                    <a href="${pageContext.request.contextPath}/common/addresses/add" class="btn btn-primary mt-1">Aggiungine
+                        uno per proseguire</a>
                 </div>
             </c:if>
         </div>
     </div>
 </main>
 
-<jsp:include page="/components/footer.jsp"/>
+<jsp:include page="/WEB-INF/components/footer.jsp"/>
 
 <%--L'attributo 'defer' assicura che lo script venga eseguito dopo il parsing del documento. --%>
 <script src="${pageContext.request.contextPath}/scripts/address-form-handler.js" defer></script>

@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<jsp:include page="/components/notification.jsp"/>
+<jsp:include page="/WEB-INF/components/notification.jsp"/>
 <header>
     <div class="container">
         <a href="${pageContext.request.contextPath}/" class="logo">CardHaven</a>

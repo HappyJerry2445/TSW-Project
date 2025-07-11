@@ -9,11 +9,11 @@
     <meta charset="UTF-8">
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
-    <jsp:include page="components/common_head.jsp"/>
+    <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
-<jsp:include page="./components/header.jsp"/>
+<jsp:include page="/WEB-INF/components/header.jsp"/>
 
-<jsp:include page="./components/footer.jsp"/>
+<jsp:include page="/WEB-INF/components/footer.jsp"/>
 </body>
 </html>

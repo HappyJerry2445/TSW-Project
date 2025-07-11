@@ -17,10 +17,10 @@
     <title><c:out value="${pageTitle}"/></title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
     <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/error.css" type="text/css"> --%>
-    <jsp:include page="/components/common_head.jsp"/>
+    <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
-<jsp:include page="/components/header.jsp"/>
+<jsp:include page="/WEB-INF/components/header.jsp"/>
 
 <main class="container mt-3 mb-3">
     <div class="card text-center" style="max-width: 600px; margin: auto;">
@@ -51,6 +51,6 @@
     </div>
 </main>
 
-<jsp:include page="/components/footer.jsp"/>
+<jsp:include page="/WEB-INF/components/footer.jsp"/>
 </body>
 </html>

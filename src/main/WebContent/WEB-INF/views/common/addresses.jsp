@@ -11,17 +11,17 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/addresses.css" type="text/css">
     <%-- Reusing profile.css for general card styling --%>
-    <jsp:include page="/components/common_head.jsp"/>
+    <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
-<jsp:include page="/components/header.jsp"/>
+<jsp:include page="/WEB-INF/components/header.jsp"/>
 
 <main>
     <div class="container mt-3">
         <div class="card profile-card"> <%-- Using profile-card for consistent styling --%>
             <h2 class="section-title">I Miei Indirizzi</h2>
 
-            <jsp:include page="/components/error_message.jsp"/>
+            <jsp:include page="/WEB-INF/components/error_message.jsp"/>
 
             <c:choose>
                 <%--@elvariable id="addresses" type="java.util.List<com.cardhaven.cardhaven.model.dto.AddressDTO>"--%>
@@ -87,7 +87,7 @@
     </div>
 </main>
 
-<jsp:include page="/components/footer.jsp"/>
+<jsp:include page="/WEB-INF/components/footer.jsp"/>
 </body>
 </html>
 
