@@ -29,7 +29,6 @@ public class ErrorHandlerServlet extends HttpServlet {
         String requestUri = (String) req.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
         String errorMessage = (String) req.getAttribute(RequestDispatcher.ERROR_MESSAGE);
 
-        log(throwable.toString());
         if (statusCode == null && req.getParameter("code") != null) {
             try {
                 statusCode = Integer.parseInt(req.getParameter("code"));

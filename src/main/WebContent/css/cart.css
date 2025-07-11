@@ -1,40 +1,167 @@
+/*
+  Mobile-First Responsive Cart Styles
+  - On mobile, each row becomes a card.
+  - On desktop, it becomes a standard table.
+*/
+
+.cart-table-wrapper {
+    overflow-x: auto; /* Fallback for horizontal scrolling */
+}
+
 .cart-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-unit);
 }
 
-.cart-table th, .cart-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
+/* Hide desktop headers by default */
+.cart-table thead {
+    display: none;
+}
+
+/* Style each cart item as a card on mobile */
+.cart-table tbody tr {
+    display: block;
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-unit);
+    box-shadow: var(--color-shadow-light);
+}
+
+.cart-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: calc(var(--spacing-unit) * 0.5) 0;
+    border-bottom: 1px solid var(--color-neutral-light);
+}
+
+.cart-table tbody tr td:last-child {
+    border-bottom: none;
+}
+
+/* Use data-label to create labels for each piece of data */
+.cart-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    margin-right: var(--spacing-unit);
+}
+
+/* Special styling for the product name to act as a title for the mobile card */
+.cart-table td[data-label="Prodotto"] {
+    display: block;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+    margin-bottom: var(--spacing-unit);
+    padding-bottom: var(--spacing-unit);
+}
+
+.cart-table td[data-label="Prodotto"]::before {
+    display: none; /* Hide the "Prodotto:" label itself */
+}
+
+/* Center and size the quantity input field */
+.cart-table input[type="number"] {
+    width: 70px;
     text-align: center;
 }
 
-.cart-table th {
-    background-color: #f5f5f5;
-    font-weight: bold;
+/* Ensure forms inside cells are aligned correctly */
+.cart-table td form {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--spacing-unit) * 0.5);
+    flex-grow: 1;
+    justify-content: flex-end;
 }
 
+/* --- Cart Footer --- */
 .cart-footer {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin-top: calc(var(--spacing-unit) * 1.5);
+    padding-top: var(--spacing-unit);
+    border-top: 1px solid var(--color-border-default);
 }
 
-.cart-footer .btn-primary {
-    padding: 10px 20px;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    text-decoration: none;
+.cart-footer .btn {
+    width: 100%; /* Full-width button on mobile */
 }
 
+
+/* --- Desktop Styles (min-width: 768px) --- */
+@media (min-width: 768px) {
+    /* Restore the standard table layout */
+    .cart-table thead {
+        display: table-header-group;
+    }
+
+    .cart-table th {
+        font-family: var(--font-heading);
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid var(--color-border-default);
+        padding: calc(var(--spacing-unit) * 0.75);
+        text-align: center;
+    }
+
+    .cart-table tbody tr {
+        display: table-row;
+        margin-bottom: 0;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+
+    .cart-table tbody tr:nth-child(even) {
+        background-color: var(--color-bg-light-grey);
+    }
+
+    .cart-table tbody tr:hover {
+        background-color: var(--color-neutral-light);
+    }
+
+    .cart-table td {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+        border-bottom: 1px solid var(--color-border-default);
+    }
+
+    .cart-table td:first-child {
+        text-align: left;
+    }
+
+    .cart-table td::before {
+        display: none; /* Hide the mobile labels */
+    }
+
+    .cart-table td[data-label="Prodotto"] {
+        font-family: var(--font-body);
+        font-size: 1rem;
+        font-weight: normal;
+        color: var(--color-text-default);
+    }
+
+    .cart-footer .btn {
+        width: auto; /* Auto-width button on desktop */
+    }
+}
+
+/* --- Button Styles --- */
+/* These styles ensure the update button matches the site's success color scheme */
 .btn-update {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
+    background-color: var(--color-status-success);
+    color: var(--color-primary-light);
+}
+
+.btn-update:hover {
+    background-color: var(--color-status-success-dark);
 }

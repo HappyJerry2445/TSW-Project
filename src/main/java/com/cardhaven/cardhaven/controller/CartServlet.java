@@ -1,77 +1,47 @@
 package com.cardhaven.cardhaven.controller;
 
-
-import com.cardhaven.cardhaven.model.dao.AddressDAO;
 import com.cardhaven.cardhaven.model.dao.CartDAO;
 import com.cardhaven.cardhaven.model.dao.CartItemDAO;
-import com.cardhaven.cardhaven.model.dao.UserDAO;
-import com.cardhaven.cardhaven.model.dto.CartItemDTO;
-import com.cardhaven.cardhaven.model.dto.UserDTO;
+import com.cardhaven.cardhaven.model.dao.ProductDAO;
+import com.cardhaven.cardhaven.model.dao.ProductVariantDAO;
+import com.cardhaven.cardhaven.model.dto.CartItemDetailDTO;
+import com.cardhaven.cardhaven.util.CartManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @WebServlet("/cart")
 public class CartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Integer userId = (Integer) session.getAttribute("userId");
-        List<String> errors = new ArrayList<>();
-
         DataSource ds = (DataSource) getServletContext().getAttribute("ds");
-        UserDAO userDAO = new UserDAO(ds);
-        AddressDAO addressDAO = new AddressDAO(ds);
+        // Instantiate all necessary DAOs
+        CartDAO cartDAO = new CartDAO(ds);
+        CartItemDAO cartItemDAO = new CartItemDAO(ds);
+        ProductDAO productDAO = new ProductDAO(ds);
+        ProductVariantDAO variantDAO = new ProductVariantDAO(ds);
 
-        UserDTO user = null;
-        if (userId != null) {
-            try {
-                user = userDAO.getById(userId);
-            } catch (SQLException _) {
-            }
-
-        }
-        Collection<CartItemDTO> cartItems = null;
         try {
-            if (user != null) {
-                var cartDAO = new CartDAO(ds);
-                var cart = cartDAO.getByUserId(user.getId());
-                var cartItemsDAO = new CartItemDAO(ds);
-                cartItems = cartItemsDAO.getByCartId(cart.getCartId(), null);
+            // A single, clean call to the manager to get everything needed for the view
+            List<CartItemDetailDTO> detailedCartItems = CartManager.getDetailedCartItems(
+                    request, cartDAO, cartItemDAO, productDAO, variantDAO
+            );
+            log(detailedCartItems.toString());
+            System.out.println(detailedCartItems);
 
-                var sessionCart = (Collection<CartItemDTO>) session.getAttribute("guestCart");
-
-                if (sessionCart != null && !sessionCart.isEmpty()) {
-                    for (var sessionItem : sessionCart) {
-                        sessionItem.setCartId(cart.getCartId());
-                        sessionItem.setCartItemId(0);
-                        cartItemsDAO.save(sessionItem);
-                    }
-                    session.removeAttribute("guestCart");
-                }
-            } else {
-                cartItems = (Collection<CartItemDTO>) session.getAttribute("guestCart");
-                if (cartItems == null) {
-                    cartItems = new ArrayList<>();
-                    session.setAttribute("guestCart", cartItems);
-                }
-            }
-            request.setAttribute("cartItems", cartItems);
+            request.setAttribute("cartItems", detailedCartItems);
             request.getRequestDispatcher("/WEB-INF/views/cart.jsp").forward(request, response);
 
         } catch (SQLException e) {
-            getServletContext().log("Error retrieving cart data", e);
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to retrieve cart data.");
+            getServletContext().log("Error retrieving detailed cart data using CartManager", e);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to retrieve your cart. Please try again later.");
         }
     }
 }
