@@ -19,7 +19,8 @@
 
 <main class="container mt-3 mb-3">
     <div class="orders-page-container">
-        <h2>Dettagli Ordine #<c:out value="${order.orderId}"/></h2>
+        <h2>Dettagli Ordine #<%--@elvariable id="order" type="com.cardhaven.cardhaven.model.dto.OrderDTO"--%>
+            <c:out value="${order.orderID}"/></h2>
 
         <jsp:include page="/components/error_message.jsp"/>
 
@@ -36,11 +37,13 @@
                         <c:choose>
                             <%--@elvariable id="shippingAddress" type="java.util.List<com.cardhaven.cardhaven.model.dto.AddressDTO>"--%>
                         <c:when test="${not empty shippingAddress}">
-                    <c:out value="${shippingAddress.streetAddress}"/>, <c:out value="${shippingAddress.postalCode}"/>, <c:out value="${shippingAddress.city}"/>, <c:out
-                            value="${shippingAddress.country}"/>
-                    </c:when>
-                    <c:otherwise>
-                        <p>Indirizzo non disponibile</p>
+                            <c:out value="${shippingAddress.streetAddress}"/>, <c:out
+                            value="${shippingAddress.postalCode}"/>, <c:out value="${shippingAddress.city}"/>,
+                            <c:out
+                                    value="${shippingAddress.country}"/>
+                        </c:when>
+                        <c:otherwise>
+                    <p>Indirizzo non disponibile</p>
                     </c:otherwise>
                     </c:choose>
                 </div>
@@ -62,32 +65,35 @@
                                 <div class="order-item-card">
                                     <div class="product-item">
                                             <%--TODO test with real images of the product and with more product--%>
-                                            <div class="product-image-container">
-                                                <div>
-                                                    <c:set var="image" value="${productImageMap[product.productId]}"/>
-                                                    <c:choose>
-                                                        <c:when test="${not empty image}">
-                                                            <img src="${image}" alt="Immagine di ${product.productName}" class="product-image-small"/>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <img src="${pageContext.request.contextPath}/imgs/noimage.png" alt="Immagine non disponibile" class="product-image-small"/>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </div>
-                                            </div>
-                                                <div>
-                                                    <h5 class="product-name">
-                                                        <c:choose>
-                                                            <c:when test="${not empty product}">
-                                                                <c:out value="${product.productName}"/>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                Prodotto non disponibile (ID: ${item.productID})
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </h5>
-                                                </div>
+                                        <div class="product-image-container">
                                             <div>
+                                                <c:set var="image" value="${productImageMap[product.productId]}"/>
+                                                <c:choose>
+                                                    <c:when test="${not empty image}">
+                                                        <img src="${image}" alt="Immagine di ${product.productName}"
+                                                             class="product-image-small"/>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <img src="${pageContext.request.contextPath}/imgs/noimage.png"
+                                                             alt="Immagine non disponibile"
+                                                             class="product-image-small"/>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h5 class="product-name">
+                                                <c:choose>
+                                                    <c:when test="${not empty product}">
+                                                        <c:out value="${product.productName}"/>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        Prodotto non disponibile (ID: ${item.productID})
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </h5>
+                                        </div>
+                                        <div>
                                         </div>
                                     </div>
                                 </div>
@@ -115,17 +121,22 @@
 
                         <div class="summary-row">
                             <span>Prezzo unitario:</span>
-                            <span class="unit-price">€ <fmt:formatNumber value="${fn:escapeXml(item.unitPrice)}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span>
+                            <span class="unit-price">€ <fmt:formatNumber value="${fn:escapeXml(item.unitPrice)}"
+                                                                         type="number" minFractionDigits="2"
+                                                                         maxFractionDigits="2"/></span>
                         </div>
 
                         <div class="summary-row">
                             <span>Subtotale:</span>
-                            <span class="unit-price">€ <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}" type="number" minFractionDigits="2" maxFractionDigits="2"/></span>
+                            <span class="unit-price">€ <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}"
+                                                                         type="number" minFractionDigits="2"
+                                                                         maxFractionDigits="2"/></span>
                         </div>
 
                         <div class="summary-row total-row">
                             <span>Totale:</span>
-                            <span class="item-total">€ <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}" type="number"
+                            <span class="item-total">€ <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}"
+                                                                         type="number"
                                                                          minFractionDigits="2"
                                                                          maxFractionDigits="2"/></span>
                         </div>
