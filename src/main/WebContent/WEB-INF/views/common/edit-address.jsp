@@ -42,7 +42,7 @@
                            value="<c:out value="${address.state}"/>">
                 </div>
                 <div class="mb-1">
-                    <label for="zipCode">CAP:</label>
+                    <label for="postalCode">CAP:</label>
                     <input type="text" id="postalCode" name="postalCode" class="form-input"
                            value="<c:out value="${address.postalCode}"/>" required>
                 </div>
@@ -62,6 +62,5 @@
 </main>
 
 <jsp:include page="/WEB-INF/components/footer.jsp"/>
-<%-- No specific JavaScript needed for this form, basic HTML5 validation will do --%>
 </body>
 </html>

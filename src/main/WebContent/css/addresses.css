@@ -79,6 +79,13 @@
     gap: var(--spacing-unit);
 }
 
+.profile-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--spacing-unit);
+    row-gap: var(--spacing-unit);
+}
+
 @media (max-width: 1060px) {
     .address-buttons {
         grid-template-columns: 1fr;
@@ -110,6 +117,10 @@
 
     .address-actions > .btn {
         padding-left: 0;
+    }
+
+    .profile-actions {
+        grid-template-columns: 1fr;
     }
 
 }
