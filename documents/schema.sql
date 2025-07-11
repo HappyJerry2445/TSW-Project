@@ -119,6 +119,16 @@ CREATE TABLE ProductCategory
     FOREIGN KEY (CategoryID) REFERENCES Category (CategoryID) ON DELETE CASCADE
 );
 
+CREATE TABLE OrderAddress
+(
+    OrderAddressID INT PRIMARY KEY AUTO_INCREMENT,
+    StreetAddress  TEXT         NOT NULL,
+    City           VARCHAR(100) NOT NULL,
+    State          VARCHAR(100),
+    PostalCode     VARCHAR(20)  NOT NULL,
+    Country        VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE "Order"
 (
     OrderID           INT PRIMARY KEY AUTO_INCREMENT,
@@ -129,8 +139,8 @@ CREATE TABLE "Order"
     BillingAddressID  INT            NOT NULL,
     TotalAmount       DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (UserID) REFERENCES "User" (UserID) ON DELETE RESTRICT,
-    FOREIGN KEY (ShippingAddressID) REFERENCES Address (AddressID),
-    FOREIGN KEY (BillingAddressID) REFERENCES Address (AddressID),
+    FOREIGN KEY (ShippingAddressID) REFERENCES OrderAddress (OrderAddressID),
+    FOREIGN KEY (BillingAddressID) REFERENCES OrderAddress (OrderAddressID),
     INDEX idx_order_status (OrderStatus)
 );
 
@@ -140,6 +150,7 @@ CREATE TABLE OrderItem
     OrderID     INT            NOT NULL,
     ProductID   INT,
     VariantID   INT,
+    ProductSnapshot JSON           NOT NULL,
     Quantity    INT            NOT NULL CHECK (Quantity > 0),
     UnitPrice   DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (OrderID) REFERENCES "Order" (OrderID) ON DELETE CASCADE,
