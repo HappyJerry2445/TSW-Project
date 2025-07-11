@@ -3,26 +3,27 @@
 package com.cardhaven.cardhaven.model.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class OrderDTO implements Serializable {
 
-    private int orderId;    //PK
-    private int userId;        //FK of User
+    private int orderID;    //PK
+    private int userID;        //FK of User
     private LocalDateTime orderDate;
     private OrderStatus orderStatus; //Enum
     private int shippingAddressId;        //FK to ShippingAddress
     private int billingAddressId;        //FK to BillingAddress
-    private int totalAmount;
+    private BigDecimal totalAmount;
 
     public OrderDTO() {
 
     }
 
-    public OrderDTO(int orderId, int userId, LocalDateTime orderDate, OrderStatus orderStatus, int shippingAddressId, int billingAddressId, int totalAmount) {
-        this.orderId = orderId;
-        this.userId = userId;
+    public OrderDTO(int orderID, int userID, LocalDateTime orderDate, OrderStatus orderStatus, int shippingAddressId, int billingAddressId, BigDecimal totalAmount) {
+        this.orderID = orderID;
+        this.userID = userID;
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;
         this.shippingAddressId = shippingAddressId;
@@ -30,20 +31,20 @@ public class OrderDTO implements Serializable {
         this.totalAmount = totalAmount;
     }
 
-    public int getOrderId() {
-        return orderId;
+    public int getOrderID() {
+        return orderID;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public LocalDateTime getOrderDate() {
@@ -78,11 +79,11 @@ public class OrderDTO implements Serializable {
         this.billingAddressId = billingAddressId;
     }
 
-    public int getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(int totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -91,14 +92,14 @@ public class OrderDTO implements Serializable {
         if (object == null || getClass() != object.getClass()) return false;
 
         OrderDTO orderDTO = (OrderDTO) object;
-        return orderId == orderDTO.orderId && userId == orderDTO.userId && shippingAddressId == orderDTO.shippingAddressId && billingAddressId == orderDTO.billingAddressId && totalAmount == orderDTO.totalAmount && Objects.equals(orderDate, orderDTO.orderDate) && Objects.equals(orderStatus, orderDTO.orderStatus);
+        return orderID == orderDTO.orderID && userID == orderDTO.userID && shippingAddressId == orderDTO.shippingAddressId && billingAddressId == orderDTO.billingAddressId && totalAmount == orderDTO.totalAmount && Objects.equals(orderDate, orderDTO.orderDate) && Objects.equals(orderStatus, orderDTO.orderStatus);
     }
 
     @Override
     public String toString() {
         return "Order{" +
-                "orderId=" + orderId + '\'' +
-                ", userId=" + userId + '\'' +
+                "orderId=" + orderID + '\'' +
+                ", userId=" + userID + '\'' +
                 ", orderDate=" + orderDate + '\'' +
                 ", orderStatus='" + orderStatus + '\'' +
                 ", shippingAddressId=" + shippingAddressId + '\'' +
@@ -110,10 +111,10 @@ public class OrderDTO implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderId, userId, orderDate, orderStatus, shippingAddressId, billingAddressId, totalAmount);
+        return Objects.hash(orderID, userID, orderDate, orderStatus, shippingAddressId, billingAddressId, totalAmount);
     }
 
-    public enum OrderStatus{
+    public enum OrderStatus {
         Pending,
         Processing,
         Shipped,

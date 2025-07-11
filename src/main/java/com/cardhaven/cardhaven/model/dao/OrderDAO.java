@@ -3,6 +3,7 @@ package com.cardhaven.cardhaven.model.dao;
 import com.cardhaven.cardhaven.model.dto.OrderDTO;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -22,23 +23,23 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
     }
 
     public void save(OrderDTO orderDTO) throws SQLException {
-        if (orderDTO == null || orderDTO.getUserId() == 0 ||
+        if (orderDTO == null || orderDTO.getUserID() == 0 ||
                 orderDTO.getOrderStatus() == null || orderDTO.getShippingAddressId() == 0 ||
-                orderDTO.getBillingAddressId() == 0 || orderDTO.getTotalAmount() == 0) {
+                orderDTO.getBillingAddressId() == 0 || orderDTO.getTotalAmount().compareTo(BigDecimal.ZERO) == 0) {
             throw new SQLException("UserID, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount cannot be 0/null/empty");
         }
 
         String sql;
-        if (orderDTO.getOrderId() == 0) {
+        if (orderDTO.getOrderID() == 0) {
             sql = "INSERT INTO `Order` (UserID, OrderDate, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount) VALUES (?,?,?,?,?,?)";
             try (Connection conn = dataSource.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                ps.setInt(1, orderDTO.getUserId());
+                ps.setInt(1, orderDTO.getUserID());
                 ps.setTimestamp(2, (orderDTO.getOrderDate() != null) ? Timestamp.valueOf(orderDTO.getOrderDate()) : Timestamp.valueOf(LocalDateTime.now()));
                 ps.setString(3, orderDTO.getOrderStatus().name());
                 ps.setInt(4, orderDTO.getShippingAddressId());
                 ps.setInt(5, orderDTO.getBillingAddressId());
-                ps.setInt(6, orderDTO.getTotalAmount());
+                ps.setBigDecimal(6, orderDTO.getTotalAmount());
 
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
@@ -47,7 +48,7 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
 
                 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        orderDTO.setOrderId(generatedKeys.getInt(1));
+                        orderDTO.setOrderID(generatedKeys.getInt(1));
                     } else {
                         throw new SQLException("Creating order failed, no ID obtained.");
                     }
@@ -57,13 +58,13 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
             sql = "UPDATE `Order` SET UserID = ?, OrderDATE = ?, OrderStatus = ?, ShippingAddressID = ?, BillingAddressID = ?, TotalAmount = ?  WHERE OrderID = ?";
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement ps = connection.prepareStatement(sql)) {
-                ps.setInt(1, orderDTO.getUserId());
+                ps.setInt(1, orderDTO.getUserID());
                 ps.setTimestamp(2, (orderDTO.getOrderDate() != null) ? Timestamp.valueOf(orderDTO.getOrderDate()) : null);
                 ps.setString(3, orderDTO.getOrderStatus().name());
                 ps.setInt(4, orderDTO.getShippingAddressId());
                 ps.setInt(5, orderDTO.getBillingAddressId());
-                ps.setInt(6, orderDTO.getTotalAmount());
-                ps.setInt(7, orderDTO.getOrderId());
+                ps.setBigDecimal(6, orderDTO.getTotalAmount());
+                ps.setInt(7, orderDTO.getOrderID());
 
                 ps.executeUpdate();
             }
@@ -156,8 +157,8 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
 
     private OrderDTO extractOrderFromResultSet(ResultSet rs) throws SQLException {
         OrderDTO orderDTO = new OrderDTO();
-        orderDTO.setOrderId(rs.getInt("OrderID"));
-        orderDTO.setUserId(rs.getInt("UserID"));
+        orderDTO.setOrderID(rs.getInt("OrderID"));
+        orderDTO.setUserID(rs.getInt("UserID"));
         orderDTO.setBillingAddressId(rs.getInt("BillingAddressID"));
         orderDTO.setShippingAddressId(rs.getInt("ShippingAddressID"));
         orderDTO.setOrderStatus(OrderDTO.OrderStatus.valueOf(rs.getString("OrderStatus")));

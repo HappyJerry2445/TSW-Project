@@ -57,7 +57,7 @@ public class OrderDetailsServlet extends HttpServlet {
 
         try {
             OrderDTO order = orderDAO.getById(orderId);
-            if (order == null || order.getUserId() != userId) {
+            if (order == null || order.getUserID() != userId) {
                 NotificationUtil.sendNotification(request, "Ordine non trovato o non autorizzato.", "error");
                 response.sendRedirect(request.getContextPath() + "/common/orders");
                 return;
@@ -81,7 +81,7 @@ public class OrderDetailsServlet extends HttpServlet {
             for (ProductDTO product : productMap.values()) {
                 byte[] images = productImageDAO.getImagesByProductId(product.getProductId());
                 ServletOutputStream out = response.getOutputStream();
-                if(images != null){
+                if (images != null) {
                     out.write(images);
                     response.setContentType("image/jpeg");
                 }
