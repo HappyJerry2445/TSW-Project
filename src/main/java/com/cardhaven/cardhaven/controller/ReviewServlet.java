@@ -92,7 +92,7 @@ public class ReviewServlet extends HttpServlet {
             ProductImageDAO productImageDAO = new ProductImageDAO(ds); // Instantiate ProductImageDAO
 
             Map<Integer, String> productImageMap = new HashMap<>();
-            for (ProductDTO product : productMap.values()) {
+/*            for (ProductDTO product : productMap.values()) {
                 byte[] images = productImageDAO.getImagesByProductId(product.getProductId());
                 ServletOutputStream out = response.getOutputStream();
                 if(images != null){
@@ -100,7 +100,7 @@ public class ReviewServlet extends HttpServlet {
                     response.setContentType("image/jpeg");
                 }
 
-            }
+            }*/
 
             // Set attributes for the JSP to display
             request.setAttribute("loggedInUser", loggedInUser);
