@@ -98,6 +98,28 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
         return productDTO;
     }
 
+    public Collection<ProductDTO> getProductsByCategory (int categoryId) throws SQLException{
+        Collection<ProductDTO> products = new ArrayList<>();
+        String sql = """
+                SELECT *
+                FROM Product
+                JOIN ProductCategory ON Product.ProductId = ProductCategory.ProductID
+                WHERE ProductCategory.ProductID = ? AND Product.IsActive = true
+                ORDER BY Product.ProductName
+                """;
+        try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, categoryId);
+
+            try (ResultSet rs = ps.executeQuery()){
+                while (rs.next()){
+                    ProductDTO product= extractProductFromResultSet(rs);
+                    products.add(product);
+                }
+            }
+        }
+        return products;
+    }
+
     public Collection<ProductDTO> getAll(String order) throws SQLException {
         Collection<ProductDTO> productDTOS = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM Product");
