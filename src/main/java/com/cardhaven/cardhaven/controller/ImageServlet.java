@@ -1,6 +1,6 @@
 package com.cardhaven.cardhaven.controller;
 
-import com.cardhaven.cardhaven.model.dao.ProductImageDAO;
+import com.cardhaven.cardhaven.model.dao.ImageDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -38,11 +38,11 @@ public class ImageServlet extends HttpServlet {
         }
 
         DataSource ds = (DataSource) getServletContext().getAttribute("ds");
-        var productImageDAO = new ProductImageDAO(ds);
+        var imageDAO = new ImageDAO(ds);
 
         try {
             // The 'image' variable will be of the type returned by getById()
-            var image = productImageDAO.getById(imageID);
+            var image = imageDAO.getById(imageID);
 
             // Check if the image or its data exists
             if (image == null || image.getImageData() == null || image.getImageData().length == 0) {

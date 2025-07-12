@@ -30,6 +30,14 @@ create table Category
 create index ParentCategoryID
     on Category (ParentCategoryID);
 
+create table Image
+(
+    ImageId   int auto_increment
+        primary key,
+    MimeType  varchar(255) not null,
+    ImageData longblob     not null
+);
+
 create table OrderAddress
 (
     OrderAddressID int auto_increment
@@ -116,17 +124,15 @@ create index CategoryID
 
 create table ProductImage
 (
-    ImageID           int auto_increment
+    ProductImageID int auto_increment
         primary key,
-    ProductID         int                                 not null,
-    ImageData         longblob                            not null,
-    MimeType          varchar(50)                         not null,
-    ImageName         varchar(255)                        null,
-    Description       varchar(255)                        null,
-    SortOrder         int       default 0                 null,
-    CreatedAt         timestamp default CURRENT_TIMESTAMP null,
-    ThumbnailData     mediumblob                          null,
-    ThumbnailMimeType varchar(50)                         null,
+    ProductID      int           not null,
+    SortOrder      int default 0 null,
+    ImageID        int           null,
+    constraint ProductImage_pk
+        unique (ProductID, ImageID),
+    constraint ProductImage_Image_ImageId_fk
+        foreign key (ImageID) references Image (ImageId),
     constraint ProductImage_ibfk_1
         foreign key (ProductID) references Product (ProductID)
             on delete cascade

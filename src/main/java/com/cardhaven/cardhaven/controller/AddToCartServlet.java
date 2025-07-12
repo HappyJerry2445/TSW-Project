@@ -22,7 +22,7 @@ public class AddToCartServlet extends HttpServlet {
         String quantityParam = request.getParameter("quantity");
 
         if (productIdParam == null || quantityParam == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing parameters.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parametri mancanti");
             return;
         }
 
@@ -31,7 +31,7 @@ public class AddToCartServlet extends HttpServlet {
             int quantity = Integer.parseInt(quantityParam);
 
             if (quantity <= 0) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Quantity must be positive.");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "La quantità deve esssere positiva");
                 return;
             }
 
@@ -45,9 +45,9 @@ public class AddToCartServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/cart");
 
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid parameter format.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Formato del parametro non valido");
         } catch (SQLException e) {
-            throw new ServletException("Database error while adding to cart", e);
+            throw new ServletException("Errore del database nell'aggiunta al carrello", e);
         } catch (IllegalArgumentException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Prodotto non trovato");
         }

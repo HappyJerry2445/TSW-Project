@@ -4,15 +4,14 @@ import com.cardhaven.cardhaven.model.dto.ProductImageDTO;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
-            "ImageId", "ProductId", "ImageData", "MimeType", "Description", "SortOrder", "CreatedAt", "ThumbnailData", "thumbnailMimeType"
+            "ProductImageId", "ProductId", "SortOrder", "ImageId"
     );
 
-    private static final String DEFAULT_ORDER_COLUMN = "ImageId";
+    private static final String DEFAULT_ORDER_COLUMN = "ProductImageId";
 
     private final DataSource dataSource;
 
@@ -25,17 +24,12 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
 
         String sql;
         if (productImageDTO.getImageId() == 0) {
-            sql = "INSERT INTO ProductImage (ImageId, ProductId, ImageData, MimeType, Description, SortOrder, CreatedAt, ThumbnailData, thumbnailMimeType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            sql = "INSERT INTO ProductImage (ProductImageId, ProductId, SortOrder, ImageID) VALUES (?, ?, ?, ?)";
             try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-                ps.setInt(1, productImageDTO.getImageId());
+                ps.setInt(1, productImageDTO.getProductImageId());
                 ps.setInt(2, productImageDTO.getProductId());
-                ps.setBytes(3, productImageDTO.getImageData());
-                ps.setString(4, productImageDTO.getMimeType());
-                ps.setString(5, productImageDTO.getDescription());
-                ps.setInt(6, productImageDTO.getSortOrder());
-                ps.setTimestamp(7, (productImageDTO.getCreatedAt() != null) ? Timestamp.valueOf(productImageDTO.getCreatedAt()) : Timestamp.valueOf(LocalDateTime.now()));
-                ps.setBytes(8, productImageDTO.getThumbnailData());
-                ps.setString(9, productImageDTO.getThumbnailMimeType());
+                ps.setInt(3, productImageDTO.getSortOrder());
+                ps.setInt(4, productImageDTO.getImageId());
 
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
@@ -51,19 +45,14 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
                 }
             }
         } else {
-            sql = "UPDATE ProductImage SET ProductId = ?, ImageData = ?, MimeType = ?, Description = ?, SortOrder = ?, CreatedAt = ?, ThumbnailData = ?, ThumbnailMimeType = ? WHERE ImageId = ?";
+            sql = "UPDATE ProductImage SET ProductId = ?, SortOrder = ?, ImageID = ?WHERE ProductImageID = ?";
             try (Connection conn = dataSource.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
 
                 ps.setInt(1, productImageDTO.getProductId());
-                ps.setBytes(2, productImageDTO.getImageData());
-                ps.setString(3, productImageDTO.getMimeType());
-                ps.setString(4, productImageDTO.getDescription());
-                ps.setInt(5, productImageDTO.getSortOrder());
-                ps.setTimestamp(6, (productImageDTO.getCreatedAt() != null) ? Timestamp.valueOf(productImageDTO.getCreatedAt()) : null);
-                ps.setBytes(7, productImageDTO.getThumbnailData());
-                ps.setString(8, productImageDTO.getThumbnailMimeType());
-                ps.setInt(9, productImageDTO.getImageId());
+                ps.setInt(2, productImageDTO.getSortOrder());
+                ps.setInt(3, productImageDTO.getImageId());
+                ps.setInt(4, productImageDTO.getProductImageId());
 
                 ps.executeUpdate();
             }
@@ -74,7 +63,7 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("Image ID cannot be null or zero.");
         }
-        String sql = "DELETE FROM ProductImage WHERE ImageId = ?";
+        String sql = "DELETE FROM ProductImage WHERE ProductImageId = ?";
         try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             int affectedRows = ps.executeUpdate();
@@ -87,7 +76,7 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
             throw new IllegalArgumentException("ImageID must be a positive integer.");
         }
 
-        String sql = "SELECT * FROM ProductImage WHERE ImageId = ?";
+        String sql = "SELECT * FROM ProductImage WHERE ProductImageId = ?";
         ProductImageDTO productImageDTO = null;
         try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -131,46 +120,14 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
 
     private ProductImageDTO extractProductImageFromResultSet(ResultSet rs) throws SQLException {
         ProductImageDTO productImageDTO = new ProductImageDTO();
-        productImageDTO.setImageId(rs.getInt("ImageId"));
+        productImageDTO.setProductImageId(rs.getInt("ProductImageId"));
         productImageDTO.setProductId(rs.getInt("ProductId"));
-        productImageDTO.setImageData(rs.getBytes("ImageData"));
-        productImageDTO.setMimeType(rs.getString("MimeType"));
-        productImageDTO.setDescription(rs.getString("Description"));
         productImageDTO.setSortOrder(rs.getInt("SortOrder"));
-
-        Timestamp createdAtTimestamp = rs.getTimestamp("CreatedAt");
-        if (createdAtTimestamp != null) {
-            productImageDTO.setCreatedAt(createdAtTimestamp.toLocalDateTime());
-        }
-
-        productImageDTO.setThumbnailData(rs.getBytes("ThumbnailData"));
-        productImageDTO.setThumbnailMimeType(rs.getString("ThumbnailMimeType"));
+        productImageDTO.setImageId(rs.getInt("ImageId"));
 
         return productImageDTO;
     }
 
-    public byte[] getImagesByProductId(Integer productId) throws SQLException {
-        if (productId == null || productId <= 0) {
-            throw new IllegalArgumentException("ProductId must be a positive integer.");
-        }
-
-        byte[] bt = null;
-        String sql = "SELECT ImageData FROM ProductImage WHERE ProductId = ? ORDER BY SortOrder, ImageId";
-
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, productId);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    bt = rs.getBytes("ImageData");
-                }
-            }
-        }
-
-        return bt;
-    }
 
     private void validateProductImage(ProductImageDTO productImageDTO) {
         if (productImageDTO == null) {
@@ -179,20 +136,8 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
         if (productImageDTO.getProductId() <= 0) {
             throw new IllegalArgumentException("ProductId must be a positive integer.");
         }
-        if (productImageDTO.getImageData() == null || productImageDTO.getImageData().length == 0) {
-            throw new IllegalArgumentException("Image data cannot be null or empty.");
-        }
-        if (productImageDTO.getMimeType() == null || productImageDTO.getMimeType().trim().isEmpty()) {
-            throw new IllegalArgumentException("MIME type cannot be null or empty.");
-        }
-        if (productImageDTO.getCreatedAt() == null) {
-            throw new IllegalArgumentException("CreatedAt timestamp cannot be null.");
-        }
-        if (productImageDTO.getThumbnailData() == null || productImageDTO.getThumbnailData().length == 0) {
-            throw new IllegalArgumentException("Thumbnail Data data cannot be null or empty.");
-        }
-        if (productImageDTO.getThumbnailMimeType() == null || productImageDTO.getThumbnailMimeType().trim().isEmpty()) {
-            throw new IllegalArgumentException("MIME type cannot be null or empty.");
+        if (productImageDTO.getImageId() <= 0) {
+            throw new IllegalArgumentException("ImageId must be a positive integer.");
         }
     }
 }
