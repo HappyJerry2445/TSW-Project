@@ -7,8 +7,8 @@
 <html lang="en">
 <head>
     <title>Il tuo carrello</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/cart.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/cart.css">
 </head>
 <body>
 <jsp:include page="/WEB-INF/components/header.jsp"/>

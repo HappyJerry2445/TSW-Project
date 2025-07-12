@@ -15,8 +15,8 @@
 <html lang="it">
 <head>
     <title><c:out value="${pageTitle}"/></title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
-    <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/error.css" type="text/css"> --%>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css" type="text/css">
+    <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/error.css" type="text/css"> --%>
     <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>

@@ -9,9 +9,9 @@
 <html lang="it">
 <head>
     <title>${pageTitle}</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/profile.css" type="text/css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/order.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/profile.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/order.css" type="text/css">
     <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
@@ -112,7 +112,7 @@
                                                          class="product-image-small"/>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <img src="${pageContext.request.contextPath}/imgs/noimage.png"
+                                                    <img src="${pageContext.request.contextPath}/images/noimage.png"
                                                          alt="Immagine non disponibile" class="product-image-small"/>
                                                 </c:otherwise>
                                             </c:choose>

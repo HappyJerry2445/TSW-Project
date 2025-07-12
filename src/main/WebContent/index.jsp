@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <title>${pageTitle}</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css" type="text/css">
     <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>

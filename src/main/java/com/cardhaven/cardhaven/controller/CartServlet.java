@@ -33,7 +33,6 @@ public class CartServlet extends HttpServlet {
             List<CartItemDetailDTO> detailedCartItems = CartManager.getDetailedCartItems(
                     request, cartDAO, cartItemDAO, productDAO, variantDAO
             );
-            log(detailedCartItems.toString());
             System.out.println(detailedCartItems);
 
             request.setAttribute("cartItems", detailedCartItems);

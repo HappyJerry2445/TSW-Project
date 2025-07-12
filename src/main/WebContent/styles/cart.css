@@ -1,0 +1,130 @@
+/* Wrapper to allow for horizontal scrolling on small screens if needed */
+.cart-table-wrapper {
+    overflow-x: auto;
+}
+
+/* --- DESKTOP TABLE STYLES --- */
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cart-table th,
+.cart-table td {
+    padding: var(--spacing-unit);
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+/*.cart-table th {*/
+/*    background-color: #f8f9fa;*/
+/*    font-weight: 600;*/
+/*    color: #555;*/
+/*    text-transform: uppercase;*/
+/*    font-size: 0.85em;*/
+/*    letter-spacing: 0.5px;*/
+/*}*/
+
+/*!* --- Column Text Alignment --- *!*/
+/*!* Product name aligned left for readability *!*/
+/*.cart-table th:first-child,*/
+/*.cart-table td[data-label="Prodotto"] {*/
+/*    text-align: left;*/
+/*}*/
+
+/*!* Price and Total aligned right, which is standard for numbers *!*/
+/*.cart-table th:nth-child(2), .cart-table td[data-label="Prezzo"],*/
+/*.cart-table th:nth-child(4), .cart-table td[data-label="Totale"] {*/
+/*    text-align: right;*/
+/*}*/
+
+/*!* Header text for the centered columns *!*/
+/*.cart-table th:nth-child(3), .cart-table th:nth-child(5) {*/
+/*    text-align: center;*/
+/*}*/
+
+/*!* --- Centering Solution --- *!*/
+/*!* This new class uses flexbox to perfectly center the forms *!*/
+/*.cell-content-wrapper {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    gap: 0.5rem; !* Provides spacing for quantity input and button *!*/
+/*    margin: 0 auto; !* Ensures the form itself is centered in the cell *!*/
+/*}*/
+
+/*!* Styling for form elements *!*/
+/*.cart-table input[type="number"] {*/
+/*    width: 60px;*/
+/*    text-align: center;*/
+/*    padding: 0.5rem;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 4px;*/
+/*}*/
+
+
+/*!* Cart footer *!*/
+/*.cart-footer {*/
+/*    text-align: right;*/
+/*    padding-top: 1.5rem;*/
+/*    margin-top: 1rem;*/
+/*    border-top: 1px solid #eee;*/
+/*}*/
+
+/*!* --- RESPONSIVE STYLES for smaller screens --- *!*/
+/*@media (max-width: 768px) {*/
+/*    .cart-table thead {*/
+/*        display: none;*/
+/*    }*/
+
+/*    .cart-table tr {*/
+/*        display: block;*/
+/*        margin-bottom: 1.5rem;*/
+/*        border: 1px solid #ddd;*/
+/*        border-radius: 8px;*/
+/*        overflow: hidden;*/
+/*    }*/
+
+/*    .cart-table td {*/
+/*        display: block;*/
+/*        text-align: right;*/
+/*        padding: 0.75rem 1rem 0.75rem 50%; !* Space for the label *!*/
+/*        position: relative;*/
+/*    }*/
+
+/*    .cart-table td:not(:last-child) {*/
+/*        border-bottom: 1px solid #eee;*/
+/*    }*/
+
+/*    .cart-table td::before {*/
+/*        content: attr(data-label);*/
+/*        position: absolute;*/
+/*        left: 1rem;*/
+/*        width: calc(50% - 2rem);*/
+/*        font-weight: bold;*/
+/*        text-align: left;*/
+/*        color: #333;*/
+/*    }*/
+
+/*    !* Make the product name a clear header for each item block *!*/
+/*    .cart-table td[data-label="Prodotto"] {*/
+/*        padding: 1rem;*/
+/*        text-align: center;*/
+/*        font-weight: bold;*/
+/*        font-size: 1.2rem;*/
+/*        background-color: #f8f9fa;*/
+/*    }*/
+
+/*    .cart-table td[data-label="Prodotto"]::before {*/
+/*        display: none; !* No "Prodotto:" label needed here *!*/
+/*    }*/
+
+/*    !* Adjust the forms to align to the right on mobile *!*/
+/*    .cell-content-wrapper {*/
+/*        justify-content: flex-end;*/
+/*    }*/
+
+/*    .cart-footer {*/
+/*        text-align: center; !* Center checkout button on mobile *!*/
+/*    }*/
+/*}*/
