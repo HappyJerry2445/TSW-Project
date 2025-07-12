@@ -93,6 +93,12 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </h5>
+                                            <p class="product-info">
+                                                Quantità: <strong>${item.quantity}</strong><br>
+                                                Prezzo unitario: <strong>€ <fmt:formatNumber
+                                                    value="${item.unitPrice}" type="number" minFractionDigits="2"
+                                                    maxFractionDigits="2"/></strong>
+                                            </p>
                                         </div>
                                         <div>
                                         </div>
