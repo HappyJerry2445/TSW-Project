@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> <%-- Add this for currency formatting --%>
 
 <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 
@@ -24,6 +25,12 @@
                     <p class="text-center">Il tuo carrello è vuoto.</p>
                 </c:when>
                 <c:otherwise>
+                    <%-- Calculate Grand Total --%>
+                    <c:set var="grandTotal" value="0"/>
+                    <c:forEach var="item" items="${cartItems}">
+                        <c:set var="grandTotal" value="${grandTotal + (item.price * item.quantity)}"/>
+                    </c:forEach>
+
                     <div class="cart-table-wrapper">
                         <table class="cart-table">
                             <thead>
@@ -39,11 +46,11 @@
                             <c:forEach var="item" items="${cartItems}">
                                 <tr>
                                     <td data-label="Prodotto">${item.productName}</td>
-                                    <td data-label="Prezzo">€${item.price}</td>
+                                    <td data-label="Prezzo"><fmt:formatNumber value="${item.price}" type="currency"
+                                                                              currencyCode="EUR"/></td>
                                     <td data-label="Quantità">
-                                            <%-- Add class here --%>
                                         <form class="cell-content-wrapper"
-                                              action="${pageContext.request.contextPath}/common/cart/update"
+                                              action="${pageContext.request.contextPath}/cart/update"
                                               method="post">
                                             <input type="hidden" name="cartId" value="${item.cartId}">
                                             <input type="number" name="quantity" value="${item.quantity}" min="1"
@@ -51,11 +58,11 @@
                                             <button type="submit" class="btn btn-update btn-sm">Aggiorna</button>
                                         </form>
                                     </td>
-                                    <td data-label="Totale">€${item.price * item.quantity}</td>
+                                    <td data-label="Totale"><fmt:formatNumber value="${item.price * item.quantity}"
+                                                                              type="currency" currencyCode="EUR"/></td>
                                     <td data-label="Azioni">
-                                            <%-- And add class here --%>
                                         <form class="cell-content-wrapper"
-                                              action="${pageContext.request.contextPath}/common/cart/delete"
+                                              action="${pageContext.request.contextPath}/cart/delete"
                                               method="post">
                                             <input type="hidden" name="cartId" value="${item.cartId}">
                                             <button type="submit" class="btn btn-danger btn-sm">Rimuovi</button>
@@ -68,6 +75,10 @@
                     </div>
 
                     <div class="cart-footer">
+                        <div class="cart-total">
+                            <strong>Totale Complessivo: </strong>
+                            <fmt:formatNumber value="${grandTotal}" type="currency" currencyCode="EUR"/>
+                        </div>
                         <a href="${pageContext.request.contextPath}/common/checkout" class="btn btn-primary">Procedi al
                             checkout</a>
                     </div>
