@@ -11,14 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
-/**
- * Manages all cart operations, including retrieving detailed cart items for display.
- */
 public final class CartManager {
 
     private static final String GUEST_CART_SESSION_KEY = "guestCart";
@@ -27,17 +21,67 @@ public final class CartManager {
     }
 
     /**
-     * Retrieves a fully detailed list of cart items for display purposes.
-     * This method is the primary entry point for servlets needing to display the cart.
-     * It fetches products and variants to build a list of CartItemDetailDTOs.
+     * Adds an item to the cart. Handles both guest and user carts.
+     * If the item already exists, it increases the quantity.
      *
-     * @param request     The current HttpServletRequest.
+     * @param request     The HttpServletRequest to access the session.
      * @param cartDAO     The DAO for cart data.
      * @param cartItemDAO The DAO for cart item data.
-     * @param productDAO  The DAO for product data.
-     * @return A list of detailed cart items ready for the view.
+     * @param productId   The ID of the product to add.
+     * @param quantity    The quantity to add.
      * @throws SQLException If a database error occurs.
      */
+    public static void addItem(HttpServletRequest request, CartDAO cartDAO, CartItemDAO cartItemDAO, ProductDAO productDAO, int productId, int quantity) throws SQLException, IllegalArgumentException {
+        ProductDTO product = productDAO.getById(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("Product not found.");
+        }
+
+        HttpSession session = request.getSession();
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId != null) {
+            CartDTO userCart = getOrCreateUserCart(userId, cartDAO);
+            Collection<CartItemDTO> userCartItems = cartItemDAO.getByCartId(userCart.getCartId(), null);
+
+            Optional<CartItemDTO> existingItemOpt = userCartItems.stream()
+                    .filter(item -> item.getProductId() == productId)
+                    .findFirst();
+
+            if (existingItemOpt.isPresent()) {
+                CartItemDTO existingItem = existingItemOpt.get();
+                existingItem.setQuantity(existingItem.getQuantity() + quantity);
+                cartItemDAO.save(existingItem);
+            } else {
+                CartItemDTO newItem = new CartItemDTO();
+                newItem.setCartId(userCart.getCartId());
+                newItem.setProductId(productId);
+                newItem.setQuantity(quantity);
+                cartItemDAO.save(newItem);
+            }
+        } else {
+            Collection<CartItemDTO> guestCart = getGuestCart(session);
+            Optional<CartItemDTO> existingItemOpt = guestCart.stream()
+                    .filter(item -> item.getProductId() == productId)
+                    .findFirst();
+
+            if (existingItemOpt.isPresent()) {
+                CartItemDTO existingItem = existingItemOpt.get();
+                existingItem.setQuantity(existingItem.getQuantity() + quantity);
+            } else {
+                CartItemDTO newItem = new CartItemDTO();
+                newItem.setProductId(productId);
+                newItem.setQuantity(quantity);
+                // For guests, we'll use the productId as the cartItemId for session management.
+                // This allows update/delete operations to work on the guest cart.
+                newItem.setCartItemId(productId);
+                guestCart.add(newItem);
+            }
+        }
+    }
+
+    // Previous methods like getDetailedCartItems, updateItemQuantity, deleteItem, etc. would be here...
+
     public static List<CartItemDetailDTO> getDetailedCartItems(HttpServletRequest request, CartDAO cartDAO, CartItemDAO cartItemDAO, ProductDAO productDAO) throws SQLException {
         Collection<CartItemDTO> rawItems = getCartItems(request, cartDAO, cartItemDAO);
         List<CartItemDetailDTO> detailedItems = new ArrayList<>();
@@ -119,6 +163,7 @@ public final class CartManager {
             }
         } else {
             Collection<CartItemDTO> guestCart = getGuestCart(session);
+            // For guests, cartItemId is the productId
             guestCart.removeIf(item -> item.getCartItemId() == cartItemId);
         }
     }
@@ -145,12 +190,12 @@ public final class CartManager {
             Collection<CartItemDTO> userCartItems = cartItemDAO.getByCartId(userCart.getCartId(), null);
 
             for (CartItemDTO guestItem : guestCart) {
-                CartItemDTO existingItem = userCartItems.stream()
-                        .filter(item -> Objects.equals(item.getProductId(), guestItem.getProductId()))
-                        .findFirst()
-                        .orElse(null);
+                Optional<CartItemDTO> existingItemOpt = userCartItems.stream()
+                        .filter(item -> item.getProductId() == guestItem.getProductId())
+                        .findFirst();
 
-                if (existingItem != null) {
+                if (existingItemOpt.isPresent()) {
+                    CartItemDTO existingItem = existingItemOpt.get();
                     existingItem.setQuantity(existingItem.getQuantity() + guestItem.getQuantity());
                     cartItemDAO.save(existingItem);
                 } else {
