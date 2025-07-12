@@ -20,7 +20,7 @@ public class DeleteCartServlet extends HttpServlet {
         String cartItemIdParam = request.getParameter("cartItemId");
 
         if (cartItemIdParam == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing cart item ID.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Cart item ID mancante.");
             return;
         }
 
@@ -32,12 +32,12 @@ public class DeleteCartServlet extends HttpServlet {
 
             CartManager.deleteItem(request, cartDAO, cartItemDAO, cartItemId);
 
-            response.sendRedirect(request.getContextPath() + "/common/cart");
+            response.sendRedirect(request.getContextPath() + "/cart");
 
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid cart item ID format.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Formato del parametro non valido. Cart item ID: " + cartItemIdParam);
         } catch (SQLException e) {
-            throw new ServletException("Database error while deleting from cart", e);
+            throw new ServletException("Errore del database", e);
         }
     }
 }
