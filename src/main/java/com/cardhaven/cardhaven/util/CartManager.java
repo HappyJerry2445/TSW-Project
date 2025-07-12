@@ -96,7 +96,7 @@ public final class CartManager {
                 detailDTO.setQuantity(item.getQuantity());
                 detailDTO.setProductId(item.getProductId());
                 detailDTO.setProductName(product.getProductName());
-                detailDTO.setPrice(product.getBasePrice());
+                detailDTO.setPrice(product.getCurrentPrice());
                 detailedItems.add(detailDTO);
             }
         }
