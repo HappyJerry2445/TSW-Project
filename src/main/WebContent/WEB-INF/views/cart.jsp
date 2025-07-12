@@ -79,7 +79,7 @@
                             <strong>Totale Complessivo: </strong>
                             <fmt:formatNumber value="${grandTotal}" type="currency" currencyCode="EUR"/>
                         </div>
-                        <a href="${pageContext.request.contextPath}/common/checkout" class="btn btn-primary">Procedi al
+                        <a href="${pageContext.request.contextPath}/common/checkout/shipping" class="btn btn-primary">Procedi al
                             checkout</a>
                     </div>
                 </c:otherwise>

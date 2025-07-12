@@ -146,7 +146,7 @@
 
             <form action="${pageContext.request.contextPath}/common/checkout/confirm" method="post">
                 <div class="profile-actions mt-3">
-                    <a href="#" class="btn btn-secondary">Torna al Carrello</a>
+                    <a href="${pageContext.request.contextPath}/cart" class="btn btn-secondary">Torna al Carrello</a>
                     <button type="submit" class="btn btn-primary">Conferma Ordine</button>
                 </div>
             </form>
