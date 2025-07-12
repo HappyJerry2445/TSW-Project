@@ -8,7 +8,6 @@ public class OrderItemDTO implements Serializable {
     private int orderItemID;
     private int orderID;
     private Integer productID;
-    private Integer variantID;
     private String productSnapshot;
     private int quantity;
     private BigDecimal unitPrice;
@@ -16,11 +15,10 @@ public class OrderItemDTO implements Serializable {
     public OrderItemDTO() {
     }
 
-    public OrderItemDTO(int orderItemID, int orderID, Integer productID, Integer variantID, int quantity, BigDecimal unitPrice) {
+    public OrderItemDTO(int orderItemID, int orderID, Integer productID, int quantity, BigDecimal unitPrice) {
         this.orderItemID = orderItemID;
         this.orderID = orderID;
         this.productID = productID;
-        this.variantID = variantID;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
     }
@@ -57,14 +55,6 @@ public class OrderItemDTO implements Serializable {
         this.productID = productID;
     }
 
-    public Integer getVariantID() {
-        return variantID;
-    }
-
-    public void setVariantID(Integer variantID) {
-        this.variantID = variantID;
-    }
-
     public int getQuantity() {
         return quantity;
     }
@@ -91,13 +81,12 @@ public class OrderItemDTO implements Serializable {
                 orderID == that.orderID &&
                 quantity == that.quantity &&
                 Objects.equals(productID, that.productID) &&
-                Objects.equals(variantID, that.variantID) &&
                 Objects.equals(unitPrice, that.unitPrice);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderItemID, orderID, productID, variantID, quantity, unitPrice);
+        return Objects.hash(orderItemID, orderID, productID, quantity, unitPrice);
     }
 
     @Override
@@ -106,7 +95,6 @@ public class OrderItemDTO implements Serializable {
                 "orderItemID=" + orderItemID +
                 ", orderID=" + orderID +
                 ", productID=" + productID +
-                ", variantID=" + variantID +
                 ", quantity=" + quantity +
                 ", unitPrice=" + unitPrice +
                 '}';

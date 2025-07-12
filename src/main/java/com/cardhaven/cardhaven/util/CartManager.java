@@ -3,12 +3,13 @@ package com.cardhaven.cardhaven.util;
 import com.cardhaven.cardhaven.model.dao.CartDAO;
 import com.cardhaven.cardhaven.model.dao.CartItemDAO;
 import com.cardhaven.cardhaven.model.dao.ProductDAO;
-import com.cardhaven.cardhaven.model.dao.ProductVariantDAO;
-import com.cardhaven.cardhaven.model.dto.*;
+import com.cardhaven.cardhaven.model.dto.CartDTO;
+import com.cardhaven.cardhaven.model.dto.CartItemDTO;
+import com.cardhaven.cardhaven.model.dto.CartItemDetailDTO;
+import com.cardhaven.cardhaven.model.dto.ProductDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,17 +35,15 @@ public final class CartManager {
      * @param cartDAO     The DAO for cart data.
      * @param cartItemDAO The DAO for cart item data.
      * @param productDAO  The DAO for product data.
-     * @param variantDAO  The DAO for product variant data.
      * @return A list of detailed cart items ready for the view.
      * @throws SQLException If a database error occurs.
      */
-    public static List<CartItemDetailDTO> getDetailedCartItems(HttpServletRequest request, CartDAO cartDAO, CartItemDAO cartItemDAO, ProductDAO productDAO, ProductVariantDAO variantDAO) throws SQLException {
+    public static List<CartItemDetailDTO> getDetailedCartItems(HttpServletRequest request, CartDAO cartDAO, CartItemDAO cartItemDAO, ProductDAO productDAO) throws SQLException {
         Collection<CartItemDTO> rawItems = getCartItems(request, cartDAO, cartItemDAO);
         List<CartItemDetailDTO> detailedItems = new ArrayList<>();
 
         for (CartItemDTO item : rawItems) {
             ProductDTO product = productDAO.getById(item.getProductId());
-            ProductVariantDTO variant = (item.getVariantId() != null) ? variantDAO.getById(item.getVariantId()) : null;
 
             if (product != null) {
                 CartItemDetailDTO detailDTO = new CartItemDetailDTO();
@@ -52,12 +51,8 @@ public final class CartManager {
                 detailDTO.setCartId(item.getCartId());
                 detailDTO.setQuantity(item.getQuantity());
                 detailDTO.setProductId(item.getProductId());
-                detailDTO.setVariantId(item.getVariantId());
                 detailDTO.setProductName(product.getProductName());
-                detailDTO.setPrice(new BigDecimal(product.getBasePrice()));
-                if (variant != null) {
-                    detailDTO.setPrice(new BigDecimal(product.getBasePrice() + variant.getAdditionalPrice()));
-                }
+                detailDTO.setPrice(product.getBasePrice());
                 detailedItems.add(detailDTO);
             }
         }
@@ -151,7 +146,7 @@ public final class CartManager {
 
             for (CartItemDTO guestItem : guestCart) {
                 CartItemDTO existingItem = userCartItems.stream()
-                        .filter(item -> Objects.equals(item.getVariantId(), guestItem.getVariantId()))
+                        .filter(item -> Objects.equals(item.getProductId(), guestItem.getProductId()))
                         .findFirst()
                         .orElse(null);
 

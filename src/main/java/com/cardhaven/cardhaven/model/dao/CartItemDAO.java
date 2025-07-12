@@ -9,10 +9,8 @@ import java.util.*;
 
 public class CartItemDAO implements GenericDAO<CartItemDTO, Integer> {
 
-    // Columns in the CartItem table: CartItemID, CartID, ProductID, VartiantID, Quantity, AddedAT
-    // Note: Schema has "VartiantID" and "AddedAT", DTO has "variantId" and "addedAt"
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
-            "CartItemID", "CartID", "ProductID", "VartiantID", "Quantity", "AddedAT"
+            "CartItemID", "CartID", "ProductID", "Quantity", "AddedAT"
     );
     private static final String DEFAULT_ORDER_COLUMN = "CartItemID";
 
@@ -48,19 +46,13 @@ public class CartItemDAO implements GenericDAO<CartItemDTO, Integer> {
         // Set AddedAt for new cart items
         if (cartItem.getCartItemId() == 0) { // New cart item (INSERT)
             cartItem.setAddedAt(LocalDateTime.now());
-            // Schema uses VartiantID and AddedAT
-            sql = "INSERT INTO CartItem (CartID, ProductID, VartiantID, Quantity, AddedAT) VALUES (?, ?, ?, ?, ?)";
+            sql = "INSERT INTO CartItem (CartID, ProductID, Quantity, AddedAT) VALUES (?, ?, ?, ?)";
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setInt(1, cartItem.getCartId());
                 ps.setInt(2, cartItem.getProductId());
-                if (cartItem.getVariantId() != null && cartItem.getVariantId() != 0) {
-                    ps.setInt(3, cartItem.getVariantId());
-                } else {
-                    ps.setNull(3, java.sql.Types.INTEGER);
-                }
-                ps.setInt(4, cartItem.getQuantity());
-                ps.setTimestamp(5, Timestamp.valueOf(cartItem.getAddedAt()));
+                ps.setInt(3, cartItem.getQuantity());
+                ps.setTimestamp(4, Timestamp.valueOf(cartItem.getAddedAt()));
 
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
@@ -75,22 +67,14 @@ public class CartItemDAO implements GenericDAO<CartItemDTO, Integer> {
                     }
                 }
             }
-        } else { // Existing cart item (UPDATE)
-            // AddedAt is generally not updated for an existing item, but quantity or variant might change.
-            // If AddedAt needs to be updated, set it before this block: cartItem.setAddedAt(LocalDateTime.now());
-            // Schema uses VartiantID
-            sql = "UPDATE CartItem SET CartID = ?, ProductID = ?, VartiantID = ?, Quantity = ? WHERE CartItemID = ?";
+        } else {
+            sql = "UPDATE CartItem SET CartID = ?, ProductID = ?, Quantity = ? WHERE CartItemID = ?";
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setInt(1, cartItem.getCartId());
                 ps.setInt(2, cartItem.getProductId());
-                if (cartItem.getVariantId() != null && cartItem.getVariantId() != 0) {
-                    ps.setInt(3, cartItem.getVariantId());
-                } else {
-                    ps.setNull(3, java.sql.Types.INTEGER);
-                }
-                ps.setInt(4, cartItem.getQuantity());
-                ps.setInt(5, cartItem.getCartItemId());
+                ps.setInt(3, cartItem.getQuantity());
+                ps.setInt(4, cartItem.getCartItemId());
 
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
@@ -134,8 +118,7 @@ public class CartItemDAO implements GenericDAO<CartItemDTO, Integer> {
         if (cartItemId == null || cartItemId <= 0) {
             throw new IllegalArgumentException("CartItemID must be a positive integer.");
         }
-        // Schema uses VartiantID and AddedAT
-        String sql = "SELECT CartItemID, CartID, ProductID, VartiantID, Quantity, AddedAT FROM CartItem WHERE CartItemID = ?";
+        String sql = "SELECT CartItemID, CartID, ProductID, Quantity, AddedAT FROM CartItem WHERE CartItemID = ?";
         CartItemDTO cartItem = null;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -162,8 +145,7 @@ public class CartItemDAO implements GenericDAO<CartItemDTO, Integer> {
             throw new IllegalArgumentException("CartID must be a positive integer.");
         }
         Collection<CartItemDTO> cartItems = new ArrayList<>();
-        // Schema uses VartiantID and AddedAT
-        StringBuilder sql = new StringBuilder("SELECT CartItemID, CartID, ProductID, VartiantID, Quantity, AddedAT FROM CartItem WHERE CartID = ?");
+        StringBuilder sql = new StringBuilder("SELECT CartItemID, CartID, ProductID, Quantity, AddedAT FROM CartItem WHERE CartID = ?");
 
         String actualOrderColumn = DEFAULT_ORDER_COLUMN; // Default ordering for items within a cart
         if (order != null && !order.trim().isEmpty()) {
@@ -201,8 +183,7 @@ public class CartItemDAO implements GenericDAO<CartItemDTO, Integer> {
     @Override
     public Collection<CartItemDTO> getAll(String order) throws SQLException {
         Collection<CartItemDTO> cartItems = new ArrayList<>();
-        // Schema uses VartiantID and AddedAT
-        StringBuilder sql = new StringBuilder("SELECT CartItemID, CartID, ProductID, VartiantID, Quantity, AddedAT FROM CartItem");
+        StringBuilder sql = new StringBuilder("SELECT CartItemID, CartID, ProductID, Quantity, AddedAT FROM CartItem");
 
         String actualOrderColumn = DEFAULT_ORDER_COLUMN;
         if (order != null && !order.trim().isEmpty()) {
@@ -243,13 +224,6 @@ public class CartItemDAO implements GenericDAO<CartItemDTO, Integer> {
         item.setCartId(rs.getInt("CartID"));
         item.setProductId(rs.getInt("ProductID"));
 
-        // Schema uses "VartiantID" (potential typo for VariantID)
-        int variantId = rs.getInt("VartiantID");
-        if (rs.wasNull()) {
-            item.setVariantId(null);
-        } else {
-            item.setVariantId(variantId);
-        }
 
         item.setQuantity(rs.getInt("Quantity"));
         // Schema uses "AddedAT" (potential typo for AddedAt)

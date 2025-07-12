@@ -9,7 +9,7 @@ import java.util.*;
 public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
 
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
-            "OrderItemID", "OrderID", "ProductID", "VariantID", "Quantity", "UnitPrice"
+            "OrderItemID", "OrderID", "ProductID", "Quantity", "UnitPrice"
     );
     private static final String DEFAULT_ORDER_COLUMN = "OrderItemID";
 
@@ -28,7 +28,7 @@ public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
 
         String sql;
         if (orderItemDTO.getOrderItemID() == 0) {
-            sql = "INSERT INTO OrderItem (OrderID, ProductID, VariantID, ProductSnapshot,  Quantity, UnitPrice) VALUES (?, ?, ?, ?, ?, ?)";
+            sql = "INSERT INTO OrderItem (OrderID, ProductID, ProductSnapshot,  Quantity, UnitPrice) VALUES (?, ?, ?, ?, ?)";
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setInt(1, orderItemDTO.getOrderID());
@@ -37,15 +37,10 @@ public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
                 } else {
                     ps.setNull(2, java.sql.Types.INTEGER);
                 }
-                if (orderItemDTO.getVariantID() != null) {
-                    ps.setInt(3, orderItemDTO.getVariantID());
-                } else {
-                    ps.setNull(3, java.sql.Types.INTEGER);
-                }
-                ps.setString(4, orderItemDTO.getProductSnapshot());
+                ps.setString(3, orderItemDTO.getProductSnapshot());
 
-                ps.setInt(5, orderItemDTO.getQuantity());
-                ps.setBigDecimal(6, orderItemDTO.getUnitPrice());
+                ps.setInt(4, orderItemDTO.getQuantity());
+                ps.setBigDecimal(5, orderItemDTO.getUnitPrice());
 
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
@@ -61,7 +56,7 @@ public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
                 }
             }
         } else {
-            sql = "UPDATE OrderItem SET OrderID = ?, ProductID = ?, VariantID = ?, ProductSnapshot = ?, Quantity = ?, UnitPrice = ? WHERE OrderItemID = ?";
+            sql = "UPDATE OrderItem SET OrderID = ?, ProductID = ?, ProductSnapshot = ?, Quantity = ?, UnitPrice = ? WHERE OrderItemID = ?";
             try (Connection connection = dataSource.getConnection();
                  PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setInt(1, orderItemDTO.getOrderID());
@@ -70,15 +65,10 @@ public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
                 } else {
                     ps.setNull(2, java.sql.Types.INTEGER);
                 }
-                if (orderItemDTO.getVariantID() != null) {
-                    ps.setInt(3, orderItemDTO.getVariantID());
-                } else {
-                    ps.setNull(3, java.sql.Types.INTEGER);
-                }
-                ps.setString(4, orderItemDTO.getProductSnapshot());
-                ps.setInt(5, orderItemDTO.getQuantity());
-                ps.setBigDecimal(6, orderItemDTO.getUnitPrice());
-                ps.setInt(7, orderItemDTO.getOrderItemID());
+                ps.setString(3, orderItemDTO.getProductSnapshot());
+                ps.setInt(4, orderItemDTO.getQuantity());
+                ps.setBigDecimal(5, orderItemDTO.getUnitPrice());
+                ps.setInt(6, orderItemDTO.getOrderItemID());
 
                 ps.executeUpdate();
             }
@@ -106,7 +96,7 @@ public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
             throw new IllegalArgumentException("OrderItemID must be a positive integer.");
         }
 
-        String sql = "SELECT OrderItemID, OrderID, ProductID, VariantID, ProductSnapshot, Quantity, UnitPrice FROM OrderItem WHERE OrderItemID = ?";
+        String sql = "SELECT OrderItemID, OrderID, ProductID, ProductSnapshot, Quantity, UnitPrice FROM OrderItem WHERE OrderItemID = ?";
         OrderItemDTO orderItemDTO = null;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -123,7 +113,7 @@ public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
     @Override
     public Collection<OrderItemDTO> getAll(String order) throws SQLException {
         Collection<OrderItemDTO> orderItems = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT OrderItemID, OrderID, ProductID, VariantID, ProductSnapshot, Quantity, UnitPrice, AddedAT FROM OrderItem");
+        StringBuilder sql = new StringBuilder("SELECT OrderItemID, OrderID, ProductID, ProductSnapshot, Quantity, UnitPrice, AddedAT FROM OrderItem");
 
         String actualOrderColumn = DEFAULT_ORDER_COLUMN;
         if (order != null && !order.trim().isEmpty()) {
@@ -163,12 +153,6 @@ public class OrderItemDAO implements GenericDAO<OrderItemDTO, Integer> {
             orderItemDTO.setProductID(productID);
         }
 
-        int variantID = rs.getInt("VariantID");
-        if (rs.wasNull()) {
-            orderItemDTO.setVariantID(null);
-        } else {
-            orderItemDTO.setVariantID(variantID);
-        }
         orderItemDTO.setProductSnapshot(rs.getString("ProductSnapshot"));
 
         orderItemDTO.setQuantity(rs.getInt("Quantity"));

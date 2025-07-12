@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 /**
  * A detailed view model for a cart item.
- * This class combines information from CartItemDTO, ProductDTO, and ProductVariantDTO
+ * This class combines information from CartItemDTO, ProductDTO
  * to provide all necessary details for displaying a single item in the cart view.
  */
 public class CartItemDetailDTO implements Serializable {
@@ -14,9 +14,8 @@ public class CartItemDetailDTO implements Serializable {
     private int cartId;
     private int quantity;
     private int productId;
-    private Integer variantId;
     private String productName;
-    private BigDecimal price; // Using BigDecimal is best practice for monetary values
+    private BigDecimal price;
 
     public CartItemDetailDTO() {
     }
@@ -55,13 +54,6 @@ public class CartItemDetailDTO implements Serializable {
         this.productId = productId;
     }
 
-    public Integer getVariantId() {
-        return variantId;
-    }
-
-    public void setVariantId(Integer variantId) {
-        this.variantId = variantId;
-    }
 
     public String getProductName() {
         return productName;

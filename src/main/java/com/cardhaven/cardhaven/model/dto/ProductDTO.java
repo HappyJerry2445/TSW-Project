@@ -1,6 +1,7 @@
 package com.cardhaven.cardhaven.model.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -9,8 +10,8 @@ public class ProductDTO implements Serializable {
     private int productId;
     private String sku;
     private String productName;
-    private double basePrice;
-    private double currentPrice;
+    private BigDecimal basePrice;
+    private BigDecimal currentPrice;
     private int stockQuantity;
     private ProductType productType;
     private LocalDateTime createdAt;
@@ -21,7 +22,7 @@ public class ProductDTO implements Serializable {
     }
 
 
-    public ProductDTO(int productId, String sku, String productName, double basePrice, double currentPrice, int stockQuantity, ProductType productType, LocalDateTime createdAt, LocalDateTime lastUpdated, boolean isActive) {
+    public ProductDTO(int productId, String sku, String productName, BigDecimal basePrice, BigDecimal currentPrice, int stockQuantity, ProductType productType, LocalDateTime createdAt, LocalDateTime lastUpdated, boolean isActive) {
         this.productId = productId;
         this.sku = sku;
         this.productName = productName;
@@ -58,19 +59,19 @@ public class ProductDTO implements Serializable {
         this.productName = productName;
     }
 
-    public double getBasePrice() {
+    public BigDecimal getBasePrice() {
         return basePrice;
     }
 
-    public void setBasePrice(double basePrice) {
+    public void setBasePrice(BigDecimal basePrice) {
         this.basePrice = basePrice;
     }
 
-    public double getCurrentPrice() {
+    public BigDecimal getCurrentPrice() {
         return currentPrice;
     }
 
-    public void setCurrentPrice(double currentPrice) {
+    public void setCurrentPrice(BigDecimal currentPrice) {
         this.currentPrice = currentPrice;
     }
 
@@ -135,7 +136,7 @@ public class ProductDTO implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ProductDTO productDTO = (ProductDTO) o;
-        return productId == productDTO.productId && Double.compare(basePrice, productDTO.basePrice) == 0 && Double.compare(currentPrice, productDTO.currentPrice) == 0 && stockQuantity == productDTO.stockQuantity && isActive == productDTO.isActive && Objects.equals(sku, productDTO.sku) && Objects.equals(productName, productDTO.productName) && productType == productDTO.productType && Objects.equals(createdAt, productDTO.createdAt) && Objects.equals(lastUpdated, productDTO.lastUpdated);
+        return productId == productDTO.productId && basePrice.compareTo(productDTO.basePrice) == 0 && currentPrice.compareTo(productDTO.currentPrice) == 0 && stockQuantity == productDTO.stockQuantity && isActive == productDTO.isActive && Objects.equals(sku, productDTO.sku) && Objects.equals(productName, productDTO.productName) && productType == productDTO.productType && Objects.equals(createdAt, productDTO.createdAt) && Objects.equals(lastUpdated, productDTO.lastUpdated);
     }
 
     public enum ProductType {

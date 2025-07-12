@@ -1,219 +1,307 @@
 CREATE DATABASE CardHaven;
 USE CardHaven;
-CREATE TABLE "User"
+
+create table AttributeDefinition
 (
-    UserID       INT PRIMARY KEY AUTO_INCREMENT,
-    FirstName    VARCHAR(255)        NOT NULL,
-    LastName     VARCHAR(255)        NOT NULL,
-    Email        VARCHAR(255) UNIQUE NOT NULL,
-    PasswordHash VARCHAR(255)        NOT NULL, -- Per Argon2id
-    CreatedAt    TIMESTAMP                               DEFAULT CURRENT_TIMESTAMP,
-    LastLogin    TIMESTAMP,
-    Role         ENUM ('Customer', 'Admin', 'Moderator') DEFAULT 'Customer',
-    INDEX idx_email (Email)
+    AttributeID   int auto_increment
+        primary key,
+    AttributeName varchar(255)                                 not null,
+    DataType      enum ('String', 'Number', 'Boolean', 'Date') not null,
+    ApplicableTo  enum ('Card', 'Accessory', 'All')            not null,
+    constraint AttributeName
+        unique (AttributeName)
 );
 
-CREATE TABLE Address
+create table Category
 (
-    AddressID     INT PRIMARY KEY AUTO_INCREMENT,
-    UserID        INT                          NOT NULL,
-    StreetAddress TEXT                         NOT NULL,
-    City          VARCHAR(100)                 NOT NULL,
-    State         VARCHAR(100),
-    PostalCode    VARCHAR(20)                  NOT NULL,
-    Country       VARCHAR(100)                 NOT NULL,
-    AddressType   ENUM ('Shipping', 'Billing') NOT NULL,
-    IsDefault     BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (UserID) REFERENCES "User" (UserID) ON DELETE CASCADE,
-    INDEX idx_user_address (UserID, AddressType)
+    CategoryID       int auto_increment
+        primary key,
+    CategoryName     varchar(255)                          not null,
+    ParentCategoryID int                                   null,
+    CategoryType     enum ('Card', 'Accessory', 'Generic') not null,
+    Description      text                                  null,
+    constraint unq_category
+        unique (CategoryName, CategoryType),
+    constraint Category_ibfk_1
+        foreign key (ParentCategoryID) references Category (CategoryID)
+            on delete set null
 );
 
-CREATE TABLE Category
+create index ParentCategoryID
+    on Category (ParentCategoryID);
+
+create table OrderAddress
 (
-    CategoryID       INT PRIMARY KEY AUTO_INCREMENT,
-    CategoryName     VARCHAR(255)                          NOT NULL,
-    ParentCategoryID INT,
-    CategoryType     ENUM ('Card', 'Accessory', 'Generic') NOT NULL,
-    Description      TEXT,
-    FOREIGN KEY (ParentCategoryID) REFERENCES Category (CategoryID) ON DELETE SET NULL,
-    UNIQUE KEY unq_category (CategoryName, CategoryType)
+    OrderAddressID int auto_increment
+        primary key,
+    StreetAddress  text         not null,
+    City           varchar(100) not null,
+    State          varchar(100) null,
+    PostalCode     varchar(20)  not null,
+    Country        varchar(100) not null
 );
 
-CREATE TABLE Product
+create table Product
 (
-    ProductID     INT PRIMARY KEY AUTO_INCREMENT,
-    SKU           VARCHAR(50) UNIQUE                               NOT NULL,
-    ProductName   VARCHAR(255)                                     NOT NULL,
-    BasePrice     DECIMAL(10, 2)                                   NOT NULL CHECK (BasePrice >= 0),
-    CurrentPrice  DECIMAL(10, 2)                                   NOT NULL CHECK (CurrentPrice >= 0),
-    StockQuantity INT                                              NOT NULL DEFAULT 0 CHECK (StockQuantity >= 0),
-    ProductType   ENUM ('TradingCard', 'Accessory', 'BoosterPack') NOT NULL,
-    CreatedAt     TIMESTAMP                                                 DEFAULT CURRENT_TIMESTAMP,
-    LastUpdated   TIMESTAMP                                                 DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    IsActive      BOOLEAN                                                   DEFAULT TRUE,
-    INDEX idx_product_type (ProductType),
-    INDEX idx_sku (SKU)
+    ProductID     int auto_increment
+        primary key,
+    SKU           varchar(50)                                      not null,
+    ProductName   varchar(255)                                     not null,
+    BasePrice     decimal(10, 2)                                   not null,
+    CurrentPrice  decimal(10, 2)                                   not null,
+    StockQuantity int        default 0                             not null,
+    ProductType   enum ('TradingCard', 'Accessory', 'BoosterPack') not null,
+    CreatedAt     timestamp  default CURRENT_TIMESTAMP             null,
+    LastUpdated   timestamp  default CURRENT_TIMESTAMP             null on update CURRENT_TIMESTAMP,
+    IsActive      tinyint(1) default 1                             null,
+    constraint SKU
+        unique (SKU),
+    check (`BasePrice` >= 0),
+    check (`CurrentPrice` >= 0),
+    check (`StockQuantity` >= 0)
 );
 
-CREATE TABLE TradingCard
+create table Accessory
 (
-    CardID        INT PRIMARY KEY,
-    CardSet       VARCHAR(100)                                            NOT NULL,
-    CardNumber    VARCHAR(50)                                             NOT NULL,
-    Rarity        ENUM ('Common', 'Uncommon', 'Rare', 'Mythic', 'Secret') NOT NULL,
-    CardCondition ENUM ('Mint', 'Near Mint', 'Lightly Played', 'Moderately Played', 'Heavily Played'),
-    CardText      TEXT,
-    Artist        VARCHAR(100),
-    YearPublished YEAR,
-    FOREIGN KEY (CardID) REFERENCES Product (ProductID) ON DELETE CASCADE,
-    UNIQUE KEY unq_card_identifier (CardSet, CardNumber)
+    AccessoryID   int                                                      not null
+        primary key,
+    AccessoryType enum ('Sleeves', 'Binders', 'Dice', 'Playmats', 'Boxes') not null,
+    Material      varchar(100)                                             null,
+    Color         varchar(50)                                              null,
+    Dimensions    varchar(100)                                             null,
+    Compatibility text                                                     null,
+    constraint Accessory_ibfk_1
+        foreign key (AccessoryID) references Product (ProductID)
+            on delete cascade
 );
 
-CREATE TABLE Accessory
+create index idx_product_type
+    on Product (ProductType);
+
+create index idx_sku
+    on Product (SKU);
+
+create table ProductAttribute
 (
-    AccessoryID   INT PRIMARY KEY,
-    AccessoryType ENUM ('Sleeves', 'Binders', 'Dice', 'Playmats', 'Boxes') NOT NULL,
-    Material      VARCHAR(100),
-    Color         VARCHAR(50),
-    Dimensions    VARCHAR(100),
-    Compatibility TEXT,
-    FOREIGN KEY (AccessoryID) REFERENCES Product (ProductID) ON DELETE CASCADE
+    ProductID   int  not null,
+    AttributeID int  not null,
+    Value       text not null,
+    primary key (ProductID, AttributeID),
+    constraint ProductAttribute_ibfk_1
+        foreign key (ProductID) references Product (ProductID)
+            on delete cascade,
+    constraint ProductAttribute_ibfk_2
+        foreign key (AttributeID) references AttributeDefinition (AttributeID)
+            on delete cascade
 );
 
-CREATE TABLE ProductVariant
+create index AttributeID
+    on ProductAttribute (AttributeID);
+
+create table ProductCategory
 (
-    VariantID       INT PRIMARY KEY AUTO_INCREMENT,
-    ProductID       INT  NOT NULL,
-    VariantName     VARCHAR(255),
-    Attributes      JSON NOT NULL, -- Es: {"color": "red", "size": "XL"}
-    AdditionalPrice DECIMAL(10, 2) DEFAULT 0,
-    Stock           INT  NOT NULL  DEFAULT 0,
-    FOREIGN KEY (ProductID) REFERENCES Product (ProductID) ON DELETE CASCADE,
-    INDEX idx_product_variants (ProductID)
+    ProductID  int not null,
+    CategoryID int not null,
+    primary key (ProductID, CategoryID),
+    constraint ProductCategory_ibfk_1
+        foreign key (ProductID) references Product (ProductID)
+            on delete cascade,
+    constraint ProductCategory_ibfk_2
+        foreign key (CategoryID) references Category (CategoryID)
+            on delete cascade
 );
 
-CREATE TABLE ProductImage
-(
-    ImageID           INT PRIMARY KEY AUTO_INCREMENT,
-    ProductID         INT         NOT NULL,
-    ImageData         LONGBLOB    NOT NULL,
-    MimeType          VARCHAR(50) NOT NULL, -- Es. 'image/jpeg', 'image/png'
-    ImageName         VARCHAR(255),
-    Description       VARCHAR(255),
-    SortOrder         INT       DEFAULT 0,
-    CreatedAt         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ThumbnailData     MEDIUMBLOB,
-    ThumbnailMimeType VARCHAR(50),
-    FOREIGN KEY (ProductID) REFERENCES Product (ProductID) ON DELETE CASCADE,
-    INDEX idx_product_images (ProductID)
-) ENGINE = InnoDB
-  ROW_FORMAT = DYNAMIC;
+create index CategoryID
+    on ProductCategory (CategoryID);
 
-
-CREATE TABLE ProductCategory
+create table ProductImage
 (
-    ProductID  INT NOT NULL,
-    CategoryID INT NOT NULL,
-    PRIMARY KEY (ProductID, CategoryID),
-    FOREIGN KEY (ProductID) REFERENCES Product (ProductID) ON DELETE CASCADE,
-    FOREIGN KEY (CategoryID) REFERENCES Category (CategoryID) ON DELETE CASCADE
+    ImageID           int auto_increment
+        primary key,
+    ProductID         int                                 not null,
+    ImageData         longblob                            not null,
+    MimeType          varchar(50)                         not null,
+    ImageName         varchar(255)                        null,
+    Description       varchar(255)                        null,
+    SortOrder         int       default 0                 null,
+    CreatedAt         timestamp default CURRENT_TIMESTAMP null,
+    ThumbnailData     mediumblob                          null,
+    ThumbnailMimeType varchar(50)                         null,
+    constraint ProductImage_ibfk_1
+        foreign key (ProductID) references Product (ProductID)
+            on delete cascade
+)
+    row_format = DYNAMIC;
+
+create index idx_product_images
+    on ProductImage (ProductID);
+
+create table TradingCard
+(
+    CardID        int                                                                                 not null
+        primary key,
+    CardSet       varchar(100)                                                                        not null,
+    CardNumber    varchar(50)                                                                         not null,
+    Rarity        enum ('Common', 'Uncommon', 'Rare', 'Mythic', 'Secret')                             not null,
+    CardCondition enum ('Mint', 'Near Mint', 'Lightly Played', 'Moderately Played', 'Heavily Played') null,
+    CardText      text                                                                                null,
+    Artist        varchar(100)                                                                        null,
+    YearPublished year                                                                                null,
+    constraint unq_card_identifier
+        unique (CardSet, CardNumber),
+    constraint TradingCard_ibfk_1
+        foreign key (CardID) references Product (ProductID)
+            on delete cascade
 );
 
-CREATE TABLE OrderAddress
+create table User
 (
-    OrderAddressID INT PRIMARY KEY AUTO_INCREMENT,
-    StreetAddress  TEXT         NOT NULL,
-    City           VARCHAR(100) NOT NULL,
-    State          VARCHAR(100),
-    PostalCode     VARCHAR(20)  NOT NULL,
-    Country        VARCHAR(100) NOT NULL
+    UserID       int auto_increment
+        primary key,
+    FirstName    varchar(255)                                                      not null,
+    LastName     varchar(255)                                                      not null,
+    Email        varchar(255)                                                      not null,
+    PasswordHash varchar(255)                                                      not null,
+    CreatedAt    timestamp                               default CURRENT_TIMESTAMP null,
+    LastLogin    timestamp                                                         null,
+    Role         enum ('Customer', 'Admin', 'Moderator') default 'Customer'        null,
+    constraint Email
+        unique (Email)
 );
 
-CREATE TABLE "Order"
+create table Address
 (
-    OrderID           INT PRIMARY KEY AUTO_INCREMENT,
-    UserID            INT            NOT NULL,
-    OrderDate         TIMESTAMP                                                           DEFAULT CURRENT_TIMESTAMP,
-    OrderStatus       ENUM ('Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled') DEFAULT 'Pending',
-    ShippingAddressID INT            NOT NULL,
-    BillingAddressID  INT            NOT NULL,
-    TotalAmount       DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (UserID) REFERENCES "User" (UserID) ON DELETE RESTRICT,
-    FOREIGN KEY (ShippingAddressID) REFERENCES OrderAddress (OrderAddressID),
-    FOREIGN KEY (BillingAddressID) REFERENCES OrderAddress (OrderAddressID),
-    INDEX idx_order_status (OrderStatus)
+    AddressID     int auto_increment
+        primary key,
+    UserID        int                          not null,
+    StreetAddress text                         not null,
+    City          varchar(100)                 not null,
+    State         varchar(100)                 null,
+    PostalCode    varchar(20)                  not null,
+    Country       varchar(100)                 not null,
+    AddressType   enum ('Shipping', 'Billing') not null,
+    IsDefault     tinyint(1) default 0         null,
+    constraint Address_ibfk_1
+        foreign key (UserID) references User (UserID)
+            on delete cascade
 );
 
-CREATE TABLE OrderItem
+create index idx_user_address
+    on Address (UserID, AddressType);
+
+create table Cart
 (
-    OrderItemID INT PRIMARY KEY AUTO_INCREMENT,
-    OrderID     INT            NOT NULL,
-    ProductID   INT,
-    VariantID   INT,
-    ProductSnapshot JSON           NOT NULL,
-    Quantity    INT            NOT NULL CHECK (Quantity > 0),
-    UnitPrice   DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (OrderID) REFERENCES "Order" (OrderID) ON DELETE CASCADE,
-    FOREIGN KEY (ProductID) REFERENCES Product (ProductID) ON DELETE SET NULL,
-    FOREIGN KEY (VariantID) REFERENCES ProductVariant (VariantID) ON DELETE SET NULL
+    CartID      int auto_increment
+        primary key,
+    UserID      int                                 not null,
+    CreatedAt   timestamp default CURRENT_TIMESTAMP null,
+    LastUpdated timestamp default CURRENT_TIMESTAMP null,
+    constraint UserID
+        unique (UserID),
+    constraint Cart_ibfk_1
+        foreign key (UserID) references User (UserID)
+            on delete cascade
 );
 
-CREATE TABLE AttributeDefinition
+create index idx_cart_user
+    on Cart (UserID);
+
+create table CartItem
 (
-    AttributeID   INT PRIMARY KEY AUTO_INCREMENT,
-    AttributeName VARCHAR(255) UNIQUE                          NOT NULL,
-    DataType      ENUM ('String', 'Number', 'Boolean', 'Date') NOT NULL,
-    ApplicableTo  ENUM ('Card', 'Accessory', 'All')            NOT NULL
+    CartItemID int auto_increment
+        primary key,
+    CartID     int                                 not null,
+    ProductID  int                                 not null,
+    Quantity   int                                 not null,
+    AddedAT    timestamp default CURRENT_TIMESTAMP null,
+    constraint unq_cart_product_variant
+        unique (CartID, ProductID),
+    constraint CartItem_ibfk_1
+        foreign key (CartID) references Cart (CartID),
+    constraint CartItem_ibfk_2
+        foreign key (ProductID) references Product (ProductID),
+    check (`Quantity` > 0)
 );
 
-CREATE TABLE ProductAttribute
+create index ProductID
+    on CartItem (ProductID);
+
+create table `Order`
 (
-    ProductID   INT  NOT NULL,
-    AttributeID INT  NOT NULL,
-    Value       TEXT NOT NULL,
-    PRIMARY KEY (ProductID, AttributeID),
-    FOREIGN KEY (ProductID) REFERENCES Product (ProductID) ON DELETE CASCADE,
-    FOREIGN KEY (AttributeID) REFERENCES AttributeDefinition (AttributeID) ON DELETE CASCADE
+    OrderID           int auto_increment
+        primary key,
+    UserID            int                                                                                           not null,
+    OrderDate         timestamp                                                           default CURRENT_TIMESTAMP null,
+    OrderStatus       enum ('Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled') default 'Pending'         null,
+    ShippingAddressID int                                                                                           not null,
+    BillingAddressID  int                                                                                           not null,
+    TotalAmount       decimal(10, 2)                                                                                not null,
+    constraint Order_ibfk_1
+        foreign key (UserID) references User (UserID),
+    constraint Order_ibfk_2
+        foreign key (ShippingAddressID) references OrderAddress (OrderAddressID),
+    constraint Order_ibfk_3
+        foreign key (BillingAddressID) references OrderAddress (OrderAddressID)
 );
 
-CREATE TABLE Review
+create index UserID
+    on `Order` (UserID);
+
+create index idx_order_status
+    on `Order` (OrderStatus);
+
+create table OrderItem
 (
-    ReviewID     INT PRIMARY KEY AUTO_INCREMENT,
-    ProductID    INT     NOT NULL,
-    UserID       INT     NOT NULL,
-    Rating       TINYINT NOT NULL CHECK (Rating BETWEEN 1 AND 5),
-    Title        VARCHAR(255),
-    ReviewText   TEXT,
-    CreatedAt    TIMESTAMP                                DEFAULT CURRENT_TIMESTAMP,
-    ReviewStatus ENUM ('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
-    UNIQUE (ProductID, UserID),
-    FOREIGN KEY (ProductID) REFERENCES Product (ProductID) ON DELETE CASCADE,
-    FOREIGN KEY (UserID) REFERENCES "User" (UserID) ON DELETE CASCADE,
-    INDEX idx_reviews_product (ProductID)
+    OrderItemID     int auto_increment
+        primary key,
+    OrderID         int            not null,
+    ProductID       int            null,
+    Quantity        int            not null,
+    UnitPrice       decimal(10, 2) not null,
+    ProductSnapshot json           not null,
+    constraint OrderItem_ibfk_1
+        foreign key (OrderID) references `Order` (OrderID)
+            on delete cascade,
+    constraint OrderItem_ibfk_2
+        foreign key (ProductID) references Product (ProductID)
+            on delete set null,
+    check (`Quantity` > 0)
 );
 
-CREATE TABLE Cart
+create index OrderID
+    on OrderItem (OrderID);
+
+create index ProductID
+    on OrderItem (ProductID);
+
+create table Review
 (
-    CartID      INT PRIMARY KEY AUTO_INCREMENT,
-    UserID      INT NOT NULL,
-    CreatedAt   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    LastUpdated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (UserID) REFERENCES User (UserID) ON DELETE CASCADE,
-    UNIQUE (UserID),
-    INDEX idx_cart_user (UserID)
+    ReviewID     int auto_increment
+        primary key,
+    ProductID    int                                                                not null,
+    UserID       int                                                                not null,
+    Rating       tinyint                                                            not null,
+    Title        varchar(255)                                                       null,
+    ReviewText   text                                                               null,
+    CreatedAt    timestamp                                default CURRENT_TIMESTAMP null,
+    ReviewStatus enum ('Pending', 'Approved', 'Rejected') default 'Pending'         null,
+    constraint ProductID
+        unique (ProductID, UserID),
+    constraint Review_ibfk_1
+        foreign key (ProductID) references Product (ProductID)
+            on delete cascade,
+    constraint Review_ibfk_2
+        foreign key (UserID) references User (UserID)
+            on delete cascade,
+    check (`Rating` between 1 and 5)
 );
 
-CREATE TABLE CartItem
-(
-    CartItemID INT PRIMARY KEY AUTO_INCREMENT,
-    CartID     INT NOT NULL,
-    ProductID  INT NOT NULL,
-    VartiantID INT,
-    Quantity   INT NOT NULL CHECK ( Quantity > 0 ),
-    AddedAT    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (CartID) REFERENCES Cart (CartID),
-    FOREIGN KEY (ProductID) REFERENCES Product (ProductID),
-    FOREIGN KEY (VartiantID) REFERENCES ProductVariant (VariantID),
-    UNIQUE KEY unq_cart_product_variant (CartID, ProductID, VartiantID)
-);
+create index UserID
+    on Review (UserID);
+
+create index idx_reviews_product
+    on Review (ProductID);
+
+create index idx_email
+    on User (Email);
 

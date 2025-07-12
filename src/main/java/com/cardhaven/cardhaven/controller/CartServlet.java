@@ -3,7 +3,6 @@ package com.cardhaven.cardhaven.controller;
 import com.cardhaven.cardhaven.model.dao.CartDAO;
 import com.cardhaven.cardhaven.model.dao.CartItemDAO;
 import com.cardhaven.cardhaven.model.dao.ProductDAO;
-import com.cardhaven.cardhaven.model.dao.ProductVariantDAO;
 import com.cardhaven.cardhaven.model.dto.CartItemDetailDTO;
 import com.cardhaven.cardhaven.util.CartManager;
 import jakarta.servlet.ServletException;
@@ -26,12 +25,11 @@ public class CartServlet extends HttpServlet {
         CartDAO cartDAO = new CartDAO(ds);
         CartItemDAO cartItemDAO = new CartItemDAO(ds);
         ProductDAO productDAO = new ProductDAO(ds);
-        ProductVariantDAO variantDAO = new ProductVariantDAO(ds);
 
         try {
             // A single, clean call to the manager to get everything needed for the view
             List<CartItemDetailDTO> detailedCartItems = CartManager.getDetailedCartItems(
-                    request, cartDAO, cartItemDAO, productDAO, variantDAO
+                    request, cartDAO, cartItemDAO, productDAO
             );
             System.out.println(detailedCartItems);
 

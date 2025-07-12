@@ -3,6 +3,7 @@ package com.cardhaven.cardhaven.model.dao;
 import com.cardhaven.cardhaven.model.dto.ProductDTO;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -29,8 +30,8 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
                 ps.setInt(1, productDTO.getProductId());
                 ps.setString(2, productDTO.getSku());
                 ps.setString(3, productDTO.getProductName());
-                ps.setDouble(4, productDTO.getBasePrice());
-                ps.setDouble(5, productDTO.getCurrentPrice());
+                ps.setBigDecimal(4, productDTO.getBasePrice());
+                ps.setBigDecimal(5, productDTO.getCurrentPrice());
                 ps.setDouble(6, productDTO.getStockQuantity());
                 ps.setString(7, productDTO.getProductType().name());
                 ps.setTimestamp(8, (productDTO.getCreatedAt() != null) ? Timestamp.valueOf(productDTO.getCreatedAt()) : Timestamp.valueOf(LocalDateTime.now()));
@@ -55,8 +56,8 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
             try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, productDTO.getSku());
                 ps.setString(2, productDTO.getProductName());
-                ps.setDouble(3, productDTO.getBasePrice());
-                ps.setDouble(4, productDTO.getCurrentPrice());
+                ps.setBigDecimal(3, productDTO.getBasePrice());
+                ps.setBigDecimal(4, productDTO.getCurrentPrice());
                 ps.setDouble(5, productDTO.getStockQuantity());
                 ps.setString(6, productDTO.getProductType().name());
                 ps.setTimestamp(7, (productDTO.getCreatedAt() != null) ? Timestamp.valueOf(productDTO.getCreatedAt()) : null);
@@ -132,8 +133,8 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
         productDTO.setProductId(rs.getInt("ProductId"));
         productDTO.setSku(rs.getString("SKU"));
         productDTO.setProductName(rs.getString("ProductName"));
-        productDTO.setBasePrice(rs.getDouble("BasePrice"));
-        productDTO.setCurrentPrice(rs.getDouble("CurrentPrice"));
+        productDTO.setBasePrice(rs.getBigDecimal("BasePrice"));
+        productDTO.setCurrentPrice(rs.getBigDecimal("CurrentPrice"));
         productDTO.setStockQuantity(rs.getInt("StockQuantity"));
         productDTO.setProductType(ProductDTO.ProductType.valueOf(rs.getString("ProductType")));
         Timestamp createdAtTimestamp = rs.getTimestamp("CreatedAt");
@@ -159,10 +160,10 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
         if (productDTO.getProductName() == null || productDTO.getProductName().trim().isEmpty()) {
             throw new IllegalArgumentException("Product Name cannot be null or empty.");
         }
-        if (productDTO.getBasePrice() <= 0) {
+        if (productDTO.getBasePrice().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Base Price must be positive.");
         }
-        if (productDTO.getCurrentPrice() <= 0) {
+        if (productDTO.getCurrentPrice().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Current Price must be positive.");
         }
         if (productDTO.getStockQuantity() < 0) {
