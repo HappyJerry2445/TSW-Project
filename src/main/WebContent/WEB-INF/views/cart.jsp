@@ -52,7 +52,7 @@
                                         <form class="cell-content-wrapper"
                                               action="${pageContext.request.contextPath}/cart/update"
                                               method="post">
-                                            <input type="hidden" name="cartId" value="${item.cartId}">
+                                            <input type="hidden" name="cartItemId" value="${item.cartItemId}">
                                             <input type="number" name="quantity" value="${item.quantity}" min="1"
                                                    required>
                                             <button type="submit" class="btn btn-update btn-sm">Aggiorna</button>
@@ -64,7 +64,7 @@
                                         <form class="cell-content-wrapper"
                                               action="${pageContext.request.contextPath}/cart/delete"
                                               method="post">
-                                            <input type="hidden" name="cartId" value="${item.cartId}">
+                                            <input type="hidden" name="cartItemId" value="${item.cartItemId}">
                                             <button type="submit" class="btn btn-danger btn-sm">Rimuovi</button>
                                         </form>
                                     </td>

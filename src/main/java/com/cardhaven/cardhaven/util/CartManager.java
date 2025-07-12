@@ -39,11 +39,9 @@ public final class CartManager {
      * @throws SQLException If a database error occurs.
      */
     public static List<CartItemDetailDTO> getDetailedCartItems(HttpServletRequest request, CartDAO cartDAO, CartItemDAO cartItemDAO, ProductDAO productDAO, ProductVariantDAO variantDAO) throws SQLException {
-        // Step 1: Get the raw cart items (for guest or user)
         Collection<CartItemDTO> rawItems = getCartItems(request, cartDAO, cartItemDAO);
         List<CartItemDetailDTO> detailedItems = new ArrayList<>();
 
-        // Step 2: Build the detailed DTO for each item
         for (CartItemDTO item : rawItems) {
             ProductDTO product = productDAO.getById(item.getProductId());
             ProductVariantDTO variant = (item.getVariantId() != null) ? variantDAO.getById(item.getVariantId()) : null;
@@ -59,7 +57,6 @@ public final class CartManager {
                 detailDTO.setPrice(new BigDecimal(product.getBasePrice()));
                 if (variant != null) {
                     detailDTO.setPrice(new BigDecimal(product.getBasePrice() + variant.getAdditionalPrice()));
-
                 }
                 detailedItems.add(detailDTO);
             }
@@ -68,9 +65,69 @@ public final class CartManager {
     }
 
     /**
-     * Retrieves the raw cart items, handling both guest and user sessions.
-     * This method is now private as the detailed method is the public entry point.
+     * Updates the quantity of an item in the cart. Handles both guest and user carts.
+     *
+     * @param request     The HttpServletRequest to access the session.
+     * @param cartDAO     The DAO for cart data, used for ownership verification.
+     * @param cartItemDAO The DAO for cart item data.
+     * @param cartItemId  The ID of the cart item to update.
+     * @param quantity    The new quantity.
+     * @throws SQLException If a database error occurs.
      */
+    public static void updateItemQuantity(HttpServletRequest request, CartDAO cartDAO, CartItemDAO cartItemDAO, int cartItemId, int quantity) throws SQLException {
+        if (quantity < 1) {
+            deleteItem(request, cartDAO, cartItemDAO, cartItemId);
+            return;
+        }
+
+        HttpSession session = request.getSession();
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId != null) {
+            CartItemDTO item = cartItemDAO.getById(cartItemId);
+            if (item != null) {
+                CartDTO cart = cartDAO.getById(item.getCartId());
+                if (cart != null && Objects.equals(cart.getUserId(), userId)) {
+                    item.setQuantity(quantity);
+                    cartItemDAO.save(item);
+                }
+            }
+        } else {
+            Collection<CartItemDTO> guestCart = getGuestCart(session);
+            guestCart.stream()
+                    .filter(item -> item.getCartItemId() == cartItemId)
+                    .findFirst()
+                    .ifPresent(item -> item.setQuantity(quantity));
+        }
+    }
+
+    /**
+     * Deletes an item from the cart. Handles both guest and user carts.
+     *
+     * @param request     The HttpServletRequest to access the session.
+     * @param cartDAO     The DAO for cart data, used for ownership verification.
+     * @param cartItemDAO The DAO for cart item data.
+     * @param cartItemId  The ID of the cart item to delete.
+     * @throws SQLException If a database error occurs.
+     */
+    public static void deleteItem(HttpServletRequest request, CartDAO cartDAO, CartItemDAO cartItemDAO, int cartItemId) throws SQLException {
+        HttpSession session = request.getSession();
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        if (userId != null) {
+            CartItemDTO item = cartItemDAO.getById(cartItemId);
+            if (item != null) {
+                CartDTO cart = cartDAO.getById(item.getCartId());
+                if (cart != null && Objects.equals(cart.getUserId(), userId)) {
+                    cartItemDAO.delete(cartItemId);
+                }
+            }
+        } else {
+            Collection<CartItemDTO> guestCart = getGuestCart(session);
+            guestCart.removeIf(item -> item.getCartItemId() == cartItemId);
+        }
+    }
+
     private static Collection<CartItemDTO> getCartItems(HttpServletRequest request, CartDAO cartDAO, CartItemDAO cartItemDAO) throws SQLException {
         HttpSession session = request.getSession();
         Integer userId = (Integer) session.getAttribute("userId");
@@ -84,8 +141,7 @@ public final class CartManager {
         }
     }
 
-    // --- The rest of the private helper methods remain the same ---
-
+    // ... private helper methods remain the same
     private static void mergeGuestCartWithUserCart(HttpSession session, int userId, CartDAO cartDAO, CartItemDAO cartItemDAO) throws SQLException {
         Collection<CartItemDTO> guestCart = (Collection<CartItemDTO>) session.getAttribute(GUEST_CART_SESSION_KEY);
 
