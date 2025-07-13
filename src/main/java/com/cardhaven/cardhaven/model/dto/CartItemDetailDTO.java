@@ -9,15 +9,36 @@ import java.math.BigDecimal;
  * to provide all necessary details for displaying a single item in the cart view.
  */
 public class CartItemDetailDTO implements Serializable {
-
     private int cartItemId;
     private int cartId;
     private int quantity;
     private int productId;
+    private int imageId;
     private String productName;
     private BigDecimal price;
 
     public CartItemDetailDTO() {
+    }
+
+    @Override
+    public String toString() {
+        return "CartItemDetailDTO{" +
+                "cartItemId=" + cartItemId +
+                ", cartId=" + cartId +
+                ", quantity=" + quantity +
+                ", productId=" + productId +
+                ", imageId=" + imageId +
+                ", productName='" + productName + '\'' +
+                ", price=" + price +
+                '}';
+    }
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
     }
 
     // Getters and Setters for all fields

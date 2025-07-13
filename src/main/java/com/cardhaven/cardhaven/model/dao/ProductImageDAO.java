@@ -89,6 +89,42 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
         return productImageDTO;
     }
 
+    public ProductImageDTO getFirstByProductId(Integer productId) throws SQLException {
+        if (productId == null || productId <= 0) {
+            throw new IllegalArgumentException("ProductID must be a positive integer.");
+        }
+
+        String sql = "SELECT * FROM ProductImage WHERE ProductId = ? ORDER BY SortOrder ASC LIMIT 1";
+        ProductImageDTO productImageDTO = null;
+        try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    productImageDTO = extractProductImageFromResultSet(rs);
+                }
+            }
+        }
+        return productImageDTO;
+    }
+
+    public Collection<ProductImageDTO> getAllByProductId(Integer productId) throws SQLException {
+        if (productId == null || productId <= 0) {
+            throw new IllegalArgumentException("ProductID must be a positive integer.");
+        }
+
+        String sql = "SELECT * FROM ProductImage WHERE ProductId = ? ORDER BY SortOrder";
+        Collection<ProductImageDTO> productImageDTOs = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    productImageDTOs.add(extractProductImageFromResultSet(rs));
+                }
+            }
+        }
+        return productImageDTOs;
+    }
+
     public Collection<ProductImageDTO> getAll(String order) throws SQLException {
         Collection<ProductImageDTO> images = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM ProductImage");

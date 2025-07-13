@@ -58,8 +58,7 @@
                                             <td data-label="Prodotto">
                                                 <div class="product-info">
                                                     <div class="product-image">
-                                                        <!-- TODO: Take Image correctly -->
-                                                        <img src="${pageContext.request.contextPath}/image/${item.productId}"
+                                                        <img src="${pageContext.request.contextPath}/image/${item.imageId}"
                                                              alt="${item.productName}"
                                                              onerror="this.src='${pageContext.request.contextPath}/images/noimage.png'">
                                                     </div>

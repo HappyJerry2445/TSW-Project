@@ -3,10 +3,8 @@ package com.cardhaven.cardhaven.util;
 import com.cardhaven.cardhaven.model.dao.CartDAO;
 import com.cardhaven.cardhaven.model.dao.CartItemDAO;
 import com.cardhaven.cardhaven.model.dao.ProductDAO;
-import com.cardhaven.cardhaven.model.dto.CartDTO;
-import com.cardhaven.cardhaven.model.dto.CartItemDTO;
-import com.cardhaven.cardhaven.model.dto.CartItemDetailDTO;
-import com.cardhaven.cardhaven.model.dto.ProductDTO;
+import com.cardhaven.cardhaven.model.dao.ProductImageDAO;
+import com.cardhaven.cardhaven.model.dto.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -82,12 +80,13 @@ public final class CartManager {
 
     // Previous methods like getDetailedCartItems, updateItemQuantity, deleteItem, etc. would be here...
 
-    public static List<CartItemDetailDTO> getDetailedCartItems(HttpServletRequest request, CartDAO cartDAO, CartItemDAO cartItemDAO, ProductDAO productDAO) throws SQLException {
+    public static List<CartItemDetailDTO> getDetailedCartItems(HttpServletRequest request, CartDAO cartDAO, CartItemDAO cartItemDAO, ProductDAO productDAO, ProductImageDAO productImageDAO) throws SQLException {
         Collection<CartItemDTO> rawItems = getCartItems(request, cartDAO, cartItemDAO);
         List<CartItemDetailDTO> detailedItems = new ArrayList<>();
 
         for (CartItemDTO item : rawItems) {
             ProductDTO product = productDAO.getById(item.getProductId());
+            ProductImageDTO productImage = productImageDAO.getFirstByProductId(item.getProductId());
 
             if (product != null) {
                 CartItemDetailDTO detailDTO = new CartItemDetailDTO();
@@ -97,6 +96,7 @@ public final class CartManager {
                 detailDTO.setProductId(item.getProductId());
                 detailDTO.setProductName(product.getProductName());
                 detailDTO.setPrice(product.getCurrentPrice());
+                detailDTO.setImageId(productImage != null ? productImage.getImageId() : 0);
                 detailedItems.add(detailDTO);
             }
         }
