@@ -1,0 +1,213 @@
+/* Stili specifici per la pagina di gestione prodotti (/admin/products) */
+
+/* Header della pagina */
+.admin-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-page-header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    flex-grow: 1;
+}
+
+.admin-page-header p {
+    margin: 0;
+    color: var(--text-color);
+    flex-basis: 100%;
+}
+
+.admin-page-header .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+}
+
+/* Card che contiene la tabella */
+.content-card {
+    background: white;
+    border-radius: var(--card-radius);
+    padding: 1.5rem 2rem;
+    box-shadow: var(--shadow-light);
+    overflow-x: auto; /* Permette lo scroll orizzontale su schermi piccoli */
+}
+
+/* Tabella dei prodotti */
+.products-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.products-table thead {
+    background-color: var(--light-color);
+}
+
+.products-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--dark-color);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.products-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.products-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.products-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Cella immagine */
+.product-image-cell img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-light);
+}
+
+.image-placeholder {
+    width: 60px;
+    height: 60px;
+    background-color: var(--border-color);
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    font-size: 1.5rem;
+}
+
+
+/* Badge di stato e quantità */
+.status-badge, .stock-badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: white;
+}
+
+.status-badge.status-active {
+    background-color: var(--secondary-color);
+}
+
+.status-badge.status-inactive {
+    background-color: var(--dark-color);
+    opacity: 0.7;
+}
+
+.stock-badge.stock-ok {
+    background-color: var(--primary-color);
+}
+
+.stock-badge.stock-low {
+    background-color: var(--warning-color);
+}
+
+.stock-badge.stock-out {
+    background-color: var(--accent-color);
+}
+
+
+/* Cella delle azioni */
+.actions-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: white;
+}
+
+.action-btn.btn-edit {
+    background-color: var(--primary-color);
+}
+
+.action-btn.btn-edit:hover {
+    background-color: var(--primary-dark);
+}
+
+.action-btn.btn-delete {
+    background-color: var(--accent-color);
+}
+
+.action-btn.btn-delete:hover {
+    background-color: #c0392b; /* Darker red */
+}
+
+/* Responsive per la tabella */
+@media (max-width: 768px) {
+    .admin-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .products-table thead {
+        display: none; /* Nascondi l'header della tabella */
+    }
+
+    .products-table, .products-table tbody, .products-table tr, .products-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .products-table tr {
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--card-radius);
+    }
+
+    .products-table td {
+        text-align: right;
+        padding-left: 50%; /* Spazio per l'etichetta */
+        position: relative;
+        border: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .products-table td:before {
+        content: attr(data-label);
+        position: absolute;
+        left: 1rem;
+        width: 45%;
+        padding-right: 1rem;
+        text-align: left;
+        font-weight: bold;
+        color: var(--dark-color);
+    }
+
+    .product-image-cell {
+        display: flex;
+        justify-content: flex-end; /* Allinea l'immagine a destra */
+    }
+
+    .actions-cell {
+        justify-content: flex-end;
+    }
+}

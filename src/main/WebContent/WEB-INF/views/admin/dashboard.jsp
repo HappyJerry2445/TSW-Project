@@ -154,6 +154,7 @@
 <jsp:include page="/WEB-INF/components/footer.jsp"/>
 
 <script>
+    // TODO: Rendi questa sezione vera
     // Script per caricare i dati statistici in modo asincrono
     document.addEventListener('DOMContentLoaded', function () {
         // Qui si potrebbe implementare una chiamata AJAX per ottenere i dati delle statistiche
