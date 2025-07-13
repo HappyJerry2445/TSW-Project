@@ -65,7 +65,7 @@
                                 <c:set var="product" value="${productMap[item.productID]}"/>
                                 <div class="order-item-card">
                                     <div class="product-item">
-                                            <%--TODO test with real images of the product and with more product--%>
+                                        <!-- TODO: Take Image correctly -->
                                         <div class="product-image-container">
                                             <div>
                                                 <c:set var="image" value="${productImageMap[product.productId]}"/>
