@@ -45,7 +45,7 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
                 }
             }
         } else {
-            sql = "UPDATE ProductImage SET ProductId = ?, SortOrder = ?, ImageID = ?WHERE ProductImageID = ?";
+            sql = "UPDATE ProductImage SET ProductId = ?, SortOrder = ?, ImageID = ?WHERE ProductImageId = ?";
             try (Connection conn = dataSource.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -76,7 +76,7 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
             throw new IllegalArgumentException("ImageID must be a positive integer.");
         }
 
-        String sql = "SELECT * FROM ProductImage WHERE ProductImageId = ?";
+        String sql = "SELECT * FROM ProductImage WHERE ProductImageID = ?";
         ProductImageDTO productImageDTO = null;
         try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
