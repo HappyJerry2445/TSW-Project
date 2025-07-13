@@ -1,0 +1,190 @@
+/* Payment Methods Styles */
+.payment-methods {
+    margin-bottom: calc(var(--spacing-unit) * 1.25);
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: calc(var(--spacing-unit) * 0.9375);
+    padding: calc(var(--spacing-unit) * 0.625);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.payment-option:hover {
+    background-color: var(--color-neutral-lightest);
+}
+
+.payment-option input[type="radio"] {
+    margin-right: calc(var(--spacing-unit) * 0.625);
+}
+
+.payment-option label {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.payment-option i {
+    margin-right: calc(var(--spacing-unit) * 0.5);
+    font-size: 1.125rem;
+}
+
+.payment-option input[type="radio"]:checked + label {
+    color: var(--color-accent-vibrant);
+}
+
+.payment-option input[type="radio"]:checked {
+    accent-color: var(--color-accent-vibrant);
+}
+
+/* Payment Details Form */
+.payment-details-form {
+    margin-top: calc(var(--spacing-unit) * 1.25);
+    padding: calc(var(--spacing-unit) * 1.25);
+    background-color: var(--color-neutral-lightest);
+    border-radius: var(--border-radius-md);
+}
+
+.payment-form {
+    display: none;
+}
+
+.payment-form.active {
+    display: block;
+}
+
+.payment-form h5 {
+    margin-bottom: calc(var(--spacing-unit) * 1.25);
+    color: var(--color-text-default);
+}
+
+.form-group {
+    margin-bottom: calc(var(--spacing-unit) * 0.9375);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: calc(var(--spacing-unit) * 0.3125);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.form-control {
+    width: 100%;
+    padding: calc(var(--spacing-unit) * 0.625);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--border-radius-sm);
+    font-size: 0.875rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-accent-vibrant);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.form-control.is-valid {
+    border-color: var(--color-status-success);
+}
+
+.form-control.is-invalid {
+    border-color: var(--color-status-error);
+}
+
+.form-row {
+    display: flex;
+    gap: calc(var(--spacing-unit) * 0.9375);
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.col-md-6 {
+    flex: 0 0 50%;
+}
+
+/* Payment Info */
+.payment-info {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: calc(var(--spacing-unit) * 0.9375);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .col-md-6 {
+        flex: 1;
+    }
+
+    .payment-option {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .payment-option input[type="radio"] {
+        margin-bottom: calc(var(--spacing-unit) * 0.3125);
+    }
+}
+
+.payment-option input[type="radio"]:checked + label .fas,
+.payment-option input[type="radio"]:checked + label .fab {
+    color: var(--color-accent-vibrant);
+}
+
+/* Loading State */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Form Validation Messages */
+.invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: calc(var(--spacing-unit) * 0.3125);
+    font-size: 0.75rem;
+    color: var(--color-status-error);
+}
+
+.valid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: calc(var(--spacing-unit) * 0.3125);
+    font-size: 0.75rem;
+    color: var(--color-status-success);
+}
+
+.field-error {
+    color: var(--color-status-error);
+    font-size: 0.75rem;
+    margin-top: calc(var(--spacing-unit) * 0.25);
+    display: block;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: calc(var(--spacing-unit) * 0.9375);
+}
+
+.form-control.is-invalid {
+    border-color: var(--color-status-error);
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.form-control.is-valid {
+    border-color: var(--color-status-success);
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
