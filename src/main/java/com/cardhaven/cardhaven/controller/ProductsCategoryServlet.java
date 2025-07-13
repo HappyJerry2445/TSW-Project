@@ -50,7 +50,7 @@ public class ProductsCategoryServlet extends HttpServlet {
 		DataSource ds= (DataSource) getServletContext().getAttribute("ds");
 		if(ds==null){
 			errors.add("Errore di configurazione del server.");
-			request.getRequestDispatcher("/WEB-INF/views/common/ricerca_prodotti_categoria.jsp").forward(request,response);
+			request.getRequestDispatcher("/WEB-INF/views/ricerca-prodotti-categoria.jsp").forward(request,response);
 			return;
 		}
 
@@ -79,11 +79,11 @@ public class ProductsCategoryServlet extends HttpServlet {
 			request.setAttribute("products", products);
 			request.setAttribute("categoryName", category.getName());
 			request.setAttribute("productImages", productImages);
-			request.getRequestDispatcher("/WEB-INF/views/common/ricerca_prodotti_categoria.jsp").forward(request,response);
+			request.getRequestDispatcher("/WEB-INF/views/ricerca-prodotti-categoria.jsp").forward(request,response);
 
 		}catch(Exception e){
 			errors.add("Errore durante il recupero dei prodotti della categoria.");
-			request.getRequestDispatcher("/WEB-INF/views/common/ricerca_prodotti_categoria.jsp").forward(request,response);
+			request.getRequestDispatcher("/WEB-INF/views/ricerca-prodotti-categoria.jsp").forward(request,response);
 		}
 	}
 
