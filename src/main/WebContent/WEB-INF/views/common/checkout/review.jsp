@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/profile.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/order.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/payment.css" type="text/css">
     <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
@@ -95,6 +96,61 @@
                 <a href="${pageContext.request.contextPath}/common/checkout/shipping">Modifica Indirizzi</a>
             </div>
 
+            <!-- PAYMENT METHOD SECTION -->
+            <div class="order-info-section">
+                <h5>Metodo di Pagamento</h5>
+                <div class="payment-methods">
+                    <div class="payment-option">
+                        <input type="radio" id="credit-card" name="payment-method" value="credit-card" checked>
+                        <label for="credit-card">
+                            <i class="fas fa-credit-card"></i> Carta di Credito/Debito
+                        </label>
+                    </div>
+                    <div class="payment-option">
+                        <input type="radio" id="bank-transfer" name="payment-method" value="bank-transfer">
+                        <label for="bank-transfer">
+                            <i class="fas fa-university"></i> Bonifico Bancario
+                        </label>
+                    </div>
+                </div>
+
+                <!-- PAYMENT DETAILS FORM -->
+                <div id="payment-details" class="payment-details-form">
+                    <!-- Credit Card Form -->
+                    <div id="credit-card-form" class="payment-form active">
+                        <h5>Dettagli Carta di Credito</h5>
+                        <div class="form-group">
+                            <label for="card-number">Numero Carta:</label>
+                            <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="expiry-date">Data Scadenza:</label>
+                                <input type="text" id="expiry-date" class="form-control" placeholder="MM/AA" maxlength="5">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="cvv">CVV:</label>
+                                <input type="text" id="cvv" class="form-control" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardholder-name">Nome sul Titolare:</label>
+                            <input type="text" id="cardholder-name" class="form-control" placeholder="Nome Cognome">
+                        </div>
+                    </div>
+
+                    <!-- Bank Transfer Form -->
+                    <div id="bank-transfer-form" class="payment-form">
+                        <h5>Bonifico Bancario</h5>
+                        <p class="payment-info">Riceverai le istruzioni per il bonifico via email dopo la conferma dell'ordine.</p>
+                        <div class="alert alert-info">
+                            <strong>Nota:</strong> L'ordine verrà processato solo dopo la ricezione del pagamento.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TODO: Take Image correctly -->
             <!-- ORDERED PRODUCTS SECTION -->
             <div>
                 <div class="order-info-section">
@@ -144,7 +200,10 @@
                 </div>
             </div>
 
-            <form action="${pageContext.request.contextPath}/common/checkout/confirm" method="post">
+            <form id="checkout-form" action="${pageContext.request.contextPath}/common/checkout/confirm" method="post">
+                <input type="hidden" id="selected-payment-method" name="paymentMethod" value="credit-card">
+                <input type="hidden" id="payment-data" name="paymentData" value="">
+
                 <div class="profile-actions mt-3">
                     <a href="${pageContext.request.contextPath}/cart" class="btn btn-secondary">Torna al Carrello</a>
                     <button type="submit" class="btn btn-primary">Conferma Ordine</button>
@@ -155,5 +214,6 @@
 </main>
 
 <jsp:include page="/WEB-INF/components/footer.jsp"/>
+<script src="${pageContext.request.contextPath}/scripts/payment-handler.js"></script>
 </body>
 </html>
