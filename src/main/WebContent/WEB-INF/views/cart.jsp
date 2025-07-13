@@ -117,6 +117,7 @@
                                 <h3><i class="fas fa-clipboard-list"></i> Riepilogo Ordine</h3>
                             </div>
                             <div class="cart-summary-content">
+                                <!--
                                 <div class="summary-row">
                                     <span>Subtotale</span>
                                     <span><fmt:formatNumber value="${grandTotal}" type="currency"
@@ -130,6 +131,7 @@
                                     <span>Tasse</span>
                                     <span>Calcolate al checkout</span>
                                 </div>
+                                -->
                                 <div class="summary-total">
                                     <span>Totale Complessivo</span>
                                     <span><fmt:formatNumber value="${grandTotal}" type="currency"

@@ -15,6 +15,7 @@ import java.sql.SQLException;
 
 @WebServlet("/cart/update")
 public class UpdateCartServlet extends HttpServlet {
+    // TODO: Here and in AddToCart check that quantity isn't more than stock. Also check in checkout and similar
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String cartItemIdParam = request.getParameter("cartItemId");
