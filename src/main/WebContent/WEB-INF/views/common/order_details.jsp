@@ -120,33 +120,34 @@
             <div class="row">
                 <div class="summary-box">
                     <h4>Riepilogo Ordine</h4>
+
                     <c:forEach var="item" items="${orderItems}">
-                        <div class="summary-row">
-                            <span>Quantità:</span>
-                            <span class="unit-price"><c:out value="${item.quantity}"/></span>
-                        </div>
+                        <c:set var="product" value="${productMap[item.productID]}"/>
+                        <div class="summary-item">
+                            <div class="summary-row">
+                                <span>
+                                    <c:choose>
+                                        <c:when test="${not empty product}">
+                                            <c:out value="${product.productName} :"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            Prodotto non disponibile (ID: ${item.productID})
+                                        </c:otherwise>
+                                    </c:choose>
+                                </span>
 
-                        <div class="summary-row">
-                            <span>Prezzo unitario:</span>
-                            <span class="unit-price"><fmt:formatNumber value="${fn:escapeXml(item.unitPrice)}"
-                                                                       type="currency" currencyCode="EUR"/></span>
+                                <span class="unit-price">
+                                    <fmt:formatNumber value="${fn:escapeXml(item.quantity * item.unitPrice)}" type="currency" currencyCode="EUR"/>
+                                </span>
+                            </div>
                         </div>
-                        <div class="summary-row">
-                            <span>Subtotale:</span>
-                            <span class="unit-price"><fmt:formatNumber
-                                    value="${fn:escapeXml(item.quantity * item.unitPrice)}"
-                                    currencyCode="EUR"
-                                    type="currency"/></span>
-                        </div>
-
-
                     </c:forEach>
+
                     <div class="summary-row total-row">
-                        <span>Totale:</span>
-                        <span class="item-total"><fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}"
-                                                                   currencyCode="EUR"
-                                                                   type="currency"
-                        /></span>
+                        <span><strong>Totale Ordine:</strong></span>
+                        <span class="item-total">
+                            <strong><fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}" type="currency" currencyCode="EUR"/></strong>
+                        </span>
                     </div>
                 </div>
             </div>
