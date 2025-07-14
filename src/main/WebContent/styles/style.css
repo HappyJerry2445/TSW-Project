@@ -71,6 +71,11 @@
     padding: 0;
 }
 
+html {
+    background-color: var(--color-primary-dark);
+    overscroll-behavior: contain;
+}
+
 body {
     font-family: var(--font-body);
     color: var(--color-text-default); /* Changed from --color-text-dark */
