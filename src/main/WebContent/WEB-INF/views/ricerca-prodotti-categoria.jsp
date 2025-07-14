@@ -4,6 +4,7 @@
 
 <c:set var="pageTitle" value="Prodotti: ${categoryName}" scope="request"/>
 
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
