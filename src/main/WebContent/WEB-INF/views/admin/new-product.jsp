@@ -8,6 +8,7 @@
     <title>Nuovo Prodotto | CardHaven</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/admin/dashboard.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/admin/products.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/admin/new-product.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -69,16 +70,16 @@
             <h2 class="form-section-title">Dettagli Carta Collezionabile</h2>
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="cardSet">Set/Espansione</label>
-                    <input type="text" id="cardSet" name="cardSet">
+                    <label for="cardSet">Set/Espansione <span class="required">*</span></label>
+                    <input type="text" id="cardSet" name="cardSet" required>
                 </div>
                 <div class="form-group">
-                    <label for="cardNumber">Numero Carta</label>
-                    <input type="text" id="cardNumber" name="cardNumber">
+                    <label for="cardNumber">Numero Carta <span class="required">*</span></label>
+                    <input type="text" id="cardNumber" name="cardNumber" required>
                 </div>
                 <div class="form-group">
-                    <label for="rarity">Rarità</label>
-                    <select id="rarity" name="rarity">
+                    <label for="rarity">Rarità <span class="required">*</span></label>
+                    <select id="rarity" name="rarity" required>
                         <option value="Common">Comune</option>
                         <option value="Uncommon">Non Comune</option>
                         <option value="Rare">Rara</option>
@@ -87,8 +88,8 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="cardCondition">Condizione</label>
-                    <select id="cardCondition" name="cardCondition">
+                    <label for="cardCondition">Condizione <span class="required">*</span></label>
+                    <select id="cardCondition" name="cardCondition" required>
                         <option value="Mint">Mint</option>
                         <option value="Near Mint" selected>Near Mint</option>
                         <option value="Lightly Played">Lightly Played</option>
@@ -104,8 +105,8 @@
             <h2 class="form-section-title">Dettagli Accessorio</h2>
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="accessoryType">Tipo Accessorio</label>
-                    <select id="accessoryType" name="accessoryType">
+                    <label for="accessoryType">Tipo Accessorio <span class="required">*</span></label>
+                    <select id="accessoryType" name="accessoryType" required>
                         <option value="Sleeves">Bustine Protettive</option>
                         <option value="Binders">Raccoglitori</option>
                         <option value="Dice">Dadi</option>
