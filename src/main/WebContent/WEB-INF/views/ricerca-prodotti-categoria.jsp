@@ -47,12 +47,13 @@
                     <c:forEach var="product" items="${products}" varStatus="status">
                         <div class="product-card">
                                 <%-- Tutta la card è un link ai dettagli --%>
-                            <a href="${pageContext.request.contextPath}/products/detail/${product.productId}" class="product-link">
+                            <a href="${pageContext.request.contextPath}/products/detail/${product.productId}"
+                               class="product-link">
                                     <%-- Immagine del prodotto --%>
                                 <div class="product-image-container">
                                     <c:choose>
                                         <c:when test="${not empty productImages[product.productId]}">
-                                            <img src="${pageContext.request.contextPath}/images/product?id=${productImages[product.productId].imageId}"
+                                            <img src="${pageContext.request.contextPath}/image/${productImages[product.productId].imageId}"
                                                  alt="${product.productName}"
                                                  class="product-image"
                                                  loading="lazy">
