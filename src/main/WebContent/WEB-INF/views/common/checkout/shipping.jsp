@@ -21,7 +21,16 @@
             <h2 class="section-title">Seleziona gli indirizzi da utilizzare per il tuo ordine</h2>
             <jsp:include page="/WEB-INF/components/error_message.jsp"/>
 
-            <!--TODO added something for not access to the page without passing from the cart
+            <!--TODO can't access to this page without passing from the cart-->
+            <c:set var="cartEmpty" value="${empty cartItems}"/>
+
+            <c:choose>
+            <c:when test="${cartEmpty}">
+                <div>
+                    <p>Aggiungi alcuni prodotti al carrello prima di procedere con l'ordine. <a href="${pageContext.request.contextPath}/">Vai ai Prodotti</a></p>
+                </div>
+            </c:when>
+            <c:otherwise>
 
             <c:if test="${not empty addresses}">
 
@@ -82,6 +91,8 @@
                         uno per proseguire</a>
                 </div>
             </c:if>
+            </c:otherwise>
+            </c:choose>
         </div>
     </div>
 </main>

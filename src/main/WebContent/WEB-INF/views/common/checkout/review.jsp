@@ -25,17 +25,6 @@
             <h2 class="section-title">Riepilogo del Tuo Ordine</h2>
             <jsp:include page="/WEB-INF/components/error_message.jsp"/>
 
-            <!-- Check if cart is empty -->
-            <c:set var="cartEmpty" value="${empty cartItems}"/>
-
-            <c:choose>
-                <c:when test="${cartEmpty}">
-                    <!-- Empty cart message -->
-                    <div>
-                        <p>Aggiungi alcuni prodotti al carrello prima di procedere con l'ordine. <a href="${pageContext.request.contextPath}/#">Vai ai Prodotti</a></p>
-                    </div>
-                </c:when>
-                <c:otherwise>
                     <!-- ORDER SUMMARY SECTION -->
                     <div class="order-summary mb-4">
                         <div class="summary-box">
@@ -204,8 +193,6 @@
                             <button type="submit" class="btn btn-primary">Conferma Ordine</button>
                         </div>
                     </form>
-                </c:otherwise>
-            </c:choose>
         </div>
     </div>
 </main>

@@ -5,19 +5,14 @@ import com.cardhaven.cardhaven.model.dto.*;
 import com.cardhaven.cardhaven.util.CartManager;
 import com.cardhaven.cardhaven.util.NotificationUtil;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet("/common/checkout/review")
 public class ReviewServlet extends HttpServlet {
@@ -83,7 +78,7 @@ public class ReviewServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             NotificationUtil.sendNotification(request, "Errore nel recupero dei dati per il riepilogo.", "error");
-            //response.sendRedirect(request.getContextPath() + "/cart"); // Redirect to cart on error
+            response.sendRedirect(request.getContextPath() + "/cart"); // Redirect to cart on error
         }
     }
 

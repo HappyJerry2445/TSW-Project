@@ -1,7 +1,9 @@
 package com.cardhaven.cardhaven.controller;
 
-import com.cardhaven.cardhaven.model.dao.AddressDAO;
+import com.cardhaven.cardhaven.model.dao.*;
 import com.cardhaven.cardhaven.model.dto.AddressDTO;
+import com.cardhaven.cardhaven.model.dto.CartItemDetailDTO;
+import com.cardhaven.cardhaven.util.CartManager;
 import com.cardhaven.cardhaven.util.NotificationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,7 +24,12 @@ public class ShippingServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         var session = request.getSession();
         var userId = (Integer) session.getAttribute("userId");
-        var addressDAO = new AddressDAO((DataSource) getServletContext().getAttribute("ds"));
+        DataSource ds = (DataSource) getServletContext().getAttribute("ds");
+        var addressDAO = new AddressDAO(ds);
+        CartDAO cartDAO = new CartDAO(ds);
+        CartItemDAO cartItemDAO = new CartItemDAO(ds);
+        ProductDAO productDAO = new ProductDAO(ds);
+        ProductImageDAO productImageDAO = new ProductImageDAO(ds);
         List<String> errors = new ArrayList<>();
 
         if (userId == null) {
@@ -33,9 +40,15 @@ public class ShippingServlet extends HttpServlet {
 
         try {
             Collection<AddressDTO> addresses = addressDAO.getAddressesByUserId(userId);
+            List<CartItemDetailDTO> detailedCartItems = CartManager.getDetailedCartItems(
+                    request, cartDAO, cartItemDAO,productDAO, productImageDAO
+            );
+            System.out.println(detailedCartItems);
+
+            request.setAttribute("cartItems", detailedCartItems);
             request.setAttribute("addresses", addresses);
         } catch (SQLException e) {
-            errors.add("Errore durante il recupero degli indirizzi.");
+            errors.add("Errore inaspettato.");
             request.setAttribute("errors", errors);
             e.printStackTrace();
         }
