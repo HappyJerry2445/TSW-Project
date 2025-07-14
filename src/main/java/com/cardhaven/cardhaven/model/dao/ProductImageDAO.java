@@ -23,7 +23,7 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
         validateProductImage(productImageDTO);
 
         String sql;
-        if (productImageDTO.getImageId() == 0) {
+        if (productImageDTO.getProductImageId() == 0) {
             sql = "INSERT INTO ProductImage (ProductImageId, ProductId, SortOrder, ImageID) VALUES (?, ?, ?, ?)";
             try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setInt(1, productImageDTO.getProductImageId());
@@ -76,7 +76,7 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
             throw new IllegalArgumentException("ImageID must be a positive integer.");
         }
 
-        String sql = "SELECT * FROM ProductImage WHERE ProductImageID = ?";
+        String sql = "SELECT * FROM ProductImage WHERE ProductImageId = ?";
         ProductImageDTO productImageDTO = null;
         try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
