@@ -177,6 +177,7 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
 
     }
 
+
     public Collection<ProductDTO> getProductsByCategory(int categoryId) throws SQLException {
         Collection<ProductDTO> products = new ArrayList<>();
         String sql = """
