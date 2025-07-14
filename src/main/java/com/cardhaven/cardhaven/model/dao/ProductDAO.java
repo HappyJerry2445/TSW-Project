@@ -8,6 +8,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
+
 public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
             "ProductId", "SKU", "ProductName", "BasePrice", "CurrentPrice", "StockQuantity", "ProductType", "CreatedAt", "LastUpdated", "IsActive"
