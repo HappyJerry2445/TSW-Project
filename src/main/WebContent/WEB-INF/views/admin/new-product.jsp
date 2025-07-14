@@ -76,15 +76,19 @@
             <h2 class="form-section-title">Dettagli Carta Collezionabile</h2>
             <div class="form-grid">
                 <%--@elvariable id="repopulatedCard" type="com.cardhaven.cardhaven.model.dto.TradingCardDTO"--%>
-                <div class="form-group"><label for="cardSet">Set/Espansione</label><input type="text" id="cardSet"
-                                                                                          name="cardSet"
-                                                                                          value="<c:out value='${repopulatedCard.cardSet}'/>">
+                <div class="form-group"><label for="cardSet">Set/Espansione<span class="required">*</span></label><input
+                        type="text" id="cardSet"
+                        name="cardSet"
+                        value="<c:out value='${repopulatedCard.cardSet}'/>" required>
                 </div>
-                <div class="form-group"><label for="cardNumber">Numero Carta</label><input type="text" id="cardNumber"
-                                                                                           name="cardNumber"
-                                                                                           value="<c:out value='${repopulatedCard.cardNumber}'/>">
+                <div class="form-group"><label for="cardNumber">Numero Carta<span
+                        class="required">*</span></label><input type="text" id="cardNumber"
+                                                                name="cardNumber"
+                                                                value="<c:out value='${repopulatedCard.cardNumber}'/>"
+                                                                required>
                 </div>
-                <div class="form-group"><label for="rarity">Rarità</label><select id="rarity" name="rarity">
+                <div class="form-group"><label for="rarity">Rarità<span class="required">*</span></label><select
+                        id="rarity" name="rarity" required>
                     <option value="Common" ${repopulatedCard.rarity == 'Common' ? 'selected' : ''}>Comune</option>
                     <option value="Uncommon" ${repopulatedCard.rarity == 'Uncommon' ? 'selected' : ''}>Non Comune
                     </option>
@@ -92,8 +96,10 @@
                     <option value="Mythic" ${repopulatedCard.rarity == 'Mythic' ? 'selected' : ''}>Mitica</option>
                     <option value="Secret" ${repopulatedCard.rarity == 'Secret' ? 'selected' : ''}>Segreta</option>
                 </select></div>
-                <div class="form-group"><label for="cardCondition">Condizione</label><select id="cardCondition"
-                                                                                             name="cardCondition">
+                <div class="form-group"><label for="cardCondition">Condizione<span
+                        class="required">*</span></label><select id="cardCondition"
+                                                                 name="cardCondition"
+                                                                 required>
                     <option value="Mint" ${repopulatedCard.cardCondition == 'Mint' ? 'selected' : ''}>Mint</option>
                     <option value="Near Mint" ${empty repopulatedCard.cardCondition || repopulatedCard.cardCondition == 'Near Mint' ? 'selected' : ''}>
                         Near Mint
@@ -115,8 +121,11 @@
             <h2 class="form-section-title">Dettagli Accessorio</h2>
             <div class="form-grid">
                 <%--@elvariable id="repopulatedAccessory" type="com.cardhaven.cardhaven.model.dto.AccessoryDTO"--%>
-                <div class="form-group"><label for="accessoryType">Tipo Accessorio</label><select id="accessoryType"
-                                                                                                  name="accessoryType">
+                <div class="form-group"><label for="accessoryType">Tipo Accessorio<span
+                        class="required">*</span></label><select
+                        id="accessoryType"
+                        name="accessoryType"
+                        required>
                     <option value="Sleeves" ${repopulatedAccessory.accessoryType == 'Sleeves' ? 'selected' : ''}>Bustine
                         Protettive
                     </option>
