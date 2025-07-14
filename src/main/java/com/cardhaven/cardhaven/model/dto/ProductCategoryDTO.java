@@ -12,6 +12,7 @@ public class ProductCategoryDTO implements Serializable {
     }
 
     public ProductCategoryDTO() {
+        this.key = new ProductCategoryKey();
     }
 
     @Override

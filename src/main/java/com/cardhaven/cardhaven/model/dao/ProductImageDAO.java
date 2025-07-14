@@ -45,7 +45,7 @@ public class ProductImageDAO implements GenericDAO<ProductImageDTO, Integer> {
                 }
             }
         } else {
-            sql = "UPDATE ProductImage SET ProductId = ?, SortOrder = ?, ImageID = ?WHERE ProductImageId = ?";
+            sql = "UPDATE ProductImage SET ProductId = ?, SortOrder = ?, ImageID = ? WHERE ProductImageId = ?";
             try (Connection conn = dataSource.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
 

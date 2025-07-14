@@ -63,6 +63,7 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
                 ps.setTimestamp(7, (productDTO.getCreatedAt() != null) ? Timestamp.valueOf(productDTO.getCreatedAt()) : null);
                 ps.setTimestamp(8, (productDTO.getLastUpdated() != null) ? Timestamp.valueOf(productDTO.getLastUpdated()) : null);
                 ps.setBoolean(9, productDTO.isActive());
+                ps.setInt(10, productDTO.getProductId());
 
                 ps.executeUpdate();
             }
