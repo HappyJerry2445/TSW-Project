@@ -30,10 +30,7 @@
                 <div class="summary-box">
                     <c:set var="subtotal" value="0"/>
                     <c:forEach var="item" items="${cartItems}">
-                        <c:set var="product" value="${productMap[item.productId]}"/>
-                        <c:if test="${not empty product}">
-                            <c:set var="subtotal" value="${subtotal + (product.currentPrice * item.quantity)}"/>
-                        </c:if>
+                            <c:set var="subtotal" value="${subtotal + (item.price * item.quantity)}"/>
                     </c:forEach>
 
                     <div class="summary-row">
@@ -150,45 +147,33 @@
                 </div>
             </div>
 
-            <!-- TODO: Take Image correctly -->
             <!-- ORDERED PRODUCTS SECTION -->
             <div>
                 <div class="order-info-section">
                     <c:choose>
                         <c:when test="${not empty cartItems}">
                             <c:forEach var="item" items="${cartItems}">
-                                <c:set var="product" value="${productMap[item.productId]}"/>
-                                <c:if test="${not empty product}">
                                     <div class="product-item">
                                         <div class="product-image-container">
-                                            <c:set var="image" value="${productImageMap[product.productId]}"/>
-                                            <c:choose>
-                                                <c:when test="${not empty image}">
-                                                    <img src="${image}" alt="Immagine di ${product.productName}"
-                                                         class="product-image-small"/>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <img src="${pageContext.request.contextPath}/images/noimage.png"
-                                                         alt="Immagine non disponibile" class="product-image-small"/>
-                                                </c:otherwise>
-                                            </c:choose>
+                                                    <img src="${pageContext.request.contextPath}/image/${item.imageId}" alt="Immagine di ${item.productName}"
+                                                         class="product-image-small"
+                                                         onerror="this.src='${pageContext.request.contextPath}/images/noimage.png'">
                                         </div>
                                         <div>
-                                            <h5 class="product-name"><c:out value="${product.productName}"/></h5>
+                                            <h5 class="product-name"><c:out value="${item.productName}"/></h5>
                                             <p class="product-info">
                                                 Quantità: <strong>${item.quantity}</strong><br>
                                                 Prezzo unitario: <strong>€ <fmt:formatNumber
-                                                    value="${product.currentPrice}" type="number" minFractionDigits="2"
+                                                    value="${item.price}" type="number" minFractionDigits="2"
                                                     maxFractionDigits="2"/></strong>
                                             </p>
                                         </div>
                                         <div class="product-total">
                                             <span class="item-total">€ <fmt:formatNumber
-                                                    value="${product.currentPrice * item.quantity}" type="number"
+                                                    value="${item.price * item.quantity}" type="number"
                                                     minFractionDigits="2" maxFractionDigits="2"/></span>
                                         </div>
                                     </div>
-                                </c:if>
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
