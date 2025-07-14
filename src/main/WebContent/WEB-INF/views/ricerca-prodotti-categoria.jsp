@@ -11,9 +11,9 @@
     <title>${pageTitle}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%-- Inclusione dei file CSS necessari --%>
+    <jsp:include page="/WEB-INF/components/common_head.jsp"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/products.css" type="text/css">
-    <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
 <jsp:include page="/WEB-INF/components/header.jsp"/>
@@ -21,7 +21,7 @@
 <main>
     <div class="container">
         <%-- Titolo della pagina con il nome della categoria --%>
-        <h1 class="category-title">${categoryName}</h1>
+        <h1 class="section-title category-title">${categoryName}</h1>
 
         <%-- Debug info - rimuovere in produzione --%>
         <div style="display: none;">
