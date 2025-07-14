@@ -21,6 +21,8 @@
             <h2 class="section-title">Seleziona gli indirizzi da utilizzare per il tuo ordine</h2>
             <jsp:include page="/WEB-INF/components/error_message.jsp"/>
 
+            <!--TODO added something for not access to the page without passing from the cart
+
             <c:if test="${not empty addresses}">
 
                 <form action="${pageContext.request.contextPath}/common/checkout/shipping" method="post">
