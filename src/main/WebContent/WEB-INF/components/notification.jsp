@@ -3,17 +3,16 @@
 
 <%--@elvariable id="notificationType" type="java.lang.String"--%>
 <%--@elvariable id="notificationMessage" type="java.lang.String"--%>
-<c:if test="${not empty notificationMessage}">
+<c:if test="${not empty sessionScope.notificationMessage}">
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-
-            <c:if test="${not empty notificationType}">
-            notify.<c:out value="${notificationType}"/>('<c:out value="${notificationMessage}"/>');
-            </c:if>
-
-            <c:if test="${empty notificationType}">
-            notify.info('<c:out value="${notificationMessage}"/>');
-            </c:if>
+            const message = '<c:out value="${sessionScope.notificationMessage}"/>';
+            const type = '<c:out value="${sessionScope.notificationType}"/>';
+            if (window.notify && typeof window.notify[type] === 'function') {
+                window.notify[type](message);
+            } else {
+                window.notify.info(message);
+            }
         });
     </script>
     <c:remove var="notificationMessage" scope="session"/>

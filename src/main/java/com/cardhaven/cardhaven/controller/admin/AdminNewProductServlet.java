@@ -17,12 +17,17 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 @WebServlet(name = "AdminNewProductServlet", value = "/admin/products/new")
-@MultipartConfig // Abilita il supporto per upload di file
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024, // 1 Mb
+        maxFileSize = 1024 * 1024 * 10, // 5 Mb
+        maxRequestSize = 1024 * 1024 * 15 // 10 Mb
+) // Abilita il supporto per upload di file
 public class AdminNewProductServlet extends HttpServlet {
 
     @Override
@@ -140,7 +145,7 @@ public class AdminNewProductServlet extends HttpServlet {
             NotificationUtil.sendNotification(request, "Prodotto creato con successo!", "success");
             response.sendRedirect(request.getContextPath() + "/admin/products");
 
-        } catch (SQLException | IOException | ServletException e) {
+        } catch (Exception e) {
             if (conn != null) {
                 try {
                     conn.rollback(); // In caso di errore, annulla tutte le modifiche
@@ -149,9 +154,58 @@ public class AdminNewProductServlet extends HttpServlet {
                 }
             }
             e.printStackTrace();
-            // TODO: Ripopolare il form con i dati inseriti e mostrare l'errore
-            NotificationUtil.sendNotification(request, "Errore nella creazione del prodotto: " + e.getMessage(), "error");
-            response.sendRedirect(request.getContextPath() + "/admin/products/new");
+            List<String> errors = new ArrayList<>();
+            errors.add("Errore nella creazione del prodotto: " + e.getMessage());
+            request.setAttribute("errors", errors);
+
+            // Ricrea gli oggetti DTO con i dati inviati per ripopolare il form
+            ProductDTO repopulatedProduct = new ProductDTO();
+            repopulatedProduct.setProductName(request.getParameter("productName"));
+            repopulatedProduct.setSku(request.getParameter("sku"));
+            try {
+                repopulatedProduct.setBasePrice(new BigDecimal(request.getParameter("basePrice")));
+                repopulatedProduct.setCurrentPrice(new BigDecimal(request.getParameter("currentPrice")));
+                repopulatedProduct.setStockQuantity(Integer.parseInt(request.getParameter("stockQuantity")));
+            } catch (NumberFormatException nfe) {
+                errors.add("Prezzo o quantità non validi.");
+            }
+            String productTypeStr = request.getParameter("productType");
+            if (productTypeStr != null && !productTypeStr.isEmpty()) {
+                repopulatedProduct.setProductType(ProductDTO.ProductType.valueOf(productTypeStr));
+                if (repopulatedProduct.getProductType() == ProductDTO.ProductType.TradingCard) {
+                    TradingCardDTO repopulatedCard = new TradingCardDTO();
+                    repopulatedCard.setCardSet(request.getParameter("cardSet"));
+                    repopulatedCard.setCardNumber(request.getParameter("cardNumber"));
+                    repopulatedCard.setRarity(request.getParameter("rarity"));
+                    repopulatedCard.setCardCondition(request.getParameter("cardCondition"));
+                    request.setAttribute("repopulatedCard", repopulatedCard);
+                } else if (repopulatedProduct.getProductType() == ProductDTO.ProductType.Accessory) {
+                    AccessoryDTO repopulatedAccessory = new AccessoryDTO();
+                    repopulatedAccessory.setAccessoryType(request.getParameter("accessoryType"));
+                    repopulatedAccessory.setMaterial(request.getParameter("material"));
+                    repopulatedAccessory.setColor(request.getParameter("color"));
+                    request.setAttribute("repopulatedAccessory", repopulatedAccessory);
+                }
+            }
+            repopulatedProduct.setActive(request.getParameter("isActive") != null);
+            request.setAttribute("repopulatedProduct", repopulatedProduct);
+            request.setAttribute("repopulatedDescription", request.getParameter("description"));
+
+            String[] selectedCategories = request.getParameterValues("categories");
+            if (selectedCategories != null) {
+                request.setAttribute("selectedCategories", Arrays.asList(selectedCategories));
+            }
+
+            // Ricarica i dati necessari per la JSP (categorie, tipi, etc.)
+            try {
+                CategoryDAO categoryDAO = new CategoryDAO(ds);
+                request.setAttribute("categories", categoryDAO.getAll("CategoryName"));
+                request.setAttribute("productTypes", ProductDTO.ProductType.values());
+            } catch (SQLException ex) {
+                errors.add("Impossibile ricaricare i dati del form.");
+            }
+            request.getRequestDispatcher("/WEB-INF/views/admin/new-product.jsp").forward(request, response);
+            // --- FINE LOGICA DI RIPOPOLAMENTO ---
         } finally {
             if (conn != null) {
                 try {

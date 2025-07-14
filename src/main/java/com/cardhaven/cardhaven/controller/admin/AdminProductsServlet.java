@@ -4,6 +4,7 @@ import com.cardhaven.cardhaven.model.dao.ProductDAO;
 import com.cardhaven.cardhaven.model.dao.ProductImageDAO;
 import com.cardhaven.cardhaven.model.dto.ProductDTO;
 import com.cardhaven.cardhaven.model.dto.ProductImageDTO;
+import com.cardhaven.cardhaven.util.NotificationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -83,16 +84,15 @@ public class AdminProductsServlet extends HttpServlet {
             boolean deleted = productDAO.delete(productId);
 
             if (deleted) {
-                // Imposta un messaggio di successo nella sessione per visualizzarlo dopo il redirect
-                request.getSession().setAttribute("successMessage", "Prodotto eliminato con successo.");
+                NotificationUtil.sendNotification(request, "Prodotto eliminato con successo.", "success");
             } else {
-                request.getSession().setAttribute("errorMessage", "Impossibile eliminare il prodotto. Potrebbe non esistere più.");
+                NotificationUtil.sendNotification(request, "Impossibile eliminare il prodotto. Potrebbe non esistere più.", "error");
             }
         } catch (NumberFormatException e) {
-            request.getSession().setAttribute("errorMessage", "ID del prodotto non valido.");
+            NotificationUtil.sendNotification(request, "ID del prodotto non valido.", "error");
             e.printStackTrace();
         } catch (SQLException e) {
-            request.getSession().setAttribute("errorMessage", "Errore del database durante l'eliminazione del prodotto.");
+            NotificationUtil.sendNotification(request, "Errore del database durante l'eliminazione del prodotto.", "error");
             e.printStackTrace();
         }
 
