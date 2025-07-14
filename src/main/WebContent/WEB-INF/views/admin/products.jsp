@@ -25,7 +25,7 @@
         </a>
     </div>
 
-
+    <%-- Card per contenere la tabella, per un look più pulito e moderno --%>
     <div class="content-card">
         <div class="table-container">
             <table class="products-table">
@@ -41,22 +41,24 @@
                 </tr>
                 </thead>
                 <tbody>
+                <%--@elvariable id="products" type="java.util.Collection<com.cardhaven.cardhaven.model.dto.ProductDTO>"--%>
+                <%--@elvariable id="productImages" type="java.util.Map<java.lang.Integer, java.lang.Integer>"--%>
                 <c:forEach var="product" items="${products}">
                     <tr>
-                        <td class="product-image-cell">
+                        <td data-label="Immagine" class="product-image-cell">
                             <c:set var="imageId" value="${productImages[product.productId]}"/>
                             <c:choose>
                                 <c:when test="${not empty imageId}">
                                     <img src="${pageContext.request.contextPath}/image/${imageId}"
-                                         alt="${product.productName}">
+                                         alt="Immagine di <c:out value="${product.productName}"/>">
                                 </c:when>
                                 <c:otherwise>
                                     <div class="image-placeholder"><i class="fas fa-image"></i></div>
                                 </c:otherwise>
                             </c:choose>
                         </td>
-                        <td data-label="Nome">${product.productName}</td>
-                        <td data-label="SKU">${product.sku}</td>
+                        <td data-label="Nome"><c:out value="${product.productName}"/></td>
+                        <td data-label="SKU"><c:out value="${product.sku}"/></td>
                         <td data-label="Prezzo">
                             <fmt:setLocale value="it_IT"/>
                             <fmt:formatNumber value="${product.currentPrice}" type="currency" currencySymbol="€"/>
@@ -64,7 +66,7 @@
                         <td data-label="Quantità">
                             <c:choose>
                                 <c:when test="${product.stockQuantity <= 0}">
-                                    <span class="stock-badge stock-out">${product.stockQuantity}</span>
+                                    <span class="stock-badge stock-out">Esaurito</span>
                                 </c:when>
                                 <c:when test="${product.stockQuantity < 10}">
                                     <span class="stock-badge stock-low">${product.stockQuantity}</span>
@@ -84,25 +86,30 @@
                                 </c:otherwise>
                             </c:choose>
                         </td>
-                        <td class="actions-cell">
-                            <a href="${pageContext.request.contextPath}/admin/products/edit?id=${product.productId}"
-                               class="action-btn btn-edit" title="Modifica">
-                                <i class="fas fa-pencil-alt"></i>
-                            </a>
-                            <form action="${pageContext.request.contextPath}/admin/products" method="post"
-                                  onsubmit="return confirm('Sei sicuro di voler eliminare questo prodotto? L\'azione è irreversibile.');">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="productId" value="${product.productId}">
-                                <button type="submit" class="action-btn btn-delete" title="Elimina">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
+                        <td data-label="Azioni">
+                            <div class="actions-cell">
+                                <a href="${pageContext.request.contextPath}/admin/products/edit?id=${product.productId}"
+                                   class="action-btn btn-edit" title="Modifica Prodotto">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <form action="${pageContext.request.contextPath}/admin/products" method="post"
+                                      onsubmit="return confirm('Sei sicuro di voler eliminare questo prodotto? L\'azione è irreversibile.');"
+                                      style="display: inline;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="productId" value="${product.productId}">
+                                    <button type="submit" class="action-btn btn-delete" title="Elimina Prodotto">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 </c:forEach>
                 <c:if test="${empty products}">
                     <tr>
-                        <td colspan="7" class="text-center">Nessun prodotto trovato nel catalogo.</td>
+                        <td colspan="7" class="text-center" style="padding: 2rem;">Nessun prodotto trovato nel
+                            catalogo.
+                        </td>
                     </tr>
                 </c:if>
                 </tbody>

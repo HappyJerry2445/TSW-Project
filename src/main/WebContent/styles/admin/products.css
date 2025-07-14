@@ -1,66 +1,83 @@
 /* Stili specifici per la pagina di gestione prodotti (/admin/products) */
 
-/* Header della pagina */
+/* Header della pagina - Migliorato per coerenza e spaziatura */
 .admin-page-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.5rem; /* Aumentato il gap per maggiore respiro */
     margin-bottom: 2rem;
     padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--color-neutral-base);
 }
 
 .admin-page-header h1 {
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 2rem; /* Leggermente più grande per importanza */
     flex-grow: 1;
+    display: flex; /* Per allineare l'icona */
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .admin-page-header p {
     margin: 0;
-    color: var(--text-color);
+    color: var(--color-text-secondary);
     flex-basis: 100%;
+    font-size: 1.1rem;
 }
 
-.admin-page-header .btn {
+.admin-page-header .btn-primary {
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
+    box-shadow: var(--color-shadow-md);
+    transition: transform 0.2s ease;
 }
 
-/* Card che contiene la tabella */
+.admin-page-header .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--color-shadow-strong);
+}
+
+/* Card che contiene la tabella - Stile più pulito */
 .content-card {
-    background: white;
-    border-radius: var(--card-radius);
-    padding: 1.5rem 2rem;
-    box-shadow: var(--shadow-light);
-    overflow-x: auto; /* Permette lo scroll orizzontale su schermi piccoli */
+    background: var(--color-bg-card);
+    border-radius: var(--border-radius-md);
+    padding: 0; /* Rimosso padding per dare più spazio alla tabella */
+    box-shadow: var(--color-shadow-md);
+    overflow: hidden; /* Nasconde l'overflow per i bordi arrotondati */
 }
 
-/* Tabella dei prodotti */
+/* Tabella dei prodotti - Stile moderno */
 .products-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.95rem;
+    font-size: 1rem;
 }
 
 .products-table thead {
-    background-color: var(--light-color);
+    background-color: var(--color-neutral-lightest);
 }
 
 .products-table th {
-    padding: 1rem;
+    padding: 1.25rem 1.5rem;
     text-align: left;
     font-weight: 600;
-    color: var(--dark-color);
-    border-bottom: 2px solid var(--border-color);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
 }
 
 .products-table td {
-    padding: 1rem;
-    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--color-neutral-light);
     vertical-align: middle;
+}
+
+.products-table tbody tr {
+    transition: background-color 0.2s ease;
 }
 
 .products-table tbody tr:last-child td {
@@ -68,106 +85,108 @@
 }
 
 .products-table tbody tr:hover {
-    background-color: #f9f9f9;
+    background-color: var(--color-bg-light-grey);
 }
 
-/* Cella immagine */
+/* Cella immagine - Stile migliorato */
 .product-image-cell img {
     width: 60px;
     height: 60px;
     object-fit: cover;
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--shadow-light);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--color-shadow-light);
+    border: 2px solid var(--color-primary-light);
 }
 
 .image-placeholder {
     width: 60px;
     height: 60px;
-    background-color: var(--border-color);
-    border-radius: var(--border-radius-sm);
+    background-color: var(--color-neutral-light);
+    border-radius: var(--border-radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-color);
+    color: var(--color-neutral-dark);
     font-size: 1.5rem;
 }
 
-
-/* Badge di stato e quantità */
+/* Badge di stato e quantità - Più leggibili */
 .status-badge, .stock-badge {
-    padding: 0.25rem 0.6rem;
+    padding: 0.35rem 0.8rem;
     border-radius: 50px;
-    font-weight: 600;
-    font-size: 0.8rem;
+    font-weight: 700;
+    font-size: 0.75rem;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
     color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .status-badge.status-active {
-    background-color: var(--secondary-color);
+    background-color: var(--color-status-success);
 }
 
 .status-badge.status-inactive {
-    background-color: var(--dark-color);
-    opacity: 0.7;
+    background-color: var(--color-neutral-dark);
 }
 
 .stock-badge.stock-ok {
-    background-color: var(--primary-color);
+    background-color: var(--color-status-info);
 }
 
 .stock-badge.stock-low {
-    background-color: var(--warning-color);
+    background-color: var(--color-status-warning);
+    color: var(--color-primary-dark);
+    text-shadow: none;
 }
 
 .stock-badge.stock-out {
-    background-color: var(--accent-color);
+    background-color: var(--color-status-error);
 }
 
-
-/* Cella delle azioni */
+/* Cella delle azioni - Bottoni più chiari e con tooltip (da implementare in HTML se si vuole) */
 .actions-cell {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
 .action-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     border: none;
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s ease;
     color: white;
+    position: relative; /* Per tooltip */
 }
 
 .action-btn.btn-edit {
-    background-color: var(--primary-color);
+    background-color: var(--color-accent-vibrant);
 }
 
 .action-btn.btn-edit:hover {
-    background-color: var(--primary-dark);
+    background-color: var(--color-accent-secondary);
 }
 
 .action-btn.btn-delete {
-    background-color: var(--accent-color);
+    background-color: var(--color-status-error);
 }
 
 .action-btn.btn-delete:hover {
-    background-color: #c0392b; /* Darker red */
+    background-color: var(--color-status-error-dark);
 }
 
-/* Responsive per la tabella */
-@media (max-width: 768px) {
-    .admin-page-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+.action-btn i {
+    font-size: 0.9rem;
+}
 
+/* Responsive - Vista a card per mobile */
+@media (max-width: 992px) {
     .products-table thead {
         display: none; /* Nascondi l'header della tabella */
     }
@@ -179,35 +198,43 @@
 
     .products-table tr {
         margin-bottom: 1.5rem;
-        border: 1px solid var(--border-color);
-        border-radius: var(--card-radius);
+        border: 1px solid var(--color-neutral-base);
+        border-radius: var(--border-radius-md);
+        box-shadow: var(--color-shadow-light);
+        overflow: hidden; /* Per contenere i bordi */
     }
 
     .products-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--color-neutral-light);
         text-align: right;
-        padding-left: 50%; /* Spazio per l'etichetta */
-        position: relative;
-        border: none;
-        border-bottom: 1px solid var(--border-color);
+    }
+
+    .products-table td:last-child {
+        border-bottom: none;
     }
 
     .products-table td:before {
         content: attr(data-label);
-        position: absolute;
-        left: 1rem;
-        width: 45%;
-        padding-right: 1rem;
-        text-align: left;
         font-weight: bold;
-        color: var(--dark-color);
+        text-align: left;
+        color: var(--color-primary-dark);
     }
 
     .product-image-cell {
-        display: flex;
-        justify-content: flex-end; /* Allinea l'immagine a destra */
+        justify-content: space-between; /* Assicura che l'immagine stia a destra */
     }
 
     .actions-cell {
-        justify-content: flex-end;
+        background-color: var(--color-neutral-lightest);
+        padding: 1rem;
+        justify-content: center; /* Centra i bottoni nella card */
+    }
+
+    .actions-cell form {
+        display: inline-block;
     }
 }
