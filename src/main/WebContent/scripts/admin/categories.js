@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
 
             const item = this.closest('.category-item');
+            console.log(item.dataset.category);
             const data = JSON.parse(item.dataset.category.replace(/'/g, '"')); // Sostituisce apici singoli con doppi per JSON valido
 
             formTitle.textContent = `Modifica Categoria: ${data.name}`;

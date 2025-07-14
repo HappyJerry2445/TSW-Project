@@ -8,7 +8,8 @@
 <c:set var="categoryJson"
        value="{'id': ${category_to_render.id}, 'name': '${nameJson}', 'parentId': ${empty category_to_render.parentId ? 'null' : category_to_render.parentId}, 'type': '${category_to_render.type}', 'description': '${descJson}'}"/>
 
-<li class="category-item" data-category='${categoryJson}'>
+<li class="category-item"
+    data-category="${categoryJson}">
     <div class="category-item-content">
         <div class="category-info">
             <c:out value="${category_to_render.name}"/>
