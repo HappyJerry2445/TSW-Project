@@ -178,8 +178,8 @@ const PaymentHandler = {
         switch(method) {
             case 'credit-card':
                 return this.validateCreditCard();
-            case 'bank-transfer':
-                return this.validateBankTransfer();
+            case 'cash-on-delivery':
+                return this.validateCashOnDelivery();
             default:
                 return false;
         }
@@ -197,8 +197,8 @@ const PaymentHandler = {
                 data.expiryDate = document.getElementById('expiry-date').value;
                 data.cardholderName = document.getElementById('cardholder-name').value;
                 break;
-            case 'bank-transfer':
-                data.notes = 'Bonifico bancario - Istruzioni inviate via email';
+            case 'cash-on-delivery':
+                data.notes = 'Pagamento in contrassegno alla consegna';
                 break;
         }
 
@@ -240,7 +240,7 @@ const PaymentHandler = {
         return /^[a-zA-ZàèéìòùÀÈÉÌÒÙ\s'-]+$/.test(name);
     },
 
-    validateBankTransfer: function() {
+    validateCashOnDelivery: function() {
         return true;
     },
 

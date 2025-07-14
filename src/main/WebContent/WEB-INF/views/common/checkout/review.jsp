@@ -30,7 +30,7 @@
                 <div class="summary-box">
                     <c:set var="subtotal" value="0"/>
                     <c:forEach var="item" items="${cartItems}">
-                            <c:set var="subtotal" value="${subtotal + (item.price * item.quantity)}"/>
+                        <c:set var="subtotal" value="${subtotal + (item.price * item.quantity)}"/>
                     </c:forEach>
 
                     <div class="summary-row">
@@ -104,9 +104,9 @@
                         </label>
                     </div>
                     <div class="payment-option">
-                        <input type="radio" id="bank-transfer" name="payment-method" value="bank-transfer">
-                        <label for="bank-transfer">
-                            <i class="fas fa-university"></i> Bonifico Bancario
+                        <input type="radio" id="cash-on-delivery" name="payment-method" value="cash-on-delivery">
+                        <label for="cash-on-delivery">
+                            <i class="fas fa-hand-holding-usd"></i> Contrassegno (pagamento alla consegna)
                         </label>
                     </div>
                 </div>
@@ -136,12 +136,20 @@
                         </div>
                     </div>
 
-                    <!-- Bank Transfer Form -->
-                    <div id="bank-transfer-form" class="payment-form">
-                        <h5>Bonifico Bancario</h5>
-                        <p class="payment-info">Riceverai le istruzioni per il bonifico via email dopo la conferma dell'ordine.</p>
+                    <!-- Cash on Delivery Form -->
+                    <div id="cash-on-delivery-form" class="payment-form">
+                        <h5>Contrassegno</h5>
+                        <p class="payment-info">
+                            <strong>Pagamento alla consegna:</strong> Il pagamento verrà effettuato direttamente al corriere al momento della consegna.
+                        </p>
                         <div class="alert alert-info">
-                            <strong>Nota:</strong> L'ordine verrà processato solo dopo la ricezione del pagamento.
+                            <strong>Importante:</strong>
+                            <ul>
+                                <li>Il pagamento può essere effettuato solo in contanti</li>
+                                <li>È necessario avere l'importo esatto o una cifra superiore</li>
+                                <li>Il corriere fornirà il resto e una ricevuta</li>
+                                <li>In caso di assenza, sarà necessario ritirare il pacco presso il punto di ritiro</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -153,27 +161,27 @@
                     <c:choose>
                         <c:when test="${not empty cartItems}">
                             <c:forEach var="item" items="${cartItems}">
-                                    <div class="product-item">
-                                        <div class="product-image-container">
-                                                    <img src="${pageContext.request.contextPath}/image/${item.imageId}" alt="Immagine di ${item.productName}"
-                                                         class="product-image-small"
-                                                         onerror="this.src='${pageContext.request.contextPath}/images/noimage.png'">
-                                        </div>
-                                        <div>
-                                            <h5 class="product-name"><c:out value="${item.productName}"/></h5>
-                                            <p class="product-info">
-                                                Quantità: <strong>${item.quantity}</strong><br>
-                                                Prezzo unitario: <strong>€ <fmt:formatNumber
-                                                    value="${item.price}" type="number" minFractionDigits="2"
-                                                    maxFractionDigits="2"/></strong>
-                                            </p>
-                                        </div>
-                                        <div class="product-total">
+                                <div class="product-item">
+                                    <div class="product-image-container">
+                                        <img src="${pageContext.request.contextPath}/image/${item.imageId}" alt="Immagine di ${item.productName}"
+                                             class="product-image-small"
+                                             onerror="this.src='${pageContext.request.contextPath}/images/noimage.png'">
+                                    </div>
+                                    <div>
+                                        <h5 class="product-name"><c:out value="${item.productName}"/></h5>
+                                        <p class="product-info">
+                                            Quantità: <strong>${item.quantity}</strong><br>
+                                            Prezzo unitario: <strong>€ <fmt:formatNumber
+                                                value="${item.price}" type="number" minFractionDigits="2"
+                                                maxFractionDigits="2"/></strong>
+                                        </p>
+                                    </div>
+                                    <div class="product-total">
                                             <span class="item-total">€ <fmt:formatNumber
                                                     value="${item.price * item.quantity}" type="number"
                                                     minFractionDigits="2" maxFractionDigits="2"/></span>
-                                        </div>
                                     </div>
+                                </div>
                             </c:forEach>
                         </c:when>
                         <c:otherwise>
