@@ -153,25 +153,25 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
 
     private void validateProduct(ProductDTO productDTO) {
         if (productDTO == null) {
-            throw new IllegalArgumentException("Product cannot be null.");
+            throw new IllegalArgumentException("Il prodotto non può essere null.");
         }
         if (productDTO.getSku() == null || productDTO.getSku().trim().isEmpty()) {
-            throw new IllegalArgumentException("SKU cannot be null or empty.");
+            throw new IllegalArgumentException("SKU non può essere null o vuoto.");
         }
         if (productDTO.getProductName() == null || productDTO.getProductName().trim().isEmpty()) {
-            throw new IllegalArgumentException("Product Name cannot be null or empty.");
+            throw new IllegalArgumentException("Il nome del prodotto non può essere null o vuoto.");
         }
         if (productDTO.getBasePrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Base Price must be positive.");
+            throw new IllegalArgumentException("Prezzo base deve essere positivo");
         }
         if (productDTO.getCurrentPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Current Price must be positive.");
+            throw new IllegalArgumentException("Prezzo corrente deve essere positivo");
         }
         if (productDTO.getStockQuantity() < 0) {
-            throw new IllegalArgumentException("Stock Quantity cannot be negative.");
+            throw new IllegalArgumentException("La stock quantity deve essere positiva o zero.");
         }
         if (productDTO.getProductType() == null) {
-            throw new IllegalArgumentException("Product Type cannot be null.");
+            throw new IllegalArgumentException("Il tipo di prodotto non può essere null.");
         }
 
     }

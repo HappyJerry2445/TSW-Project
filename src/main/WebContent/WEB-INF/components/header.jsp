@@ -21,7 +21,14 @@
                 <button type="submit" aria-label="Invia ricerca"><i class="fas fa-search"></i></button>
             </form>
             <div class="header-icons">
-                <!-- TODO: pagina account -->
+                <%--@elvariable id="userRole" type="com.cardhaven.cardhaven.model.dto.UserDTO.Role"--%>
+                <c:if test="${sessionScope.userRole == 'Admin'}">
+                    <a id="admin-dashboard-icon" href="${pageContext.request.contextPath}/admin/dashboard"
+                       aria-label="Dashboard Amministrazione"
+                       class="action-icon">
+                        <i class="fa-solid fa-solar-panel"></i>
+                    </a>
+                </c:if>
                 <a id="account-icon" href="${pageContext.request.contextPath}/common/profile"
                    aria-label="Il mio account"
                    class="action-icon">

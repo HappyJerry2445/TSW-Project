@@ -18,11 +18,18 @@
 
 <main class="admin-container">
     <div class="admin-page-header">
-        <h1><i class="fas fa-box-open"></i> Gestione Prodotti</h1>
-        <p>Visualizza, aggiungi, modifica o elimina i prodotti del tuo catalogo.</p>
-        <a href="${pageContext.request.contextPath}/admin/products/new" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Aggiungi Nuovo Prodotto
-        </a>
+        <div class="header-content">
+            <h1><i class="fas fa-box-open"></i> Gestione Prodotti</h1>
+            <p>Visualizza, aggiungi, modifica o elimina i prodotti del tuo catalogo.</p>
+        </div>
+        <div class="header-actions">
+            <a href="${pageContext.request.contextPath}/admin/dashboard" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Torna alla Dashboard
+            </a>
+            <a href="${pageContext.request.contextPath}/admin/products/new" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Aggiungi Nuovo Prodotto
+            </a>
+        </div>
     </div>
 
     <%-- Card per contenere la tabella, per un look più pulito e moderno --%>
