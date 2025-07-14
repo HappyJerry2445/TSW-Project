@@ -99,6 +99,7 @@
     </div>
 
 
-                </main>
+</main>
+<jsp:include page="/WEB-INF/components/footer.jsp"/>
 </body>
 </html>
