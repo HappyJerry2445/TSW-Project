@@ -183,7 +183,7 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
                 SELECT *
                 FROM Product
                 JOIN ProductCategory ON Product.ProductId = ProductCategory.ProductID
-                WHERE ProductCategory.ProductID = ? AND Product.IsActive = true
+                WHERE ProductCategory.CategoryID = ? AND Product.IsActive = true
                 ORDER BY Product.ProductName
                 """;
         try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
