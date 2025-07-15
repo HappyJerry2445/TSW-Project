@@ -1,3 +1,7 @@
+<%@ page import="com.cardhaven.cardhaven.model.dao.UserDAO" %>
+<%@ page import="javax.sql.DataSource" %>
+<%@ page import="com.cardhaven.cardhaven.model.dto.UserDTO" %>
+<%@ page import="java.sql.SQLException" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -22,7 +26,18 @@
             </form>
             <div class="header-icons">
                 <%--@elvariable id="userRole" type="com.cardhaven.cardhaven.model.dto.UserDTO.Role"--%>
-                <c:if test="${sessionScope.userRole == 'Admin'}">
+                <%
+                    UserDTO.Role userRole = null;
+                    var ds = (DataSource) request.getServletContext().getAttribute("ds");
+                    UserDAO userDAO = new UserDAO(ds);
+                    try {
+                        UserDTO userDTO = userDAO.getById((Integer) session.getAttribute("userId"));
+                        userRole = userDTO.getRole();
+                    } catch (SQLException e) {
+                    }
+                    request.setAttribute("userRole", userRole);
+                %>
+                <c:if test="${userRole == 'Admin'}">
                     <a id="admin-dashboard-icon" href="${pageContext.request.contextPath}/admin/dashboard"
                        aria-label="Dashboard Amministrazione"
                        class="action-icon">

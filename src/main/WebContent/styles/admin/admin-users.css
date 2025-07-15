@@ -1,0 +1,193 @@
+/* Styles for Admin Users Page */
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.users-table th,
+.users-table td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-neutral-light);
+    vertical-align: middle;
+}
+
+.users-table thead {
+    background-color: var(--color-neutral-lightest);
+}
+
+.users-table th {
+    font-weight: 600;
+    color: var(--color-table-thead);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.users-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.users-table tbody tr:hover {
+    background-color: var(--color-bg-light-grey);
+}
+
+.users-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* User Role Cell */
+.user-role-cell {
+    white-space: nowrap;
+}
+
+.role-select {
+    padding: 0.4rem 0.75rem;
+    padding-right: 1.7rem;
+    border: 1px solid var(--color-neutral-base);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--color-primary-light);
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    transition: border-color 0.2s;
+    -webkit-appearance: none; /* Remove default dropdown arrow */
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%236c757d' d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+}
+
+.role-select:focus {
+    outline: none;
+    border-color: var(--color-accent-vibrant);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+.role-update-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.9rem;
+    border-radius: var(--border-radius-sm);
+    color: var(--color-accent-vibrant);
+    border: 1px solid var(--color-accent-vibrant);
+    background-color: transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.role-update-btn:hover {
+    background-color: var(--color-accent-vibrant);
+    color: var(--color-primary-light);
+}
+
+/* Actions Cell - aligned with products.css actions-cell */
+.actions-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: white;
+    font-size: 0.85rem;
+}
+
+/* Specific button styles (e.g., delete) can be copied from admin-orders.css */
+.action-btn.btn-delete {
+    background-color: var(--color-status-error);
+}
+
+.action-btn.btn-delete:hover {
+    background-color: var(--color-status-error-dark);
+}
+
+.filter-actions {
+    grid-column: span 4;
+}
+
+
+/* Responsive adjustments (mostly inherited from admin-orders.css and products.css) */
+@media (max-width: 992px) {
+    .filter-actions {
+        grid-column: span 1;
+    }
+
+    .users-table thead {
+        display: none;
+    }
+
+    .users-table, .users-table tbody, .users-table tr, .users-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .users-table tr {
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--color-neutral-base);
+        border-radius: var(--border-radius-md);
+        box-shadow: var(--color-shadow-light);
+        overflow: hidden;
+    }
+
+    .users-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--color-neutral-light);
+        text-align: right;
+    }
+
+    .users-table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        text-align: left;
+        color: var(--color-primary-dark);
+        flex-basis: 40%;
+    }
+
+    .user-role-cell, .actions-cell {
+        justify-content: flex-end;
+    }
+
+    .user-role-cell .role-select {
+        flex-grow: 0;
+        width: auto;
+    }
+
+    .user-role-cell .role-update-btn {
+        margin-left: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .users-table td {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .users-table td:before {
+        margin-bottom: 0.25rem;
+    }
+
+    .user-role-cell, .actions-cell {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 0.5rem;
+    }
+}

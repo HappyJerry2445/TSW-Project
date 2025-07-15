@@ -7,6 +7,6 @@ public class UserLoginUtil {
     static public void login(HttpSession session, UserDTO user) {
         session.setAttribute("userId", user.getId());
         session.setAttribute("userEmail", user.getEmail());
-        session.setAttribute("userRole", user.getRole());
+        //session.setAttribute("userRole", user.getRole());
     }
 }

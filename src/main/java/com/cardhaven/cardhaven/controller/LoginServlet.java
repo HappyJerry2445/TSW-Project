@@ -25,6 +25,10 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         System.out.println("doPost");
+        if (request.getSession().getAttribute("userId") != null) {
+            response.sendRedirect(request.getContextPath() + "/");
+            return;
+        }
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -88,6 +92,10 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (req.getSession().getAttribute("userId") != null) {
+            resp.sendRedirect(req.getContextPath() + "/");
+            return;
+        }
         var dispatcher = req.getRequestDispatcher("/WEB-INF/views/login.jsp");
         dispatcher.forward(req, resp);
 

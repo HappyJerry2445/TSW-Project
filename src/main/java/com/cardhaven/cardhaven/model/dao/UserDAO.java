@@ -158,8 +158,43 @@ public class UserDAO implements GenericDAO<UserDTO, Integer> {
      */
     @Override
     public Collection<UserDTO> getAll(String order) throws SQLException {
+        return getFilteredUsers(order, false, null, null, null, null);
+    }
+
+    /**
+     * Retrieves a filtered collection of users from the database.
+     *
+     * @param order     The column name to order the results by.
+     *                  Pass null or an empty string for default order.
+     * @param desc      Descending or not
+     * @param firstName Optional. Filters users by first name (case-insensitive, partial match).
+     * @param lastName  Optional. Filters users by last name (case-insensitive, partial match).
+     * @param email     Optional. Filters users by email (case-insensitive, partial match).
+     * @param role      Optional. Filters users by role.
+     * @return A collection of User objects.
+     * @throws SQLException if a database access error occurs.
+     */
+    public Collection<UserDTO> getFilteredUsers(String order, boolean desc, String firstName, String lastName, String email, UserDTO.Role role) throws SQLException {
         Collection<UserDTO> userDTOS = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT UserID, FirstName, LastName, Email, PasswordHash, CreatedAt, LastLogin, Role FROM User");
+        StringBuilder sql = new StringBuilder("SELECT UserID, FirstName, LastName, Email, PasswordHash, CreatedAt, LastLogin, Role FROM User WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+
+        if (firstName != null && !firstName.isEmpty()) {
+            sql.append(" AND FirstName LIKE ?");
+            params.add("%" + firstName + "%");
+        }
+        if (lastName != null && !lastName.isEmpty()) {
+            sql.append(" AND LastName LIKE ?");
+            params.add("%" + lastName + "%");
+        }
+        if (email != null && !email.isEmpty()) {
+            sql.append(" AND Email LIKE ?");
+            params.add("%" + email + "%");
+        }
+        if (role != null) {
+            sql.append(" AND Role = ?");
+            params.add(role.name());
+        }
 
         String actualOrderColumn = DEFAULT_ORDER_COLUMN;
         if (order != null && !order.trim().isEmpty()) {
@@ -171,12 +206,21 @@ public class UserDAO implements GenericDAO<UserDTO, Integer> {
             }
         }
         sql.append(" ORDER BY ").append(actualOrderColumn);
+        if (desc) {
+            sql.append(" DESC");
+        }
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql.toString());
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                userDTOS.add(extractUserFromResultSet(rs));
+             PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    userDTOS.add(extractUserFromResultSet(rs));
+                }
             }
         }
         return userDTOS;
