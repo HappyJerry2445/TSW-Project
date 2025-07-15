@@ -119,6 +119,18 @@ public class OrderDTO implements Serializable {
         Processing,
         Shipped,
         Delivered,
-        Cancelled
+        Cancelled;
+
+        @Override
+        public String toString() {
+            return switch (this) {
+                case Pending -> "In attesa";
+                case Processing -> "In elaborazione";
+                case Shipped -> "Spedito";
+                case Delivered -> "Consegnato";
+                case Cancelled -> "Annullato";
+                default -> "";
+            };
+        }
     }
 }

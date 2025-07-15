@@ -1,0 +1,321 @@
+/* Styles for Admin Orders Page */
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.orders-table th,
+.orders-table td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-neutral-light);
+    vertical-align: middle;
+}
+
+.orders-table thead {
+    background-color: var(--color-neutral-lightest);
+}
+
+.orders-table th {
+    font-weight: 600;
+    color: var(--color-table-thead);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.orders-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.orders-table tbody tr:hover {
+    background-color: var(--color-bg-light-grey);
+}
+
+.orders-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Customer Email in a smaller font */
+.customer-email {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+}
+
+/* Address cells with line breaks */
+.address-cell {
+    line-height: 1.4;
+    white-space: normal; /* Allow text to wrap */
+    max-width: 200px; /* Limit width to prevent overly wide columns */
+}
+
+/* Order Status Cell */
+.order-status-cell {
+    white-space: nowrap;
+}
+
+.status-select {
+    padding: 0.4rem 1rem;
+    padding-right: 1.7rem;
+    border: 1px solid var(--color-neutral-base);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--color-primary-light);
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    transition: border-color 0.2s;
+    -webkit-appearance: none; /* Remove default dropdown arrow */
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%236c757d' d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+}
+
+.status-select:focus {
+    outline: none;
+    border-color: var(--color-accent-vibrant);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+.status-update-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.9rem;
+    border-radius: var(--border-radius-sm);
+    color: var(--color-accent-vibrant);
+    border: 1px solid var(--color-accent-vibrant);
+    background-color: transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: block;
+}
+
+.status-update-btn:hover {
+    background-color: var(--color-accent-vibrant);
+    color: var(--color-primary-light);
+}
+
+/* Actions Cell - aligned with products.css actions-cell */
+.actions-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: white;
+    font-size: 0.85rem;
+}
+
+.action-btn.btn-view {
+    background-color: var(--color-status-info);
+}
+
+.action-btn.btn-view:hover {
+    background-color: var(--color-status-info-hover);
+}
+
+.action-btn.btn-delete {
+    background-color: var(--color-status-error);
+}
+
+.action-btn.btn-delete:hover {
+    background-color: var(--color-status-error-dark);
+}
+
+/* Filter Form Styles */
+.filter-card {
+    margin-bottom: 2rem;
+    padding: 1.5rem 2rem; /* Adjusted padding for filters */
+}
+
+.filter-card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-neutral-base);
+}
+
+.filter-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    align-items: end; /* Align items at the bottom */
+}
+
+.filter-form .form-group {
+    margin-bottom: 0; /* Remove default form-group margin */
+}
+
+.filter-form .form-group label {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.filter-form .form-group input[type="date"],
+.filter-form .form-group input[type="text"] {
+    padding: 0.7rem;
+    font-size: 0.95rem;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 1rem;
+    grid-column: span 2; /* Span across two columns for buttons on larger screens */
+    justify-content: flex-end; /* Align buttons to the right */
+    padding-top: 1rem; /* Space above buttons */
+}
+
+.filter-actions .btn {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.95rem;
+}
+
+/*.dateFilterForm {*/
+/*    display: grid;*/
+/*    grid-template-columns: repeat(2, 1fr);*/
+/*    gap: 1rem;*/
+/*}*/
+
+/*.dateFilterForm .form-group {*/
+/*    display: contents;*/
+/*}*/
+
+.dateFilterForm {
+    display: contents;
+}
+
+a.action-btn.btn-view {
+    color: white;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .dateFilterForm {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .dateFilterForm .form-group {
+        display: contents;
+    }
+
+
+    .address-cell {
+        max-width: 100%;
+    }
+
+    .content-card {
+        box-shadow: none;
+    }
+
+    .orders-table thead {
+        display: none;
+    }
+
+    .status-select {
+        margin-right: 0;
+    }
+
+    .actions-cell {
+        padding: 0;
+    }
+
+    .filter-card {
+        padding: 0;
+    }
+
+    .orders-table, .orders-table tbody, .orders-table tr, .orders-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .orders-table tr {
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--color-neutral-base);
+        border-radius: var(--border-radius-md);
+        box-shadow: var(--color-shadow-light);
+        overflow: hidden;
+    }
+
+    .orders-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--color-neutral-light);
+        text-align: right;
+    }
+
+    .orders-table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        text-align: left;
+        color: var(--color-primary-dark);
+        flex-basis: 40%; /* Adjust as needed for label width */
+    }
+
+    .order-status-cell, .actions-cell {
+        justify-content: flex-end;
+    }
+
+    .order-status-cell .status-select {
+        flex-grow: 0;
+        width: auto;
+    }
+
+    .order-status-cell .status-update-btn {
+        margin-left: 0.5rem;
+    }
+
+    .filter-form {
+        grid-template-columns: 1fr; /* Stack filter inputs on smaller screens */
+    }
+
+    .filter-actions {
+        grid-column: 1 / -1; /* Buttons span full width */
+        flex-direction: column; /* Stack buttons vertically */
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .filter-actions .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+
+
+    .orders-table td {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .orders-table td:before {
+        margin-bottom: 0.25rem;
+    }
+
+    .order-status-cell, .actions-cell {
+        width: 100%;
+        justify-content: flex-start;
+        margin-top: 0.5rem;
+    }
+}

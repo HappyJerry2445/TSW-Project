@@ -242,7 +242,6 @@
     }
 
     .actions-cell {
-        background-color: var(--color-neutral-lightest);
         padding: 1rem;
         justify-content: center; /* Centra i bottoni nella card */
     }

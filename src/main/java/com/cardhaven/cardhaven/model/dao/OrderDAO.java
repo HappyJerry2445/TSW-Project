@@ -1,12 +1,15 @@
 package com.cardhaven.cardhaven.model.dao;
 
 import com.cardhaven.cardhaven.model.dto.OrderDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
+
 
 public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
 
@@ -15,6 +18,7 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
     );
 
     private static final String DEFAULT_ORDER_COLUMN = "OrderID";
+    private static final Logger log = LoggerFactory.getLogger(OrderDAO.class);
 
     private final DataSource dataSource;
 
@@ -105,9 +109,41 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
         return orderDTO;
     }
 
+    @Override
     public Collection<OrderDTO> getAll(String order) throws SQLException {
+        // Delegates to the new getFilteredOrders with no filters
+        return getFilteredOrders(order, false, null, null, null);
+    }
+
+    /**
+     * Retrieves a filtered collection of orders from the database.
+     *
+     * @param order     The column name to order the results by.
+     *                  Pass null or an empty string for default order.
+     * @param startDate Optional. Filters orders created on or after this date.
+     * @param endDate   Optional. Filters orders created on or before this date.
+     * @param userId    Optional. Filters orders placed by this user ID.
+     * @return A collection of Order objects.
+     * @throws SQLException if a database access error occurs.
+     */
+    public Collection<OrderDTO> getFilteredOrders(String order, boolean desc, LocalDateTime startDate, LocalDateTime endDate, Integer userId) throws SQLException {
         Collection<OrderDTO> orderDTOS = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM `Order` ");
+        StringBuilder sql = new StringBuilder("SELECT * FROM `Order` WHERE 1=1"); // 1=1 is a trick to easily append WHERE clauses
+
+        List<Object> params = new ArrayList<>();
+
+        if (startDate != null) {
+            sql.append(" AND OrderDate >= ?");
+            params.add(Timestamp.valueOf(startDate));
+        }
+        if (endDate != null) {
+            sql.append(" AND OrderDate <= ?");
+            params.add(Timestamp.valueOf(endDate));
+        }
+        if (userId != null && userId > 0) {
+            sql.append(" AND UserID = ?");
+            params.add(userId);
+        }
 
         String actualOrderColumn = DEFAULT_ORDER_COLUMN;
         if (order != null && !order.isEmpty()) {
@@ -119,17 +155,27 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
             }
         }
         sql.append(" ORDER BY ").append(actualOrderColumn);
+        if (desc) {
+            sql.append(" DESC");
+        }
 
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql.toString());
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                orderDTOS.add(extractOrderFromResultSet(rs));
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    orderDTOS.add(extractOrderFromResultSet(rs));
+                }
             }
         }
         return orderDTOS;
-
     }
+
 
     public List<String> getAllowedOrderColumns() {
         return new ArrayList<>(ALLOWED_ORDER_COLUMNS);
