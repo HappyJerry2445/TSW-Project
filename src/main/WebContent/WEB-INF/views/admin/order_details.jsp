@@ -30,7 +30,6 @@
                 <h4>Informazioni Ordine</h4>
                 <p><strong>Nome utente:</strong> <c:out value="${orderUserFirstName} ${orderUserLastName}"/></p>
                 <p><strong>E-mail:</strong> <c:out value="${orderUserEmail}"/></p>
-                <p><strong>Stato:</strong> <c:out value="${order.orderStatus}"/></p>
                 <p><strong>Data:</strong> <c:out value="${my:formatDateTime(order.orderDate)}"/></p>
                 <p><strong>Stato:</strong> <c:out value="${order.orderStatus}"/></p>
                 <p><strong>Totale:</strong> € <fmt:formatNumber value="${fn:escapeXml(order.totalAmount)}"
