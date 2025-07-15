@@ -203,6 +203,10 @@ a.action-btn.btn-view {
     color: white;
 }
 
+.admin-header-actions {
+    grid-template-columns: 1fr;
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
