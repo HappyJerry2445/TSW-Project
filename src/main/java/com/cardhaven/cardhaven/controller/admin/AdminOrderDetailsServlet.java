@@ -45,10 +45,15 @@ public class AdminOrderDetailsServlet extends HttpServlet {
         ProductDAO productDAO = new ProductDAO(ds);
         OrderAddressDAO addressDAO = new OrderAddressDAO(ds);
         ProductImageDAO productImageDAO = new ProductImageDAO(ds); // Instantiate ProductImageDAO
+        UserDAO userDAO = new UserDAO(ds);
 
 
         try {
             OrderDTO order = orderDAO.getById(orderId);
+
+            var userId = order.getUserID();
+            UserDTO userDTO = userDAO.getById(userId);
+
 
             // Recupera gli items dell'ordine
             List<OrderItemDTO> items = orderItemDAO.getOrderItemsByOrderId(orderId);
@@ -80,6 +85,9 @@ public class AdminOrderDetailsServlet extends HttpServlet {
                 shippingAddress = addressDAO.getById(order.getShippingAddressId());
             }
 
+            request.setAttribute("orderUserFirstName", userDTO.getFirstName());
+            request.setAttribute("orderUserLastName", userDTO.getLastName());
+            request.setAttribute("orderUserEmail", userDTO.getEmail());
             request.setAttribute("order", order);
             request.setAttribute("orderItems", items);
             request.setAttribute("productMap", productMap);
