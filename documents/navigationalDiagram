@@ -1,121 +1,46 @@
 graph TD
-    %% Define styles for JSPs (yellow) and Servlets (blue)
-    classDef jsp fill:#F9E79F,stroke:#333,stroke-width:2px
-    classDef servlet fill:#AED6F1,stroke:#333,stroke-width:2px
+    %% Define a simple style for the nodes
+    classDef page fill:#f8f9fa,stroke:#333,stroke-width:2px
 
-    subgraph "User"
-        I(index.jsp) -->|Link| L(login.jsp)
-        L --Submit--> LS(LoginServlet)
-        LS --Success (User)--> I
-        LS --Failure--> L
-        I -->|Link| R(register.jsp)
-        R --Submit--> RS(RegisterServlet)
-        RS --Success--> L
+    subgraph "User-Facing Website"
+        Home("Home Page<br/>(index.jsp)")
 
-        subgraph "Profile & Logout"
-            I -->|Link to Profile| ProfileS(ProfileServlet)
-            ProfileS -->|Forwards| ProfileJ(profile.jsp)
-            ProfileJ -->|Logout| LogoutS(LogoutServlet)
-            LogoutS -->|Redirect| I
-            %% --- Subgraph: User Profile Management ---
-                subgraph "User Profile Management"
-                    I -->|My Account| ProfileS(ProfileServlet)
-                    ProfileS -->|Forwards| ProfileJ
+        %% --- Main Navigation ---
+        Home --> Products("Products<br/>(ricerca-prodotti-categoria.jsp)")
+        Home --> Account("My Account<br/>(profile.jsp)")
+        Home --> Cart("Shopping Cart<br/>(cart.jsp)")
+        Home --> Login("Login / Register")
 
-                    ProfileJ -->|Change Password| CPJ(common/change-password.jsp)
-                    CPJ --"Submit"--> CPS(ChangePasswordServlet)
-                    CPS --"Success"--> ProfileS
+        %% --- 'My Account' Sub-pages ---
+        Account --> MyOrders("My Orders<br/>(common/orders.jsp)")
+        Account --> MyAddresses("My Addresses<br/>(common/addresses.jsp)")
+        Account --> ChangePass("Change Password<br/>(common/change-password.jsp)")
+        MyOrders --> OrderDetails("Order Details<br/>(common/order_details.jsp)")
+        MyAddresses --> AddAddress("Add New Address<br/>(common/add-address.jsp)")
+        MyAddresses --> EditAddress("Edit Address<br/>(common/edit-address.jsp)")
 
-                    ProfileJ -->|Manage Addresses| AddrS(AddressesServlet)
-                    AddrS -->|Forwards| AddrJ(common/addresses.jsp)
-                    AddrJ -->|Add New| AddAddrJ(common/add-address.jsp)
-                    AddAddrJ --"Submit"--> AddAddrS(AddAddressServlet)
-                    AddAddrS --"Success"--> AddrS
-
-                    AddrJ -->|Edit| EditAddrJ(common/edit-address.jsp)
-                    EditAddrJ --"Submit"--> EditAddrS(EditAddressServlet)
-                    EditAddrS --"Success"--> AddrS
-
-                    AddrJ --"Delete"--> DelAddrS(DeleteAddressServlet)
-                    DelAddrS --"Success"--> AddrS
-
-                    AddrJ --"Set Default"--> SetDefAddrS(SetDefaultAddressServlet)
-                    SetDefAddrS --"Success"--> AddrS
-                end
-        end
-        %% --- Subgraph: Product Browse & Cart ---
-        subgraph "Product Browse & Shopping Cart"
-            I -->|View Products| PCS(ProductsCategoryServlet)
-            PCS -->|Forwards| PCJ(ricerca-prodotti-categoria.jsp)
-            PCJ -->|Select Product| PDS(ProductDetailsServlet)
-
-            %% Assumed user-facing product view, handled by ProductDetailsServlet
-            PDS -->|Forwards| UserProductView("User Product View")
-            UserProductView -->|Add to Cart| ATCS(AddToCartServlet)
-            ATCS -->|Redirect| CartS(CartServlet)
-            CartS -->|Forwards| CartJ(cart.jsp)
-
-            CartJ -->|Update Qty| UpdateCS(UpdateCartServlet)
-            UpdateCS -->|Redirect| CartS
-            CartJ -->|Delete Item| DeleteCS(DeleteCartServlet)
-            DeleteCS -->|Redirect| CartS
-
-            %% ImageServlet is a resource called by pages displaying products
-            PCJ --> |"<img> src"| ImgS(ImageServlet)
-            UserProductView --> |"<img> src"| ImgS
-        end
-
-        %% --- Subgraph: Checkout Process ---
-        subgraph "Checkout & Post-Order"
-            CartJ -->|Proceed to Checkout| ShipS(ShippingServlet)
-            ShipS -->|Forwards| ShipJ(common/checkout/shipping.jsp)
-            ShipJ -->|Forwards| ReviewJ(common/checkout/review.jsp)
-            ReviewJ --"Submit"--> ReviewS(ReviewServlet)
-
-            ReviewS -->|Continue| ConfirmS(ConfirmServlet)
-            ConfirmS -->|Forwards| ConfirmJ(common/checkout/confirm.jsp)
-            ConfirmJ -->|"Place Order"| OrderS(OrderServlet)
-            OrderS --"Success"--> OrderDetailsS(OrderDetailsServlet)
-            OrderDetailsS -->|Forwards| OrderDetailsJ(common/order_details.jsp)
-
-            %% Viewing order history and submitting reviews
-            ProfileJ -->|My Orders| OrderS
-            OrderS -->|Forwards| OrdersJ(common/orders.jsp)
-            OrdersJ -->|View Details| OrderDetailsS
-        end
-
-        subgraph "Admin Panel"
-        LS --"Success (Admin)"--> ADashS(admin/AdminDashboardServlet)
-        ADashS -->|Forwards| ADashJ(admin/dashboard.jsp)
-
-        ADashJ -->|Manage Products| AProdS(admin/AdminProductsServlet)
-        AProdS -->|Forwards| AProdJ(admin/products.jsp)
-        AProdJ -->|Add New| ANewProdJ(admin/new-product.jsp)
-        ANewProdJ --"Submit"--> ANewProdS(admin/AdminNewProductServlet)
-        ANewProdS --"Success"--> AProdS
-        AProdJ -->|Edit| AEditProdJ(admin/edit-product.jsp)
-        AEditProdJ --"Submit"--> AEditProdS(admin/AdminEditProductServlet)
-        AEditProdS --"Success"--> AProdS
-
-        ADashJ -->|Manage Categories| ACatS(admin/AdminCategoriesServlet)
-        ACatS -->|Forwards| ACatJ(admin/categories.jsp)
-
-        ADashJ -->|Manage Orders| AOrdersS(admin/AdminOrdersServlet)
-        AOrdersS -->|Forwards| AOrdersJ(admin/orders.jsp)
-        AOrdersJ -->|Details| AOrderDetailsS(admin/AdminOrderDetailsServlet)
-        AOrderDetailsS -->|Forwards| AOrderDetailsJ(admin/order_details.jsp)
-
-        ADashJ -->|Manage Users| AUsersS(admin/AdminUsersServlet)
-        AUsersS -->|Forwards| AUsersJ(admin/users.jsp)
-
-        ADashJ -->|Manage Reviews| AReviewsS(admin/AdminReviewsServlet)
-        AReviewsS -->|Forwards| AReviewsJ(admin/reviews.jsp)
+        %% --- Checkout Flow ---
+        Cart --> Checkout("Checkout Process")
+        Checkout --> Ship("1. Shipping Details<br/>(checkout/shipping.jsp)")
+        Ship --> Review("2. Review Details<br/>(checkout/review.jsp)")
+        Review --> Confirm("3. Confirm Order<br/>(checkout/confirm.jsp)")
     end
 
+    subgraph "Admin Panel (Requires Login)"
+        AdminDash("Admin Dashboard<br/>(admin/dashboard.jsp)")
+
+        %% --- Main Admin Sections ---
+        AdminDash --> ManageProd("Manage Products<br/>(admin/products.jsp)")
+        AdminDash --> ManageCat("Manage Categories<br/>(admin/categories.jsp)")
+        AdminDash --> ManageOrders("Manage Orders<br/>(admin/orders.jsp)")
+        AdminDash --> ManageUsers("Manage Users<br/>(admin/users.jsp)")
+        AdminDash --> ManageRev("Manage Reviews<br/>(admin/reviews.jsp)")
+
+        %% --- Admin Sub-pages ---
+        ManageProd --> NewProd("New Product<br/>(admin/new-product.jsp)")
+        ManageProd --> EditProd("Edit Product<br/>(admin/edit-product.jsp)")
+        ManageOrders --> AdminOrderDetails("Admin Order Details<br/>(admin/order_details.jsp)")
     end
 
-    %% --- Assign Classes to all nodes ---
-    class I,L,R,UserProductView,CartJ,ShipJ,ConfirmJ,OrderDetailsJ,OrdersJ,ReviewJ,ProfileJ,CPJ,AddrJ,AddAddrJ,EditAddrJ jsp
-    class ADashJ,AProdJ,ANewProdJ,AEditProdJ,ACatJ,AOrdersJ,AOrderDetailsJ,AUsersJ,AReviewsJ jsp
-    class LS,RS,LogoutS,PCS,PDS,ATCS,CartS,UpdateCS,DeleteCS,ShipS,ConfirmS,OrderS,OrderDetailsS,ReviewS,ProfileS,CPS,AddrS,AddAddrS,EditAddrS,DelAddrS,SetDefAddrS servlet
-    class ADashS,AProdS,ANewProdS,AEditProdS,ACatS,AOrdersS,AOrderDetailsS,AUsersS,AReviewsS servlet
+    %% Apply the style to all nodes
+    classDef default fill:#f8f9fa,stroke:#333,stroke-width:2px;
