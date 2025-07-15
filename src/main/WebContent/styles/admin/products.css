@@ -170,6 +170,7 @@
 }
 
 .action-btn.btn-edit:hover {
+    color: white;
     background-color: var(--color-accent-secondary);
 }
 
