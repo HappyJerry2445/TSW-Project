@@ -12,6 +12,7 @@
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/order.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/admin/admin-orders.css">
     <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
@@ -35,8 +36,8 @@
             <c:when test="${not empty orders}">
                 <!-- Tabella per desktop -->
                 <div>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover">
+                    <div>
+                        <table class="table">
                             <!-- Testata tabella -->
                             <thead>
                             <tr>
@@ -57,8 +58,9 @@
                                                           type="currency" currencyCode="EUR" minFractionDigits="2"
                                                           maxFractionDigits="2"/></td>
                                     <td>
-                                        <a href="<c:url value='/common/orders/${order.orderID}'/>"
-                                           class="btn btn-info">Dettagli</a>
+                                        <a href="${pageContext.request.contextPath}/common/orders/${order.orderID}"
+                                           class="action-btn btn-view" title="Visualizza Dettagli">
+                                            <i class="fas fa-eye"></i></a>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -92,8 +94,9 @@
                                 <div class="card-row">
                                     <span class="card-label">Azioni:</span>
                                     <span class="card-value">
-                            <a href="<c:url value='/common/orders/${order.orderID}'/>"
-                               class="btn btn-info">Dettagli</a>
+                            <a href="${pageContext.request.contextPath}/common/orders/${order.orderID}"
+                               class="action-btn btn-view" title="Visualizza Dettagli">
+                                            <i class="fas fa-eye"></i></a>
                         </span>
                                 </div>
                             </div>
