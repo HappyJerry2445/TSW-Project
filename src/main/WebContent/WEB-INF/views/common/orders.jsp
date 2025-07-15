@@ -53,9 +53,9 @@
                                     <td>#<c:out value="${order.orderID}"/></td>
                                     <td><c:out value="${my:formatDateTime(order.orderDate)}"/></td>
                                     <td><c:out value="${order.orderStatus}"/></td>
-                                    <td>€ <fmt:formatNumber value="${order.totalAmount}"
-                                                            type="currency" currencyCode="EUR" minFractionDigits="2"
-                                                            maxFractionDigits="2"/></td>
+                                    <td><fmt:formatNumber value="${order.totalAmount}"
+                                                          type="currency" currencyCode="EUR" minFractionDigits="2"
+                                                          maxFractionDigits="2"/></td>
                                     <td>
                                         <a href="<c:url value='/common/orders/${order.orderID}'/>"
                                            class="btn btn-info">Dettagli</a>
