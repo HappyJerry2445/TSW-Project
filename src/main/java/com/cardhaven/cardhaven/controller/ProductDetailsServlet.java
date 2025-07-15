@@ -15,8 +15,8 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.*;
 
-@WebServlet("/product/detail/*")
-public class ProductDetailServlet extends HttpServlet {
+@WebServlet("/products/*")
+public class ProductDetailsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String pathInfo = req.getPathInfo();
@@ -24,8 +24,7 @@ public class ProductDetailServlet extends HttpServlet {
 
 		if (pathInfo == null || pathInfo.equals("/")){
 			errors.add("Id del prodotto non specificato.");
-			req.setAttribute("errors",errors);
-			req.getRequestDispatcher("/WEB-INF/views/error.jsp").forward(req,resp);
+			resp.sendRedirect(req.getContextPath() + "/");
 			return;
 		}
 
