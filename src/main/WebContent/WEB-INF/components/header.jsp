@@ -33,9 +33,9 @@
                     try {
                         UserDTO userDTO = userDAO.getById((Integer) session.getAttribute("userId"));
                         userRole = userDTO.getRole();
-                    } catch (SQLException e) {
+                        request.setAttribute("userRole", userRole);
+                    } catch (Exception e) {
                     }
-                    request.setAttribute("userRole", userRole);
                 %>
                 <c:if test="${userRole == 'Admin'}">
                     <a id="admin-dashboard-icon" href="${pageContext.request.contextPath}/admin/dashboard"
