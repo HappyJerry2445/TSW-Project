@@ -12,7 +12,7 @@
     data-category="${categoryJson}">
     <div class="category-item-content">
         <div class="category-info">
-            <c:out value="${category_to_render.name}"/>
+            <p><c:out value="${category_to_render.name}"/></p>
             <span class="type-badge"><c:out value="${category_to_render.type}"/></span>
         </div>
         <div class="category-actions">

@@ -17,8 +17,15 @@
 
 <main class="admin-container">
     <div class="admin-page-header">
-        <h1><i class="fas fa-sitemap"></i> Gestione Categorie</h1>
-        <p>Organizza il tuo catalogo creando, modificando ed eliminando le categorie.</p>
+        <div class="admin-header-content">
+            <h1><i class="fas fa-sitemap"></i> Gestione Categorie</h1>
+            <p>Organizza il tuo catalogo creando, modificando ed eliminando le categorie.</p>
+        </div>
+        <div class="admin-header-actions">
+            <a href="${pageContext.request.contextPath}/admin/dashboard" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i> Torna alla Dashboard
+            </a>
+        </div>
     </div>
     <jsp:include page="/WEB-INF/components/error_message.jsp"/>
 

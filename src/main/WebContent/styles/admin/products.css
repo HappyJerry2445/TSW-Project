@@ -185,8 +185,20 @@
     font-size: 0.9rem;
 }
 
+.admin-header-actions {
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    gap: var(--spacing-unit);
+}
+
 /* Responsive - Vista a card per mobile */
 @media (max-width: 992px) {
+    .admin-header-actions {
+        width: 100%;
+        grid-template-columns: 1fr;
+    }
+
     .products-table thead {
         display: none; /* Nascondi l'header della tabella */
     }
@@ -237,4 +249,5 @@
     .actions-cell form {
         display: inline-block;
     }
+
 }

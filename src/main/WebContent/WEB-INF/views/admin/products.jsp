@@ -18,11 +18,11 @@
 
 <main class="admin-container">
     <div class="admin-page-header">
-        <div class="header-content">
+        <div class="admin-header-content">
             <h1><i class="fas fa-box-open"></i> Gestione Prodotti</h1>
             <p>Visualizza, aggiungi, modifica o elimina i prodotti del tuo catalogo.</p>
         </div>
-        <div class="header-actions">
+        <div class="admin-header-actions">
             <a href="${pageContext.request.contextPath}/admin/dashboard" class="btn btn-outline">
                 <i class="fas fa-arrow-left"></i> Torna alla Dashboard
             </a>
