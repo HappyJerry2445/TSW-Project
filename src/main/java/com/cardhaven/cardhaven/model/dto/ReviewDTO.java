@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class ReviewDTO implements Serializable {
-
     private int reviewId;
     private int productId;
     private int userId;
@@ -14,10 +13,9 @@ public class ReviewDTO implements Serializable {
     private String reviewText;
     private LocalDateTime createdAt;
     private ReviewStatus reviewStatus;
-
-
     public ReviewDTO() {
     }
+
 
     public ReviewDTO(int reviewId, int productId, int userId, int rating, String title, String reviewText, LocalDateTime createdAt, ReviewStatus reviewStatus) {
         this.reviewId = reviewId;
@@ -28,6 +26,20 @@ public class ReviewDTO implements Serializable {
         this.reviewText = reviewText;
         this.createdAt = createdAt;
         this.reviewStatus = reviewStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "ReviewDTO{" +
+                "reviewId=" + reviewId +
+                ", productId=" + productId +
+                ", userId=" + userId +
+                ", rating=" + rating +
+                ", title='" + title + '\'' +
+                ", reviewText='" + reviewText + '\'' +
+                ", createdAt=" + createdAt +
+                ", reviewStatus=" + reviewStatus +
+                '}';
     }
 
     public int getReviewId() {
@@ -107,24 +119,18 @@ public class ReviewDTO implements Serializable {
         return Objects.hash(reviewId, productId, userId, rating, title, reviewText, createdAt, reviewStatus);
     }
 
-    @Override
-    public String toString() {
-        return "Review{" +
-                "reviewId=" + reviewId + '\'' +
-                ", productId=" + productId + '\'' +
-                ", userId=" + userId + '\'' +
-                ", rating=" + rating + '\'' +
-                ", title='" + title + '\'' +
-                ", reviewText='" + reviewText + '\'' +
-                ", createdAt=" + createdAt + '\'' +
-                ", reviewStatus=" + reviewStatus + '\'' +
-                '}';
-    }
-
     public enum ReviewStatus {
         Pending,
         Approved,
-        Rejected
+        Rejected;
+
+        public String toItalian() {
+            return switch (this) {
+                case Pending -> "In attesa";
+                case Approved -> "Approvato";
+                case Rejected -> "Rifiutato";
+            };
+        }
     }
 
 

@@ -34,9 +34,6 @@
     background-color: var(--color-bg-light-grey);
 }
 
-.users-table tbody tr:last-child td {
-    border-bottom: none;
-}
 
 /* User Role Cell */
 .user-role-cell {

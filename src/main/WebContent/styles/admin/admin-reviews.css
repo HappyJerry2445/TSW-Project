@@ -1,0 +1,351 @@
+/* Styles for Admin Reviews Page */
+
+.reviews-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.reviews-table th,
+.reviews-table td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-neutral-light);
+    vertical-align: middle;
+}
+
+.reviews-table thead {
+    background-color: var(--color-neutral-lightest);
+}
+
+.reviews-table th {
+    font-weight: 600;
+    color: var(--color-table-thead);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.reviews-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.reviews-table tbody tr:hover {
+    background-color: var(--color-bg-light-grey);
+}
+
+
+/* Specific cell styles */
+.rating-cell {
+    white-space: nowrap;
+}
+
+.rating-cell .fas.fa-star {
+    color: var(--color-neutral-base); /* Grey for unrated stars */
+    font-size: 0.9rem;
+}
+
+.rating-cell .fas.fa-star.rated {
+    color: #FFD700; /* Gold for rated stars */
+}
+
+.review-title {
+    max-width: 200px; /* Limit width for long titles */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Status Select (reused from admin-orders.css) */
+.review-status-cell .status-select {
+    padding: 0.4rem 1rem;
+    padding-right: 1.7rem;
+    border: 1px solid var(--color-neutral-base);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--color-primary-light);
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%236c757d' d='M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+}
+
+.review-status-cell .status-select:focus {
+    outline: none;
+    border-color: var(--color-accent-vibrant);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+
+.review-status-cell .status-update-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.9rem;
+    border-radius: var(--border-radius-sm);
+    color: var(--color-accent-vibrant);
+    border: 1px solid var(--color-accent-vibrant);
+    background-color: transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.review-status-cell .status-update-btn:hover {
+    background-color: var(--color-accent-vibrant);
+    color: var(--color-primary-light);
+}
+
+
+/* Actions Cell (reused from admin-orders.css/products.css) */
+.actions-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: white;
+    font-size: 0.85rem;
+}
+
+.action-btn.btn-view {
+    background-color: var(--color-status-info);
+}
+
+.action-btn.btn-view:hover {
+    background-color: var(--color-status-info-hover);
+}
+
+.action-btn.btn-delete {
+    background-color: var(--color-status-error);
+}
+
+.action-btn.btn-delete:hover {
+    background-color: var(--color-status-error-dark);
+}
+
+/* Filter Form Styles (reused from admin-orders.css) */
+.filter-card {
+    margin-bottom: 2rem;
+    padding: 1.5rem 2rem;
+}
+
+.filter-card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-neutral-base);
+}
+
+.filter-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    align-items: end;
+}
+
+.filter-form .form-group {
+    margin-bottom: 0;
+}
+
+.filter-form .form-group label {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.filter-form .form-group input[type="text"],
+.filter-form .form-group select {
+    padding: 0.7rem;
+    font-size: 0.95rem;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 1rem;
+    grid-column: 1 / -1; /* Span full width */
+    justify-content: flex-end;
+    padding-top: 1rem;
+}
+
+.filter-actions .btn {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.95rem;
+}
+
+
+/* Modal Styles for Review Text */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 2000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: var(--color-bg-card);
+    margin: auto;
+    padding: 2.5rem;
+    border: 1px solid var(--color-neutral-base);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--color-shadow-md);
+    width: 80%;
+    max-width: 700px;
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-neutral-base);
+}
+
+.modal-content p {
+    white-space: pre-wrap; /* Preserves newlines and spaces */
+    word-wrap: break-word; /* Breaks long words */
+    max-height: 400px; /* Limit height */
+    overflow-y: auto; /* Add scroll if content is too long */
+    margin-bottom: 0;
+}
+
+.close-button {
+    color: var(--color-neutral-dark);
+    font-size: 1.8rem;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: var(--color-status-error);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .reviews-table thead {
+        display: none;
+    }
+
+    .reviews-table, .reviews-table tbody, .reviews-table tr, .reviews-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .reviews-table tr {
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--color-neutral-base);
+        border-radius: var(--border-radius-md);
+        box-shadow: var(--color-shadow-light);
+        overflow: hidden;
+    }
+
+    .reviews-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--color-neutral-light);
+        text-align: right;
+    }
+
+    .reviews-table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        text-align: left;
+        color: var(--color-primary-dark);
+        flex-basis: 40%;
+    }
+
+    .review-status-cell, .actions-cell {
+        justify-content: flex-end;
+    }
+
+    .review-status-cell .status-select {
+        flex-grow: 0;
+        width: auto;
+    }
+
+    .review-status-cell .status-update-btn {
+        margin-left: 0.5rem;
+    }
+
+    .filter-form {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-actions {
+        grid-column: 1 / -1;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .filter-actions .btn {
+        width: 100%;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    .filter-card {
+        padding: 0;
+    }
+
+    .review-title {
+        max-width: 100%;
+    }
+
+    .review-status-cell .status-select {
+        margin-right: 0;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .reviews-table td {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .reviews-table td:before {
+        margin-bottom: 0.25rem;
+    }
+
+    .review-status-cell, .actions-cell {
+        width: 100%;
+    }
+
+
+}
