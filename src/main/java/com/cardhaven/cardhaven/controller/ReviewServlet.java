@@ -2,21 +2,17 @@ package com.cardhaven.cardhaven.controller;
 
 import com.cardhaven.cardhaven.model.dao.*;
 import com.cardhaven.cardhaven.model.dto.*;
+import com.cardhaven.cardhaven.util.CartManager;
 import com.cardhaven.cardhaven.util.NotificationUtil;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet("/common/checkout/review")
 public class ReviewServlet extends HttpServlet {
@@ -47,27 +43,19 @@ public class ReviewServlet extends HttpServlet {
         AddressDAO addressDAO = new AddressDAO(ds);
         CartDAO cartDAO = new CartDAO(ds);
         CartItemDAO cartItemDAO = new CartItemDAO(ds);
+        ProductDAO productDAO = new ProductDAO(ds);
+        ProductImageDAO productImageDAO = new ProductImageDAO(ds);
 
         try {
             // Fetch the full address objects
             AddressDTO shippingAddress = addressDAO.getById(shippingAddressId);
             AddressDTO billingAddress = addressDAO.getById(billingAddressId);
 
-            // Fetch the user's cart
-            CartDTO cart = cartDAO.getByUserId(userId);
-            Collection<CartItemDTO> cartItems = null;
 
-            if (cart != null) {
-                // If the cart exists, fetch all items within that cart
-                cartItems = cartItemDAO.getByCartId(cart.getCartId(), "AddedAT");
-            }
+            List<CartItemDetailDTO> detailedCartItems = CartManager.getDetailedCartItems(
+                    request, cartDAO, cartItemDAO, productDAO, productImageDAO
+            );
 
-            // If there is no cart or the cart is empty, redirect the user
-            if (cart == null || cartItems == null || cartItems.isEmpty()) {
-                NotificationUtil.sendNotification(request, "Il tuo carrello è vuoto. Aggiungi articoli prima di procedere.", "warning");
-                response.sendRedirect(request.getContextPath() + "/cart");
-                return;
-            }
 
             UserDTO loggedInUser;
             try {
@@ -76,40 +64,12 @@ public class ReviewServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
 
-            ProductDAO productDAO = new ProductDAO(ds);
-
-            // Recupera i dettagli dei prodotti per ogni item
-            Map<Integer, ProductDTO> productMap = new HashMap<>();
-            for (CartItemDTO item : cartItems) {
-                if (!productMap.containsKey(item.getProductId())){
-                    ProductDTO product = productDAO.getById(item.getProductId());
-                    if (product != null) {
-                        productMap.put(item.getProductId(), product);
-                    }
-                }
-            }
-
-            ProductImageDAO productImageDAO = new ProductImageDAO(ds); // Instantiate ProductImageDAO
-
-            Map<Integer, String> productImageMap = new HashMap<>();
-/*            for (ProductDTO product : productMap.values()) {
-                byte[] images = productImageDAO.getImagesByProductId(product.getProductId());
-                ServletOutputStream out = response.getOutputStream();
-                if(images != null){
-                    out.write(images);
-                    response.setContentType("image/jpeg");
-                }
-
-            }*/
 
             // Set attributes for the JSP to display
             request.setAttribute("loggedInUser", loggedInUser);
             request.setAttribute("shippingAddress", shippingAddress);
             request.setAttribute("billingAddress", billingAddress);
-            request.setAttribute("cart", cart);
-            request.setAttribute("cartItems", cartItems);
-            request.setAttribute("productMap", productMap);
-            request.setAttribute("productImageMap", productImageMap); // Add the new map to the request
+            request.setAttribute("cartItems", detailedCartItems);
 
 
             // Forward to the review JSP page
@@ -118,7 +78,7 @@ public class ReviewServlet extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
             NotificationUtil.sendNotification(request, "Errore nel recupero dei dati per il riepilogo.", "error");
-            //response.sendRedirect(request.getContextPath() + "/cart"); // Redirect to cart on error
+            response.sendRedirect(request.getContextPath() + "/cart"); // Redirect to cart on error
         }
     }
 

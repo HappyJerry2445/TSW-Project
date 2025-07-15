@@ -1,10 +1,7 @@
 package com.cardhaven.cardhaven.controller;
 
 import com.cardhaven.cardhaven.model.dao.*;
-import com.cardhaven.cardhaven.model.dto.OrderAddressDTO;
-import com.cardhaven.cardhaven.model.dto.OrderDTO;
-import com.cardhaven.cardhaven.model.dto.OrderItemDTO;
-import com.cardhaven.cardhaven.model.dto.ProductDTO;
+import com.cardhaven.cardhaven.model.dto.*;
 import com.cardhaven.cardhaven.util.NotificationUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,10 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @WebServlet("/common/orders/*")
 public class OrderDetailsServlet extends HttpServlet {
@@ -76,16 +70,15 @@ public class OrderDetailsServlet extends HttpServlet {
                 }
             }
 
-            Map<Integer, String> productImageMap = new HashMap<>();
-//            for (ProductDTO product : productMap.values()) {
-//                byte[] images = productImageDAO.getImagesByProductId(product.getProductId());
-//                ServletOutputStream out = response.getOutputStream();
-//                if (images != null) {
-//                    out.write(images);
-//                    //response.setContentType("");
-//                }
-//
-//            }
+            Collection<ProductDTO> products = productDAO.getAll("ProductName");
+
+            Map<Integer, Integer> productFirstImageIds = new HashMap<>();
+            for (ProductDTO product : products) {
+                ProductImageDTO firstImage = productImageDAO.getFirstByProductId(product.getProductId());
+                if (firstImage != null) {
+                    productFirstImageIds.put(product.getProductId(), firstImage.getImageId());
+                }
+            }
 
             // Recupera l'indirizzo di spedizione
             OrderAddressDTO shippingAddress = null;
@@ -97,7 +90,7 @@ public class OrderDetailsServlet extends HttpServlet {
             request.setAttribute("orderItems", items);
             request.setAttribute("productMap", productMap);
             request.setAttribute("shippingAddress", shippingAddress);
-            request.setAttribute("productImageMap", productImageMap); // Add the new map to the request
+            request.setAttribute("productImages", productFirstImageIds);
             request.getRequestDispatcher("/WEB-INF/views/common/order_details.jsp").forward(request, response);
 
         } catch (SQLException ex) {
