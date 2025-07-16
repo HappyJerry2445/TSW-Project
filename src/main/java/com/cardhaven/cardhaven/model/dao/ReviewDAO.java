@@ -23,7 +23,7 @@ public class ReviewDAO implements GenericDAO<ReviewDTO, Integer> {
     }
 
     public void save(ReviewDTO reviewDTO) throws SQLException {
-        if (reviewDTO == null || reviewDTO.getReviewId() == 0 ||
+        if (reviewDTO == null ||
                 reviewDTO.getProductId() == 0 || reviewDTO.getUserId() == 0 || reviewDTO.getTitle() == null
                 || reviewDTO.getTitle().trim().isEmpty() || reviewDTO.getReviewText() == null || reviewDTO.getReviewText().trim().isEmpty() ||
                 reviewDTO.getReviewStatus() == null) {
@@ -34,7 +34,7 @@ public class ReviewDAO implements GenericDAO<ReviewDTO, Integer> {
         if (reviewDTO.getReviewId() == 0) {
             sql = "INSERT INTO Review (ProductID, UserID, Rating, Title, ReviewText, CreatedAt,ReviewStatus) VALUES (?,?,?,?,?,?,?)";
             try (Connection conn = dataSource.getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
+                 PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setInt(1, reviewDTO.getProductId());
                 ps.setInt(2, reviewDTO.getUserId());
                 ps.setInt(3, reviewDTO.getRating());

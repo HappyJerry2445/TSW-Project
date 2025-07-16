@@ -18,7 +18,14 @@
 <jsp:include page="/WEB-INF/components/header.jsp"/>
 
 <main class="container mt-3">
-    <h1 class="section-title">Ricerca Prodotti</h1>
+    <c:choose>
+        <c:when test="${not empty onSale}">
+            <h1 class="section-title">Offerte Speciali</h1>
+        </c:when>
+        <c:otherwise>
+            <h1 class="section-title">Ricerca Prodotti</h1>
+        </c:otherwise>
+    </c:choose>
 
     <jsp:include page="/WEB-INF/components/error_message.jsp"/>
 
@@ -69,7 +76,14 @@
     <div class="search-results">
         <c:choose>
             <c:when test="${not empty products}">
-                <h2 class="results-title">Risultati della ricerca (${products.size()})</h2>
+                <c:choose>
+                    <c:when test="${not empty onSale}">
+                        <h2 class="results-title">Trovati ${products.size()} prodotti in offerta</h2>
+                    </c:when>
+                    <c:otherwise>
+                        <h2 class="results-title">Risultati della ricerca (${products.size()})</h2>
+                    </c:otherwise>
+                </c:choose>
                 <div class="products-grid">
                     <c:forEach var="product" items="${products}">
                         <%-- Imposta gli attributi per il componente product_card --%>

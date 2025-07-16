@@ -49,11 +49,13 @@ public class ProductsSearchServlet extends HttpServlet {
         String maxPriceStr = request.getParameter("maxPrice");
         String categoryIdStr = request.getParameter("category");
         String productTypeStr = request.getParameter("productType");
+        String onSaleStr = request.getParameter("onSale");
 
         BigDecimal minPrice = null;
         BigDecimal maxPrice = null;
         Integer categoryId = null;
         ProductDTO.ProductType productType = null;
+        boolean onSale = onSaleStr != null && onSaleStr.equals("true");
 
         try {
             if (minPriceStr != null && !minPriceStr.isEmpty()) {
@@ -115,6 +117,16 @@ public class ProductsSearchServlet extends HttpServlet {
                 null
             );
 
+            // If onSale is requested, filter the results in memory
+            if (onSale) {
+                products = products
+                    .stream()
+                    .filter(
+                        p -> p.getCurrentPrice().compareTo(p.getBasePrice()) < 0
+                    )
+                    .collect(Collectors.toList());
+            }
+
             // Recupera le prime immagini per i prodotti
             Map<Integer, ProductImageDTO> productImages = new HashMap<>();
             for (ProductDTO product : products) {
@@ -155,6 +167,9 @@ public class ProductsSearchServlet extends HttpServlet {
             request.setAttribute("maxPrice", maxPriceStr);
             request.setAttribute("selectedCategory", categoryIdStr); // String to match option value
             request.setAttribute("selectedProductType", productTypeStr); // String to match option value
+            if (onSale) {
+                request.setAttribute("onSale", "true");
+            }
 
             request
                 .getRequestDispatcher("/WEB-INF/views/search.jsp")

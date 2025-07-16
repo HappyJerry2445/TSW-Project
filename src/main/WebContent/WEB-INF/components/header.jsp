@@ -9,13 +9,23 @@
 <header>
     <div class="container">
         <a href="${pageContext.request.contextPath}/" class="logo">CardHaven</a>
+        <div class="nav-overlay"></div>
         <nav class="main-nav">
             <ul>
-                <!-- TODO: Sezione placeholder -->
-                <li><a href="#carte-collezionabili">Carte Collezionabili</a></li>
-                <li><a href="#accessori">Accessori</a></li>
-                <li><a href="#novita">Novità</a></li>
-                <li><a href="#offerte">Offerte</a></li>
+                <%-- L'attributo "allCategories" viene caricato dall'application scope (MainContext.java) --%>
+                <c:set var="categoryCount" value="0" scope="page"/>
+                <c:forEach var="category" items="${applicationScope.allCategories}">
+                    <%-- Mostra solo le categorie principali (senza genitore) e limita a 4 per pulizia --%>
+                    <c:if test="${empty category.parentId and categoryCount < 3}">
+                        <li>
+                            <a href="${pageContext.request.contextPath}/products/category/${category.id}">
+                                <c:out value="${category.name}"/>
+                            </a>
+                        </li>
+                        <c:set var="categoryCount" value="${categoryCount + 1}" scope="page"/>
+                    </c:if>
+                </c:forEach>
+                <li><a href="${pageContext.request.contextPath}/products/search?onSale=true">Offerte</a></li>
             </ul>
         </nav>
         <div class="header-actions">
@@ -64,6 +74,7 @@
                     const APP_CONTEXT_PATH = "${pageContext.request.contextPath}";
                 </script>
                 <script defer src="${pageContext.request.contextPath}/scripts/cart-count-update.js"></script>
+                <script defer src="${pageContext.request.contextPath}/scripts/mobile-menu.js"></script>
             </div>
         </div>
         <!-- TODO: pagina menu -->

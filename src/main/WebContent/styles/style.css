@@ -550,6 +550,36 @@ footer {
     margin: calc(var(--spacing-unit));
 }
 
+/* Mobile Navigation Menu */
+/* ================================= */
+
+/* Body state when menu is open */
+body.no-scroll {
+    overflow: hidden;
+}
+
+/* Overlay for the background */
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1001; /* Below menu, above content */
+    visibility: hidden;
+    opacity: 0;
+    transition:
+        opacity 0.3s ease-in-out,
+        visibility 0s 0.3s;
+}
+
+.nav-overlay.is-visible {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+}
+
 .m-2 {
     margin: calc(var(--spacing-unit) * 2);
 }
@@ -797,11 +827,12 @@ footer {
         display: block;
         background: none;
         border: none;
-        color: var(--color-text-inverted); /* Changed from --color-text-light */
+        color: var(--color-text-inverted);
         font-size: 1.5rem;
         cursor: pointer;
         grid-area: mobile-menu-toggle;
         justify-self: start;
+        z-index: 1003; /* Ensure toggle is above everything */
     }
 
     header .container {
@@ -812,7 +843,52 @@ footer {
     }
 
     .main-nav {
-        display: none; /* TODO: To be handled by JS for mobile menu */
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 300px;
+        max-width: 80vw;
+        height: 100%;
+        padding-top: calc(var(--spacing-unit) * 4);
+        background-color: var(--color-primary-dark);
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 1002;
+    }
+
+    .main-nav.is-open {
+        transform: translateX(0);
+    }
+
+    .main-nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .main-nav ul li {
+        margin-left: 0;
+        width: 100%;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .main-nav ul li:last-child {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .main-nav ul li a {
+        display: block;
+        width: 100%;
+        padding: 1rem 1.5rem;
+        border-bottom: none;
+    }
+
+    .main-nav ul li a:hover,
+    .main-nav ul li a.active {
+        background-color: var(--color-accent-vibrant);
     }
 
     .header-actions {
