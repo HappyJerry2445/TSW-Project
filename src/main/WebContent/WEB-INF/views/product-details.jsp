@@ -91,7 +91,7 @@
                 </div>
 
                 <c:if test="${product.stockQuantity > 0}">
-                    <form action="${pageContext.request.contextPath}/cart/add" method="post" class="add-to-cart-form-details">
+                    <form action="${pageContext.request.contextPath}/cart/add" method="post" class="add-to-cart-form">
                         <input type="hidden" name="productId" value="${product.productId}">
                         <div class="quantity-selector">
                             <label for="quantity">Quantità:</label>
@@ -166,6 +166,35 @@
                             <p>Non ci sono ancora recensioni per questo prodotto. Sii il primo a lasciarne una!</p>
                         </c:otherwise>
                     </c:choose>
+
+                    <c:if test="${canReview}">
+                        <div class="write-review-section">
+                            <hr>
+                            <h4>Scrivi la tua recensione</h4>
+                            <form action="${pageContext.request.contextPath}/reviews/submit" method="post" id="review-form">
+                                <input type="hidden" name="productId" value="${product.productId}">
+                                <div class="form-group">
+                                    <label>La tua valutazione</label>
+                                    <div class="star-rating">
+                                        <input type="radio" id="star5" name="rating" value="5" required/><label for="star5" title="5 stelle"></label>
+                                        <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="4 stelle"></label>
+                                        <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="3 stelle"></label>
+                                        <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="2 stelle"></label>
+                                        <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="1 stella"></label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="review-title">Titolo della recensione</label>
+                                    <input type="text" id="review-title" name="title" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="review-text">La tua recensione</label>
+                                    <textarea id="review-text" name="reviewText" rows="5" class="form-control" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Invia Recensione</button>
+                            </form>
+                        </div>
+                    </c:if>
                 </div>
             </div>
         </div>
@@ -174,5 +203,6 @@
 
 <jsp:include page="/WEB-INF/components/footer.jsp"/>
 <script src="${pageContext.request.contextPath}/scripts/product-details.js"></script>
+<script src="${pageContext.request.contextPath}/scripts/async-cart.js"></script>
 </body>
 </html>

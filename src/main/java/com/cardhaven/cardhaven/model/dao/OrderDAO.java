@@ -1,20 +1,24 @@
 package com.cardhaven.cardhaven.model.dao;
 
 import com.cardhaven.cardhaven.model.dto.OrderDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
-
+import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
 
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
-            "OrderID", "UserID", "OrderDate", "OrderStatus", "ShippingAddressID", "BillingAddressID", "TotalAmount"
+        "OrderID",
+        "UserID",
+        "OrderDate",
+        "OrderStatus",
+        "ShippingAddressID",
+        "BillingAddressID",
+        "TotalAmount"
     );
 
     private static final String DEFAULT_ORDER_COLUMN = "OrderID";
@@ -23,23 +27,44 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
     private final DataSource dataSource;
 
     public OrderDAO(DataSource dataSource) {
-        this.dataSource = Objects.requireNonNull(dataSource, "DataSource cannot be null.");
+        this.dataSource = Objects.requireNonNull(
+            dataSource,
+            "DataSource cannot be null."
+        );
     }
 
     public void save(OrderDTO orderDTO) throws SQLException {
-        if (orderDTO == null || orderDTO.getUserID() == 0 ||
-                orderDTO.getOrderStatus() == null || orderDTO.getShippingAddressId() == 0 ||
-                orderDTO.getBillingAddressId() == 0 || orderDTO.getTotalAmount().compareTo(BigDecimal.ZERO) == 0) {
-            throw new SQLException("UserID, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount cannot be 0/null/empty");
+        if (
+            orderDTO == null ||
+            orderDTO.getUserID() == 0 ||
+            orderDTO.getOrderStatus() == null ||
+            orderDTO.getShippingAddressId() == 0 ||
+            orderDTO.getBillingAddressId() == 0 ||
+            orderDTO.getTotalAmount().compareTo(BigDecimal.ZERO) == 0
+        ) {
+            throw new SQLException(
+                "UserID, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount cannot be 0/null/empty"
+            );
         }
 
         String sql;
         if (orderDTO.getOrderID() == 0) {
-            sql = "INSERT INTO `Order` (UserID, OrderDate, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount) VALUES (?,?,?,?,?,?)";
-            try (Connection conn = dataSource.getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            sql =
+                "INSERT INTO `Order` (UserID, OrderDate, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount) VALUES (?,?,?,?,?,?)";
+            try (
+                Connection conn = dataSource.getConnection();
+                PreparedStatement ps = conn.prepareStatement(
+                    sql,
+                    PreparedStatement.RETURN_GENERATED_KEYS
+                );
+            ) {
                 ps.setInt(1, orderDTO.getUserID());
-                ps.setTimestamp(2, (orderDTO.getOrderDate() != null) ? Timestamp.valueOf(orderDTO.getOrderDate()) : Timestamp.valueOf(LocalDateTime.now()));
+                ps.setTimestamp(
+                    2,
+                    (orderDTO.getOrderDate() != null)
+                        ? Timestamp.valueOf(orderDTO.getOrderDate())
+                        : Timestamp.valueOf(LocalDateTime.now())
+                );
                 ps.setString(3, orderDTO.getOrderStatus().name());
                 ps.setInt(4, orderDTO.getShippingAddressId());
                 ps.setInt(5, orderDTO.getBillingAddressId());
@@ -47,23 +72,35 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
 
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
-                    throw new SQLException("Creating order failed, 0 rows affected.");
+                    throw new SQLException(
+                        "Creating order failed, 0 rows affected."
+                    );
                 }
 
                 try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         orderDTO.setOrderID(generatedKeys.getInt(1));
                     } else {
-                        throw new SQLException("Creating order failed, no ID obtained.");
+                        throw new SQLException(
+                            "Creating order failed, no ID obtained."
+                        );
                     }
                 }
             }
         } else {
-            sql = "UPDATE `Order` SET UserID = ?, OrderDATE = ?, OrderStatus = ?, ShippingAddressID = ?, BillingAddressID = ?, TotalAmount = ?  WHERE OrderID = ?";
-            try (Connection connection = dataSource.getConnection();
-                 PreparedStatement ps = connection.prepareStatement(sql)) {
+            sql =
+                "UPDATE `Order` SET UserID = ?, OrderDATE = ?, OrderStatus = ?, ShippingAddressID = ?, BillingAddressID = ?, TotalAmount = ?  WHERE OrderID = ?";
+            try (
+                Connection connection = dataSource.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+            ) {
                 ps.setInt(1, orderDTO.getUserID());
-                ps.setTimestamp(2, (orderDTO.getOrderDate() != null) ? Timestamp.valueOf(orderDTO.getOrderDate()) : null);
+                ps.setTimestamp(
+                    2,
+                    (orderDTO.getOrderDate() != null)
+                        ? Timestamp.valueOf(orderDTO.getOrderDate())
+                        : null
+                );
                 ps.setString(3, orderDTO.getOrderStatus().name());
                 ps.setInt(4, orderDTO.getShippingAddressId());
                 ps.setInt(5, orderDTO.getBillingAddressId());
@@ -81,8 +118,10 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
         }
 
         String sql = "DELETE FROM `Order` WHERE OrderID = ?";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (
+            Connection conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+        ) {
             ps.setInt(1, orderId);
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
@@ -95,10 +134,13 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
             throw new SQLException("UserID, OrderID cannot be 0 or less");
         }
 
-        String sql = "SELECT OrderID, UserID, OrderDate, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount FROM `Order` WHERE OrderID = ?";
+        String sql =
+            "SELECT OrderID, UserID, OrderDate, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount FROM `Order` WHERE OrderID = ?";
         OrderDTO orderDTO = null;
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (
+            Connection conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+        ) {
             ps.setInt(1, orderID);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -126,9 +168,17 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
      * @return A collection of Order objects.
      * @throws SQLException if a database access error occurs.
      */
-    public Collection<OrderDTO> getFilteredOrders(String order, boolean desc, LocalDateTime startDate, LocalDateTime endDate, Integer userId) throws SQLException {
+    public Collection<OrderDTO> getFilteredOrders(
+        String order,
+        boolean desc,
+        LocalDateTime startDate,
+        LocalDateTime endDate,
+        Integer userId
+    ) throws SQLException {
         Collection<OrderDTO> orderDTOS = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM `Order` WHERE 1=1"); // 1=1 is a trick to easily append WHERE clauses
+        StringBuilder sql = new StringBuilder(
+            "SELECT * FROM `Order` WHERE 1=1"
+        ); // 1=1 is a trick to easily append WHERE clauses
 
         List<Object> params = new ArrayList<>();
 
@@ -151,7 +201,11 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
             if (ALLOWED_ORDER_COLUMNS.contains(trimmedOrder)) {
                 actualOrderColumn = trimmedOrder;
             } else {
-                System.err.println("Warning: Attempted to order by invalid column: '" + order + "'. Falling back to default order.");
+                System.err.println(
+                    "Warning: Attempted to order by invalid column: '" +
+                    order +
+                    "'. Falling back to default order."
+                );
             }
         }
         sql.append(" ORDER BY ").append(actualOrderColumn);
@@ -159,13 +213,13 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
             sql.append(" DESC");
         }
 
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-
+        try (
+            Connection conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql.toString());
+        ) {
             for (int i = 0; i < params.size(); i++) {
                 ps.setObject(i + 1, params.get(i));
             }
-
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -175,7 +229,6 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
         }
         return orderDTOS;
     }
-
 
     public List<String> getAllowedOrderColumns() {
         return new ArrayList<>(ALLOWED_ORDER_COLUMNS);
@@ -187,9 +240,12 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
         }
 
         List<OrderDTO> orderDTOS = new ArrayList<>();
-        String sql = "SELECT OrderID, UserID, OrderDate, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount FROM `Order` WHERE UserID = ?";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        String sql =
+            "SELECT OrderID, UserID, OrderDate, OrderStatus, ShippingAddressID, BillingAddressID, TotalAmount FROM `Order` WHERE UserID = ?";
+        try (
+            Connection conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+        ) {
             ps.setInt(1, userID);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -200,14 +256,16 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
         return orderDTOS;
     }
 
-
-    private OrderDTO extractOrderFromResultSet(ResultSet rs) throws SQLException {
+    private OrderDTO extractOrderFromResultSet(ResultSet rs)
+        throws SQLException {
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setOrderID(rs.getInt("OrderID"));
         orderDTO.setUserID(rs.getInt("UserID"));
         orderDTO.setBillingAddressId(rs.getInt("BillingAddressID"));
         orderDTO.setShippingAddressId(rs.getInt("ShippingAddressID"));
-        orderDTO.setOrderStatus(OrderDTO.OrderStatus.valueOf(rs.getString("OrderStatus")));
+        orderDTO.setOrderStatus(
+            OrderDTO.OrderStatus.valueOf(rs.getString("OrderStatus"))
+        );
         orderDTO.setTotalAmount(rs.getBigDecimal("TotalAmount"));
         Timestamp orderDate = rs.getTimestamp("OrderDate");
 
@@ -220,13 +278,35 @@ public class OrderDAO implements GenericDAO<OrderDTO, Integer> {
     public int countAll() throws SQLException {
         String sql = "SELECT COUNT(*) FROM `Order`";
 
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try (
+            Connection connection = dataSource.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+        ) {
             if (rs.next()) {
                 return rs.getInt(1);
             }
         }
         return 0;
+    }
+
+    public boolean hasUserPurchasedProduct(int userId, int productId)
+        throws SQLException {
+        String sql =
+            "SELECT COUNT(*) FROM `Order` o JOIN OrderItem oi ON o.OrderID = oi.OrderID WHERE o.UserID = ? AND oi.ProductID = ? AND o.OrderStatus = 'Delivered'";
+
+        try (
+            Connection connection = dataSource.getConnection();
+            PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            ps.setInt(1, userId);
+            ps.setInt(2, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
     }
 }

@@ -194,6 +194,25 @@
     display: flex;
     border-bottom: 2px solid var(--details-border-color);
     margin-bottom: 1.5rem;
+    overflow-x: auto;
+    /* Stile per la scrollbar per un look più pulito */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: var(--details-accent-color) var(--details-border-color); /* Firefox */
+}
+
+/* Stile per la scrollbar per browser Webkit (Chrome, Safari) */
+.tab-navigation::-webkit-scrollbar {
+    height: 6px;
+}
+
+.tab-navigation::-webkit-scrollbar-track {
+    background: var(--details-border-color);
+    border-radius: 3px;
+}
+
+.tab-navigation::-webkit-scrollbar-thumb {
+    background-color: var(--details-accent-color);
+    border-radius: 3px;
 }
 .tab-link {
     padding: 0.75rem 1.5rem;
@@ -204,6 +223,7 @@
     border-bottom: 3px solid transparent;
     margin-bottom: -2px; /* Align with bottom border */
     transition: all 0.2s ease;
+    white-space: nowrap; /* Impedisce ai tab di andare a capo */
 }
 .tab-link:hover {
     color: var(--details-text-primary);
@@ -290,6 +310,68 @@
 }
 .review-text {
     line-height: 1.6;
+}
+
+/* 5. Write Review Section */
+.write-review-section {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--details-border-color);
+}
+.write-review-section h4 {
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    color: var(--details-text-primary);
+}
+
+#review-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+#review-form .form-control {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid var(--color-neutral-base);
+    border-radius: var(--border-radius-sm);
+    transition: all 0.2s ease-in-out;
+}
+
+#review-form .form-control:focus {
+    border-color: var(--color-accent-vibrant);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+/* Star Rating Input */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse; /* Key for the hover effect */
+    font-size: 1.8rem;
+    justify-content: flex-start;
+}
+
+.star-rating input[type="radio"] {
+    display: none;
+}
+
+.star-rating label {
+    color: var(--color-neutral-base);
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 0 0.1em;
+}
+
+.star-rating label:before {
+    content: "\2605"; /* Star character */
+}
+
+/* When a radio is checked, all preceding labels (~) turn yellow */
+.star-rating input:checked ~ label,
+/* On hover, the star under the cursor and all preceding ones turn yellow */
+.star-rating:not(:hover) input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #ffc107;
 }
 
 /* Responsive */

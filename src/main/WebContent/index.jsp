@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="pageTitle" value="Homepage - CardHaven" scope="request"/>
 
@@ -11,13 +10,14 @@
     <title>${pageTitle}</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/homepage.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/products.css" type="text/css">
     <jsp:include page="/WEB-INF/components/common_head.jsp"/>
 </head>
 <body>
 <jsp:include page="/WEB-INF/components/header.jsp"/>
 
 <main>
-    <!-- Hero Section -->
+    <!-- Sezione Hero -->
     <section class="hero">
         <div class="hero-content container">
             <h1>Il Tuo Paradiso delle Carte</h1>
@@ -26,12 +26,12 @@
         </div>
     </section>
 
-    <!-- New Arrivals Section -->
+    <!-- Sezione Nuovi Arrivi -->
     <section class="product-showcase container mt-3">
         <h2>Nuovi Arrivi</h2>
         <c:choose>
             <c:when test="${not empty newestProducts}">
-                <div class="product-grid">
+                <div class="products-grid">
                     <c:forEach var="product" items="${newestProducts}">
                         <%-- Set attributes for the product_card component --%>
                         <c:set var="product" value="${product}" scope="request"/>
@@ -48,12 +48,12 @@
         </c:choose>
     </section>
 
-    <!-- On Sale Section -->
+    <!-- Sezione Prodotti in Offerta -->
     <section class="product-showcase container mt-3">
         <h2>In Offerta Speciale</h2>
         <c:choose>
             <c:when test="${not empty onSaleProducts}">
-                <div class="product-grid">
+                <div class="products-grid">
                     <c:forEach var="product" items="${onSaleProducts}">
                         <%-- Set attributes for the product_card component --%>
                         <c:set var="product" value="${product}" scope="request"/>
@@ -74,5 +74,6 @@
 
 <jsp:include page="/WEB-INF/components/footer.jsp"/>
 <script src="${pageContext.request.contextPath}/scripts/homepage.js"></script>
+<script src="${pageContext.request.contextPath}/scripts/async-cart.js"></script>
 </body>
 </html>

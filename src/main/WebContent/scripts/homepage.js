@@ -1,64 +1,28 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Gestisce l'animazione di fade-in per le sezioni della homepage quando entrano nel viewport.
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          observer.unobserve(entry.target);
+          // Applica l'animazione a ogni card all'interno della sezione visibile
+          entry.target
+            .querySelectorAll(".product-card")
+            .forEach((card, index) => {
+              // Applica un ritardo crescente per un effetto "stagger"
+              card.style.animationDelay = `${index * 100}ms`;
+              card.classList.add("fade-in-up");
+            });
+          observer.unobserve(entry.target); // Ferma l'osservazione dopo la prima animazione
         }
       });
     },
     {
-      threshold: 0.1,
+      threshold: 0.1, // L'animazione si attiva quando il 10% dell'elemento è visibile
     },
   );
 
+  // Applica l'observer a tutte le sezioni di vetrina dei prodotti.
   document.querySelectorAll(".product-showcase").forEach((section) => {
     observer.observe(section);
-  });
-
-  document.querySelectorAll(".add-to-cart-form").forEach((form) => {
-    form.addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      const formData = new FormData(this);
-      const button = this.querySelector('button[type="submit"]');
-      const originalButtonHTML = button.innerHTML;
-
-      button.disabled = true;
-      button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-      fetch(this.action, {
-        method: "POST",
-        body: new URLSearchParams(formData),
-      })
-        .then((response) => {
-          if (response.ok) {
-            if (typeof window.updateCartCount === "function") {
-              window.updateCartCount();
-            }
-            if (window.notify) {
-              window.notify.success("Prodotto aggiunto al carrello!");
-            }
-            button.innerHTML = '<i class="fas fa-check"></i> Aggiunto!';
-            setTimeout(() => {
-              button.disabled = false;
-              button.innerHTML = originalButtonHTML;
-            }, 2000);
-          } else {
-            return response.json().then((errorData) => {
-              throw new Error(errorData.message || "Errore server");
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Errore:", error);
-          if (window.notify) {
-            window.notify.error(error.message || "Errore di connessione.");
-          }
-          button.disabled = false;
-          button.innerHTML = originalButtonHTML;
-        });
-    });
   });
 });

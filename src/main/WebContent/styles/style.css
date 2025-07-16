@@ -566,7 +566,8 @@ footer {
     /* A gentle gradient overlay enhances text readability over a background image */
     background:
         linear-gradient(rgba(26, 42, 64, 0.8), rgba(26, 42, 64, 0.8)),
-        url("/images/trading_card_hero_background.jpg") no-repeat center center/cover;
+        url("/images/trading_card_hero_background.jpg") no-repeat center
+            center/cover;
     color: var(--color-primary-light);
     padding: calc(var(--spacing-unit) * 5) var(--spacing-unit);
     text-align: center;
@@ -606,110 +607,6 @@ footer {
 }
 
 /* Product Grid Layout */
-.product-grid {
-    display: grid;
-    /* Responsive grid: 1 col on small screens, up to 4 on large */
-    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-    gap: calc(var(--spacing-unit) * 2);
-}
-
-/* Product Card Styling */
-.product-card {
-    background: var(--color-bg-card);
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--color-shadow-light);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-}
-
-.product-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--color-shadow-strong);
-}
-
-.product-card-link {
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    color: var(--color-text-default);
-    flex-grow: 1; /* Allows the link to fill the card space not taken by actions */
-}
-
-.product-image-container {
-    position: relative;
-    width: 100%;
-    /* Maintain a square aspect ratio for images */
-    padding-top: 100%;
-}
-
-.product-image-container img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Ensures image covers the container without distortion */
-    transition: transform 0.3s ease;
-}
-
-.product-card:hover img {
-    transform: scale(1.05); /* Subtle zoom effect on hover */
-}
-
-.product-card h3 {
-    font-size: 1.1rem;
-    margin: var(--spacing-unit) var(--spacing-unit) 0.5rem;
-    line-height: 1.4;
-}
-
-.price {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--color-accent-vibrant);
-    padding: 0 var(--spacing-unit);
-}
-
-.add-to-cart-form {
-    padding: var(--spacing-unit);
-    margin-top: auto; /* Pushes the form to the bottom of the card */
-}
-
-/* On Sale Styles */
-.sale-badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background-color: var(--color-status-error);
-    color: var(--color-primary-light);
-    padding: 4px 10px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    border-radius: var(--border-radius-sm);
-    z-index: 2;
-}
-
-.price-on-sale {
-    display: flex;
-    align-items: baseline;
-    gap: calc(var(--spacing-unit) * 0.75);
-    padding: 0 var(--spacing-unit);
-}
-
-.original-price {
-    font-size: 1rem;
-    color: var(--color-text-secondary);
-    text-decoration: line-through;
-}
-
-.current-price {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--color-status-error-dark);
-}
 
 /* Centering text for empty sections */
 .text-center {
@@ -893,7 +790,7 @@ footer {
 
     .header-icons {
         grid-area: header-icons;
-        justify-self: center;
+        justify-self: end;
     }
 
     .mobile-menu-toggle {
@@ -947,6 +844,9 @@ footer {
 }
 
 @media (max-width: 470px) {
+    .header-icons {
+        justify-self: center;
+    }
     .logo {
         font-size: 1.5rem;
     }

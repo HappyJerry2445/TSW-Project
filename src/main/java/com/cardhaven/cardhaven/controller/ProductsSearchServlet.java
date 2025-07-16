@@ -11,12 +11,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
+import javax.sql.DataSource;
 
 @WebServlet(name = "ProductsSearchServlet", value = "/products/search")
 public class ProductsSearchServlet extends HttpServlet {
@@ -28,14 +28,19 @@ public class ProductsSearchServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        DataSource dataSource = (DataSource) getServletContext().getAttribute("ds");
+        DataSource dataSource = (DataSource) getServletContext().getAttribute(
+            "ds"
+        );
         productDAO = new ProductDAO(dataSource);
         productImageDAO = new ProductImageDAO(dataSource);
         categoryDAO = new CategoryDAO(dataSource);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws ServletException, IOException {
         List<String> errors = new ArrayList<>();
 
         // Parametri di ricerca
@@ -65,8 +70,14 @@ public class ProductsSearchServlet extends HttpServlet {
                     maxPrice = null;
                 }
             }
-            if (minPrice != null && maxPrice != null && minPrice.compareTo(maxPrice) > 0) {
-                errors.add("Il prezzo minimo non può essere maggiore del prezzo massimo.");
+            if (
+                minPrice != null &&
+                maxPrice != null &&
+                minPrice.compareTo(maxPrice) > 0
+            ) {
+                errors.add(
+                    "Il prezzo minimo non può essere maggiore del prezzo massimo."
+                );
                 minPrice = null; // Reset to avoid incorrect filtering
                 maxPrice = null; // Reset to avoid incorrect filtering
             }
@@ -81,7 +92,9 @@ public class ProductsSearchServlet extends HttpServlet {
 
             if (productTypeStr != null && !productTypeStr.isEmpty()) {
                 try {
-                    productType = ProductDTO.ProductType.valueOf(productTypeStr);
+                    productType = ProductDTO.ProductType.valueOf(
+                        productTypeStr
+                    );
                 } catch (IllegalArgumentException e) {
                     errors.add("Tipo prodotto selezionato non valido.");
                     productType = null;
@@ -90,28 +103,50 @@ public class ProductsSearchServlet extends HttpServlet {
 
             // Recupera prodotti filtrati
             Collection<ProductDTO> products = productDAO.getFilteredProducts(
-                    null, // Order by product name
-                    false,
-                    query, null, productType, categoryId, minPrice, maxPrice, null, null
+                null, // Order by product name
+                false,
+                query,
+                null,
+                productType,
+                categoryId,
+                minPrice,
+                maxPrice,
+                null,
+                null
             );
 
             // Recupera le prime immagini per i prodotti
             Map<Integer, ProductImageDTO> productImages = new HashMap<>();
             for (ProductDTO product : products) {
-                ProductImageDTO image = productImageDAO.getFirstByProductId(product.getProductId());
+                ProductImageDTO image = productImageDAO.getFirstByProductId(
+                    product.getProductId()
+                );
                 if (image != null) {
                     productImages.put(product.getProductId(), image);
                 }
             }
 
+            // Identifica quali dei prodotti filtrati sono in saldo
+            Set<Integer> onSaleProductIds = productDAO
+                .findOnSale(Integer.MAX_VALUE)
+                .stream()
+                .map(ProductDTO::getProductId)
+                .collect(Collectors.toSet());
+
             // Recupera tutte le categorie per il filtro dropdown
-            Collection<CategoryDTO> categories = categoryDAO.getAll("CategoryName");
+            Collection<CategoryDTO> categories = categoryDAO.getAll(
+                "CategoryName"
+            );
 
             // Imposta attributi per la JSP
             request.setAttribute("products", products);
             request.setAttribute("productImages", productImages);
+            request.setAttribute("onSaleProductIds", onSaleProductIds);
             request.setAttribute("categories", categories);
-            request.setAttribute("productTypes", ProductDTO.ProductType.values());
+            request.setAttribute(
+                "productTypes",
+                ProductDTO.ProductType.values()
+            );
             request.setAttribute("errors", errors);
 
             // Per ripopolare i campi del form dopo la ricerca
@@ -121,25 +156,35 @@ public class ProductsSearchServlet extends HttpServlet {
             request.setAttribute("selectedCategory", categoryIdStr); // String to match option value
             request.setAttribute("selectedProductType", productTypeStr); // String to match option value
 
-            request.getRequestDispatcher("/WEB-INF/views/search.jsp").forward(request, response);
-
+            request
+                .getRequestDispatcher("/WEB-INF/views/search.jsp")
+                .forward(request, response);
         } catch (NumberFormatException e) {
             errors.add("Formato numerico non valido per prezzo o categoria.");
             request.setAttribute("errors", errors);
-            request.getRequestDispatcher("/WEB-INF/views/search.jsp").forward(request, response);
+            request
+                .getRequestDispatcher("/WEB-INF/views/search.jsp")
+                .forward(request, response);
             e.printStackTrace();
         } catch (SQLException e) {
-            errors.add("Errore del database durante la ricerca dei prodotti: " + e.getMessage());
+            errors.add(
+                "Errore del database durante la ricerca dei prodotti: " +
+                e.getMessage()
+            );
             request.setAttribute("errors", errors);
-            request.getRequestDispatcher("/WEB-INF/views/search.jsp").forward(request, response);
+            request
+                .getRequestDispatcher("/WEB-INF/views/search.jsp")
+                .forward(request, response);
             e.printStackTrace();
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws ServletException, IOException {
         // La ricerca di solito è una GET, ma per coerenza reindirizziamo al doGet
         doGet(request, response);
     }
 }
-

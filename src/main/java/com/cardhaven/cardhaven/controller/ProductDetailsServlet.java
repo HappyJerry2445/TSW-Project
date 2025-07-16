@@ -60,6 +60,7 @@ public class ProductDetailsServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO(ds);
         ProductCategoryDAO productCategoryDAO = new ProductCategoryDAO(ds);
         CategoryDAO categoryDAO = new CategoryDAO(ds);
+        OrderDAO orderDAO = new OrderDAO(ds);
 
         try {
             // 1. Fetch main product
@@ -86,7 +87,7 @@ public class ProductDetailsServlet extends HttpServlet {
                 product.getProductType() == ProductDTO.ProductType.TradingCard
             ) {
                 TradingCardDTO cardDetails = tradingCardDAO.getById(productId);
-                req.setAttribute("tradingCardDetails", cardDetails);
+                req.setAttribute("cardDetails", cardDetails);
             } else if (
                 product.getProductType() == ProductDTO.ProductType.Accessory
             ) {
@@ -134,6 +135,28 @@ public class ProductDetailsServlet extends HttpServlet {
             }
             req.setAttribute("reviews", reviews);
             req.setAttribute("reviewAuthors", reviewAuthors);
+
+            // Check if the current user can review this product
+            Integer currentUserId = (Integer) req
+                .getSession()
+                .getAttribute("userId");
+            boolean canReview = false;
+            if (currentUserId != null) {
+                UserDTO currentUser = userDAO.getById(currentUserId);
+                // Admins can always review, others must have purchased the product.
+                if (
+                    currentUser != null &&
+                    currentUser.getRole() == UserDTO.Role.Admin
+                ) {
+                    canReview = true;
+                } else {
+                    canReview = orderDAO.hasUserPurchasedProduct(
+                        currentUserId,
+                        productId
+                    );
+                }
+            }
+            req.setAttribute("canReview", canReview);
 
             // Forward to the JSP
             req

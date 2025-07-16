@@ -1,93 +1,118 @@
-/* Styles for Product Search Page */
+/*
+ * Styles for the Product Search Page.
+ * Enhances the filter form and results layout for a better user experience.
+ */
 
+/* Filter Form Styling */
 .search-filter-card {
-    margin-bottom: 2rem;
-    padding: 1.5rem 2rem;
+    background-color: var(--color-neutral-lightest);
+    padding: 2rem;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 2.5rem;
+    border: 1px solid var(--color-neutral-base);
 }
 
 .search-filter-card h2 {
-    font-size: 1.3rem;
-    margin-bottom: 1.2rem;
-    padding-bottom: 0.75rem;
+    font-size: 1.5rem;
+    color: var(--color-primary-dark);
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
     border-bottom: 1px solid var(--color-neutral-base);
 }
 
 .search-form {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /* Create a responsive grid for filters */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1.5rem;
-    align-items: end; /* Align items at the bottom */
+    align-items: end; /* Align form elements to the bottom for a neat look */
 }
 
 .search-form .form-group {
-    margin-bottom: 0;
+    margin: 0;
 }
 
 .search-form .form-group label {
-    margin-bottom: 0.5rem;
+    font-weight: 600;
     font-size: 0.9rem;
     color: var(--color-text-secondary);
+    margin-bottom: 0.5rem;
+    display: block;
 }
 
-.search-form .form-group input[type="text"],
-.search-form .form-group input[type="number"],
-.search-form .form-group select {
-    padding: 0.7rem;
-    font-size: 0.95rem;
-}
-
-.search-form .form-group input[type="text"]#query {
-    grid-column: 1 / -1; /* Make query input span full width */
+/* Make the main search query input stand out */
+.search-form .form-group input#query {
+    padding: 0.8rem;
+    font-size: 1.1rem;
 }
 
 .filter-actions {
     display: flex;
     gap: 1rem;
-    grid-column: 1 / -1; /* Buttons span full width */
     justify-content: flex-end;
-    padding-top: 1rem;
+    /* Span the full width on larger screens if needed */
+    grid-column: 1 / -1;
+    margin-top: 1rem;
 }
 
-.filter-actions .btn {
-    padding: 0.7rem 1.2rem;
-    font-size: 0.95rem;
+/* Search Results Section */
+.search-results {
+    margin-top: 2rem;
 }
 
 .results-title {
-    text-align: center;
-    margin: 2rem 0;
     font-size: 1.8rem;
+    font-weight: 600;
     color: var(--color-primary-dark);
-}
-
-.no-results-message {
+    margin-bottom: 2rem;
     text-align: center;
-    padding: 3rem 1rem;
-    color: var(--color-text-secondary);
-    font-size: 1.1rem;
+    border-bottom: 2px solid var(--color-neutral-light);
+    padding-bottom: 1rem;
 }
 
-/* Responsive adjustments */
-@media (max-width: 992px) {
-    .search-form {
-        grid-template-columns: 1fr; /* Stack filter inputs on smaller screens */
+/* Re-using the "no-products-message" from products.css for consistency */
+.no-results-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    background-color: var(--color-neutral-lightest);
+    border: 1px dashed var(--color-neutral-base);
+    border-radius: var(--border-radius-md);
+    color: var(--color-text-secondary);
+}
+
+.no-results-message p {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .search-filter-card {
+        padding: 1.5rem;
     }
 
-    .search-form .form-group input[type="text"]#query {
-        grid-column: auto; /* Remove full width on small screens */
+    .search-form {
+        grid-template-columns: 1fr 1fr; /* Two columns on smaller screens */
+    }
+
+    .search-form .form-group:first-child {
+        grid-column: 1 / -1; /* Make search bar full width */
     }
 
     .filter-actions {
-        flex-direction: column; /* Stack buttons vertically */
-        justify-content: center;
-        gap: 0.75rem;
+        flex-direction: column;
+        grid-column: 1 / -1;
     }
 
     .filter-actions .btn {
         width: 100%;
     }
+}
 
-    .search-filter-card {
-        padding: 0;
+@media (max-width: 576px) {
+    .search-form {
+        grid-template-columns: 1fr; /* Stack all filters on mobile */
     }
 }
