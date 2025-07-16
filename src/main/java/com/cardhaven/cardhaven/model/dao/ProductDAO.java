@@ -129,7 +129,8 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
             );
         }
 
-        String sql = "DELETE FROM Product WHERE ProductId = ?";
+        // Change from hard delete to soft delete
+        String sql = "UPDATE Product SET IsActive = false WHERE ProductId = ?";
         try (
             Connection conn = dataSource.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);

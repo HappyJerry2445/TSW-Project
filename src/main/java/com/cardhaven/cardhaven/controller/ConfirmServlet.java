@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -18,12 +17,16 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import javax.sql.DataSource;
 
 @WebServlet("/common/checkout/confirm")
 public class ConfirmServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws ServletException, IOException {
         HttpSession session = request.getSession();
         DataSource ds = (DataSource) getServletContext().getAttribute("ds");
 
@@ -39,28 +42,50 @@ public class ConfirmServlet extends HttpServlet {
 
         // Get session attributes
         Integer userId = (Integer) session.getAttribute("userId");
-        Integer shippingAddressId = (Integer) session.getAttribute("shippingAddressId");
-        Integer billingAddressId = (Integer) session.getAttribute("billingAddressId");
+        Integer shippingAddressId = (Integer) session.getAttribute(
+            "shippingAddressId"
+        );
+        Integer billingAddressId = (Integer) session.getAttribute(
+            "billingAddressId"
+        );
 
         // Validate user authentication
         if (userId == null) {
-            NotificationUtil.sendNotification(request, "Devi essere loggato per confermare il tuo ordine.", "error");
+            NotificationUtil.sendNotification(
+                request,
+                "Devi essere loggato per confermare il tuo ordine.",
+                "error"
+            );
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
         // Validate addresses (must come from checkout flow)
         if (shippingAddressId == null || billingAddressId == null) {
-            NotificationUtil.sendNotification(request, "Indirizzi non selezionati. Riprova il checkout.", "error");
-            response.sendRedirect(request.getContextPath() + "/common/checkout/shipping");
+            NotificationUtil.sendNotification(
+                request,
+                "Indirizzi non selezionati. Riprova il checkout.",
+                "error"
+            );
+            response.sendRedirect(
+                request.getContextPath() + "/common/checkout/shipping"
+            );
             return;
         }
 
         // Check if order was already processed (prevent duplicate orders)
-        Boolean orderProcessed = (Boolean) session.getAttribute("orderProcessed");
+        Boolean orderProcessed = (Boolean) session.getAttribute(
+            "orderProcessed"
+        );
         if (orderProcessed != null && orderProcessed) {
-            NotificationUtil.sendNotification(request, "Ordine già processato.", "warning");
-            response.sendRedirect(request.getContextPath() + "/common/checkout/confirm");
+            NotificationUtil.sendNotification(
+                request,
+                "Ordine già processato.",
+                "warning"
+            );
+            response.sendRedirect(
+                request.getContextPath() + "/common/checkout/confirm"
+            );
             return;
         }
 
@@ -71,32 +96,69 @@ public class ConfirmServlet extends HttpServlet {
             conn.setAutoCommit(false);
 
             // Get cart items
-            List<CartItemDetailDTO> cartItems = CartManager.getDetailedCartItems(request, cartDAO, cartItemDAO, productDAO, productImageDAO);
+            List<CartItemDetailDTO> cartItems =
+                CartManager.getDetailedCartItems(
+                    request,
+                    cartDAO,
+                    cartItemDAO,
+                    productDAO,
+                    productImageDAO
+                );
             if (cartItems.isEmpty()) {
-                NotificationUtil.sendNotification(request, "Il tuo carrello è vuoto.", "error");
+                NotificationUtil.sendNotification(
+                    request,
+                    "Il tuo carrello è vuoto.",
+                    "error"
+                );
                 response.sendRedirect(request.getContextPath() + "/cart");
                 return;
             }
 
             // --- VALIDATE STOCK AVAILABILITY FIRST ---
             for (CartItemDetailDTO cartItem : cartItems) {
-                ProductDTO product = productDAO.getById(cartItem.getProductId());
+                ProductDTO product = productDAO.getById(
+                    cartItem.getProductId()
+                );
                 if (product == null) {
-                    throw new SQLException("Prodotto non trovato: " + cartItem.getProductName());
+                    throw new SQLException(
+                        "Prodotto non trovato: " + cartItem.getProductName()
+                    );
                 }
                 if (product.getStockQuantity() < cartItem.getQuantity()) {
-                    throw new SQLException("Scorte insufficienti per il prodotto: " + cartItem.getProductName() +
-                            " (Disponibili: " + product.getStockQuantity() + ", Richieste: " + cartItem.getQuantity() + ")");
+                    throw new SQLException(
+                        "Scorte insufficienti per il prodotto: " +
+                        cartItem.getProductName() +
+                        " (Disponibili: " +
+                        product.getStockQuantity() +
+                        ", Richieste: " +
+                        cartItem.getQuantity() +
+                        ")"
+                    );
                 }
             }
 
             // --- CREATE ORDER ADDRESSES (SNAPSHOTS) ---
-            OrderAddressDTO shippingOrderAddress = createOrderAddressSnapshot(addressDAO, orderAddressDAO, shippingAddressId, "spedizione");
-            OrderAddressDTO billingOrderAddress = createOrderAddressSnapshot(addressDAO, orderAddressDAO, billingAddressId, "fatturazione");
+            OrderAddressDTO shippingOrderAddress = createOrderAddressSnapshot(
+                addressDAO,
+                orderAddressDAO,
+                shippingAddressId,
+                "spedizione"
+            );
+            OrderAddressDTO billingOrderAddress = createOrderAddressSnapshot(
+                addressDAO,
+                orderAddressDAO,
+                billingAddressId,
+                "fatturazione"
+            );
 
             // --- CREATE ORDER ---
             BigDecimal total = calculateOrderTotal(cartItems);
-            OrderDTO newOrder = createOrder(userId, shippingOrderAddress, billingOrderAddress, total);
+            OrderDTO newOrder = createOrder(
+                userId,
+                shippingOrderAddress,
+                billingOrderAddress,
+                total
+            );
             orderDAO.save(newOrder);
 
             // --- CREATE ORDER ITEMS AND UPDATE STOCK ---
@@ -116,9 +178,14 @@ public class ConfirmServlet extends HttpServlet {
             cleanupCheckoutSession(session);
 
             // Success notification and redirect
-            NotificationUtil.sendNotification(request, "Ordine confermato con successo!", "success");
-            response.sendRedirect(request.getContextPath() + "/common/checkout/confirm");
-
+            NotificationUtil.sendNotification(
+                request,
+                "Ordine confermato con successo!",
+                "success"
+            );
+            response.sendRedirect(
+                request.getContextPath() + "/common/checkout/confirm"
+            );
         } catch (SQLException e) {
             handleCheckoutError(conn, e, request, response);
         } finally {
@@ -127,7 +194,10 @@ public class ConfirmServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws ServletException, IOException {
         HttpSession session = request.getSession();
         DataSource ds = (DataSource) getServletContext().getAttribute("ds");
 
@@ -140,15 +210,27 @@ public class ConfirmServlet extends HttpServlet {
 
         // Check if user is logged in
         if (userId == null) {
-            NotificationUtil.sendNotification(request, "Accesso negato. Effettua il login.", "error");
+            NotificationUtil.sendNotification(
+                request,
+                "Accesso negato. Effettua il login.",
+                "error"
+            );
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
         // Check if user accessed this page through proper checkout flow
-        Boolean orderProcessed = (Boolean) session.getAttribute("orderProcessed");
-        if (lastOrderId == null || (orderProcessed == null || !orderProcessed)) {
-            NotificationUtil.sendNotification(request, "Accesso non autorizzato. Completa prima il checkout.", "error");
+        Boolean orderProcessed = (Boolean) session.getAttribute(
+            "orderProcessed"
+        );
+        if (
+            lastOrderId == null || (orderProcessed == null || !orderProcessed)
+        ) {
+            NotificationUtil.sendNotification(
+                request,
+                "Accesso non autorizzato. Completa prima il checkout.",
+                "error"
+            );
             response.sendRedirect(request.getContextPath() + "/cart");
             return;
         }
@@ -164,10 +246,15 @@ public class ConfirmServlet extends HttpServlet {
                 request.setAttribute("lastOrder", lastOrder);
 
                 // Get order items for display
-                List<OrderItemDTO> orderItems = orderItemDAO.getOrderItemsByOrderId(lastOrderId);
+                List<OrderItemDTO> orderItems =
+                    orderItemDAO.getOrderItemsByOrderId(lastOrderId);
                 request.setAttribute("orderItems", orderItems);
             } else {
-                NotificationUtil.sendNotification(request, "Ordine non trovato.", "error");
+                NotificationUtil.sendNotification(
+                    request,
+                    "Ordine non trovato.",
+                    "error"
+                );
                 response.sendRedirect(request.getContextPath() + "/");
                 return;
             }
@@ -175,22 +262,34 @@ public class ConfirmServlet extends HttpServlet {
             // Clean up session after displaying order (prevent refresh issues)
             session.removeAttribute("lastOrderId");
             session.removeAttribute("orderProcessed");
-
         } catch (SQLException e) {
-            NotificationUtil.sendNotification(request, "Errore nel recupero dei dati dell'ordine.", "error");
+            NotificationUtil.sendNotification(
+                request,
+                "Errore nel recupero dei dati dell'ordine.",
+                "error"
+            );
             response.sendRedirect(request.getContextPath() + "/");
             return;
         }
 
-        request.getRequestDispatcher("/WEB-INF/views/common/checkout/confirm.jsp").forward(request, response);
+        request
+            .getRequestDispatcher("/WEB-INF/views/common/checkout/confirm.jsp")
+            .forward(request, response);
     }
 
     // --- HELPER METHODS ---
 
-    private OrderAddressDTO createOrderAddressSnapshot(AddressDAO addressDAO, OrderAddressDAO orderAddressDAO, Integer addressId, String addressType) throws SQLException {
+    private OrderAddressDTO createOrderAddressSnapshot(
+        AddressDAO addressDAO,
+        OrderAddressDAO orderAddressDAO,
+        Integer addressId,
+        String addressType
+    ) throws SQLException {
         AddressDTO address = addressDAO.getById(addressId);
         if (address == null) {
-            throw new SQLException("Indirizzo di " + addressType + " non trovato");
+            throw new SQLException(
+                "Indirizzo di " + addressType + " non trovato"
+            );
         }
 
         OrderAddressDTO orderAddress = new OrderAddressDTO();
@@ -205,13 +304,20 @@ public class ConfirmServlet extends HttpServlet {
     }
 
     private BigDecimal calculateOrderTotal(List<CartItemDetailDTO> cartItems) {
-        return cartItems.stream()
-                .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return cartItems
+            .stream()
+            .map(item ->
+                item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()))
+            )
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private OrderDTO createOrder(Integer userId, OrderAddressDTO shippingAddress,
-                                 OrderAddressDTO billingAddress, BigDecimal total) {
+    private OrderDTO createOrder(
+        Integer userId,
+        OrderAddressDTO shippingAddress,
+        OrderAddressDTO billingAddress,
+        BigDecimal total
+    ) {
         OrderDTO order = new OrderDTO();
         order.setUserID(userId);
         order.setShippingAddressId(shippingAddress.getOrderAddressID());
@@ -222,15 +328,26 @@ public class ConfirmServlet extends HttpServlet {
         return order;
     }
 
-    private void processOrderItem(ProductDAO productDAO, OrderItemDAO orderItemDAO,
-                                  OrderDTO order, CartItemDetailDTO cartItem) throws SQLException {
+    private void processOrderItem(
+        ProductDAO productDAO,
+        OrderItemDAO orderItemDAO,
+        OrderDTO order,
+        CartItemDetailDTO cartItem
+    ) throws SQLException {
         // Re-fetch product to ensure we have the latest stock info
         ProductDTO product = productDAO.getById(cartItem.getProductId());
 
         // Double-check stock availability (race condition protection)
         if (product.getStockQuantity() < cartItem.getQuantity()) {
-            throw new SQLException("Scorte insufficienti per il prodotto: " + cartItem.getProductName() +
-                    " (Disponibili: " + product.getStockQuantity() + ", Richieste: " + cartItem.getQuantity() + ")");
+            throw new SQLException(
+                "Scorte insufficienti per il prodotto: " +
+                cartItem.getProductName() +
+                " (Disponibili: " +
+                product.getStockQuantity() +
+                ", Richieste: " +
+                cartItem.getQuantity() +
+                ")"
+            );
         }
 
         // Create order item
@@ -247,19 +364,30 @@ public class ConfirmServlet extends HttpServlet {
         orderItemDAO.save(orderItem);
 
         // Update stock quantity
-        product.setStockQuantity(product.getStockQuantity() - cartItem.getQuantity());
+        product.setStockQuantity(
+            product.getStockQuantity() - cartItem.getQuantity()
+        );
         productDAO.save(product);
     }
 
     // Helper method to create a valid JSON product snapshot
-    private String createProductSnapshot(ProductDTO product, CartItemDetailDTO cartItem) {
+    private String createProductSnapshot(
+        ProductDTO product,
+        CartItemDetailDTO cartItem
+    ) {
         // Create a properly escaped JSON representation
         StringBuilder json = new StringBuilder();
         json.append("{");
-        json.append("\"productId\":").append(product.getProductId()).append(",");
-        json.append("\"name\":\"").append(escapeJsonString(product.getProductName())).append("\",");
-        json.append("\"price\":").append(product.getCurrentPrice()).append(",");
-        json.append("\"stockAtPurchase\":").append(product.getStockQuantity());
+        json
+            .append("\"productId\":")
+            .append(product.getProductId())
+            .append(",");
+        json
+            .append("\"name\":\"")
+            .append(escapeJsonString(product.getProductName()))
+            .append("\",");
+        json.append("\"price\":").append(cartItem.getPrice()).append(",");
+        json.append("\"imageId\":").append(cartItem.getImageId());
         json.append("}");
         return json.toString();
     }
@@ -267,18 +395,26 @@ public class ConfirmServlet extends HttpServlet {
     // Helper method to escape special characters in JSON strings
     private String escapeJsonString(String input) {
         if (input == null) return "";
-        return input.replace("\\", "\\\\")
-                .replace("\"", "\\\"")
-                .replace("\n", "\\n")
-                .replace("\r", "\\r")
-                .replace("\t", "\\t");
+        return input
+            .replace("\\", "\\\\")
+            .replace("\"", "\\\"")
+            .replace("\n", "\\n")
+            .replace("\r", "\\r")
+            .replace("\t", "\\t");
     }
 
-    private void clearUserCart(CartDAO cartDAO, CartItemDAO cartItemDAO, Integer userId) throws SQLException {
+    private void clearUserCart(
+        CartDAO cartDAO,
+        CartItemDAO cartItemDAO,
+        Integer userId
+    ) throws SQLException {
         CartDTO userCart = cartDAO.getByUserId(userId);
         if (userCart != null) {
             // Get all cart items for this user's cart
-            Collection<CartItemDTO> cartItems = cartItemDAO.getByCartId(userCart.getCartId(), null);
+            Collection<CartItemDTO> cartItems = cartItemDAO.getByCartId(
+                userCart.getCartId(),
+                null
+            );
 
             // Delete each cart item individually using the CartItemDAO delete method
             for (CartItemDTO item : cartItems) {
@@ -292,8 +428,12 @@ public class ConfirmServlet extends HttpServlet {
         session.removeAttribute("billingAddressId");
     }
 
-    private void handleCheckoutError(Connection conn, SQLException e, HttpServletRequest request,
-                                     HttpServletResponse response) throws IOException {
+    private void handleCheckoutError(
+        Connection conn,
+        SQLException e,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException {
         // Rollback transaction on error
         if (conn != null) {
             try {
