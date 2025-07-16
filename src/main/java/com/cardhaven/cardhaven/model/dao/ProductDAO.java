@@ -200,4 +200,18 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
         }
         return products;
     }
+
+    public int countAll() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM `Product`";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
 }

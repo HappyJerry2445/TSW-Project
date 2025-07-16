@@ -141,6 +141,11 @@
     color: var(--primary-color);
 }
 
+.admin-section:nth-child(2) h2 i {
+    margin-right: 0.75rem;
+    color: var(--secondary-color);
+}
+
 /* Admin Cards */
 .admin-cards {
     display: grid;

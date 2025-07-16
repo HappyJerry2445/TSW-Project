@@ -34,17 +34,17 @@
     /*--color-status-info: #17A2B8; !* New, for info messages *!*/
     /*--color-status-info-hover: #138496;*/
 
-    --color-status-error: #D32F2F; /* Deep, professional red */
+    --color-status-error: #e74c3c; /* Deep, professional red */
     --color-status-error-dark: #B71C1C; /* Darker red for error states */
 
-    --color-status-success: #2E7D32; /* Earthy green (less neon) */
+    --color-status-success: #2ecc71; /* Earthy green (less neon) */
     --color-status-success-dark: #1B5E20; /* Darker success state */
 
-    --color-status-warning: #F57C00; /* Warm amber (more visible) */
+    --color-status-warning: #f39c12; /* Warm amber (more visible) */
     --color-status-warning-dark: #E65100; /* Darker warning state */
 
-    --color-status-info: #0288D1; /* Softer blue (distinct from accent) */
-    --color-status-info-hover: #01579B; /* Darker info hover state */
+    --color-status-info: #3498db; /* Softer blue (distinct from accent) */
+    --color-status-info-hover: #2980b9; /* Darker info hover state */
 
     /* Borders & Shadows */
     --color-border-default: var(--color-neutral-base);
@@ -721,4 +721,19 @@ footer {
 
 .links a:hover {
     text-decoration: underline;
+}
+
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+.spin {
+    animation: spin 2s linear infinite;
 }

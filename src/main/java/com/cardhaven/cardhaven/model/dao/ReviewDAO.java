@@ -223,4 +223,18 @@ public class ReviewDAO implements GenericDAO<ReviewDTO, Integer> {
         return reviewDTOs;
     }
 
+    public int countAll() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM `Review`";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+
 }
