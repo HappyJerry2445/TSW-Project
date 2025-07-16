@@ -28,12 +28,12 @@
     overflow: hidden;
     transition: all 0.3s ease;
     background: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .product-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
 }
 
 /* Image container with fixed aspect ratio */
@@ -85,7 +85,7 @@
     justify-content: space-between;
     align-items: center;
     margin: 0.5rem 0;
-    gap: 8px; /* Spazio ridotto tra prezzo e bottone */
+    gap: 8px;
     padding: 0 1rem 1rem 1rem;
 }
 
@@ -98,15 +98,14 @@
 
 /* Add to cart button */
 .add-to-cart-btn {
-    background-color: #2ecc71;
-    color: white;
+    padding: 8px 15px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    padding: 0.5rem 0.7rem;
-    transition: all 0.2s ease;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+    background-color: #3498db;
+    color: white;
     min-width: 32px;
 }
 
@@ -123,7 +122,7 @@
     color: white;
     padding: 10px 20px;
     border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     transform: translateY(100px);
     opacity: 0;
     transition: all 0.3s ease;
@@ -171,7 +170,7 @@
 }
 
 .in-stock {
-    color: #27ae60;
+    color: #3498db;
     font-weight: 500;
 }
 
@@ -199,7 +198,7 @@
     }
 
     .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 1.5rem;
     }
 
