@@ -19,8 +19,11 @@ import java.util.*;
 public class ProductDetailsServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.out.println("ProductServlet: doGet chiamato con pathInfo=" + req.getPathInfo());
+
 		String pathInfo = req.getPathInfo();
 		List<String> errors = new ArrayList<>();
+		req.setAttribute("errors", errors);
 
 		if (pathInfo == null || pathInfo.equals("/")){
 			errors.add("Id del prodotto non specificato.");
@@ -69,9 +72,10 @@ public class ProductDetailsServlet extends HttpServlet {
 			req.setAttribute("pageTitle", product.getProductName());
 
 			req.getRequestDispatcher("/WEB-INF/views/product-details.jsp").forward(req, resp);
+
 		} catch (Exception e) {
 			errors.add("Errore durante il recupero dei dettagli del prodotto.");
-			req.getRequestDispatcher("/WEB-INF/views/product-detail").forward(req, resp);
+			req.getRequestDispatcher("/WEB-INF/views/product-details.jsp").forward(req, resp);
 		}
 
 
