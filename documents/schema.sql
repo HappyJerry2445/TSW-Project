@@ -1,6 +1,3 @@
-CREATE DATABASE CardHaven;
-USE CardHaven;
-
 create table AttributeDefinition
 (
     AttributeID   int auto_increment
@@ -51,17 +48,18 @@ create table OrderAddress
 
 create table Product
 (
-    ProductID     int auto_increment
+    ProductID          int auto_increment
         primary key,
-    SKU           varchar(50)                                      not null,
-    ProductName   varchar(255)                                     not null,
-    BasePrice     decimal(10, 2)                                   not null,
-    CurrentPrice  decimal(10, 2)                                   not null,
-    StockQuantity int        default 0                             not null,
-    ProductType   enum ('TradingCard', 'Accessory', 'BoosterPack') not null,
-    CreatedAt     timestamp  default CURRENT_TIMESTAMP             null,
-    LastUpdated   timestamp  default CURRENT_TIMESTAMP             null on update CURRENT_TIMESTAMP,
-    IsActive      tinyint(1) default 1                             null,
+    SKU                varchar(50)                                      not null,
+    ProductName        varchar(255)                                     not null,
+    BasePrice          decimal(10, 2)                                   not null,
+    CurrentPrice       decimal(10, 2)                                   not null,
+    StockQuantity      int        default 0                             not null,
+    ProductType        enum ('TradingCard', 'Accessory', 'BoosterPack') not null,
+    CreatedAt          timestamp  default CURRENT_TIMESTAMP             null,
+    LastUpdated        timestamp  default CURRENT_TIMESTAMP             null on update CURRENT_TIMESTAMP,
+    IsActive           tinyint(1) default 1                             null,
+    ProductDescription text                                             null,
     constraint SKU
         unique (SKU),
     check (`BasePrice` >= 0),
@@ -82,6 +80,15 @@ create table Accessory
         foreign key (AccessoryID) references Product (ProductID)
             on delete cascade
 );
+
+create fulltext index ProductDescription
+    on Product (ProductDescription);
+
+create fulltext index ProductName
+    on Product (ProductName);
+
+create fulltext index ProductNameDescription
+    on Product (ProductName, ProductDescription);
 
 create index idx_product_type
     on Product (ProductType);
@@ -127,8 +134,8 @@ create table ProductImage
     ProductImageID int auto_increment
         primary key,
     ProductID      int           not null,
-    SortOrder      int default 0 null,
-    ImageID        int           null,
+    SortOrder      int default 0 not null,
+    ImageID        int           not null,
     constraint ProductImage_pk
         unique (ProductID, ImageID),
     constraint ProductImage_Image_ImageId_fk
