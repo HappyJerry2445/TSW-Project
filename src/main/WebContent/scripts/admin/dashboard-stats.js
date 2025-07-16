@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchDashboardStats() {
         try {
-            const response = await fetch(`${window.location.origin}/admin/stats`); // Assuming /admin/stats endpoint
+            const response = await fetch(`${APP_CONTEXT_PATH}/admin/stats`); // Assuming /admin/stats endpoint
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }

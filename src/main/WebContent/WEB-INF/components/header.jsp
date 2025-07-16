@@ -58,8 +58,12 @@
                 <a id="cart-icon" href="${pageContext.request.contextPath}/cart" aria-label="Carrello"
                    class="action-icon">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">0</span>
+                    <span class="cart-count hidden">0</span>
                 </a>
+                <script>
+                    const APP_CONTEXT_PATH = "${pageContext.request.contextPath}";
+                </script>
+                <script defer src="${pageContext.request.contextPath}/scripts/cart-count-update.js"></script>
             </div>
         </div>
         <!-- TODO: pagina menu -->

@@ -737,3 +737,7 @@ footer {
 .spin {
     animation: spin 2s linear infinite;
 }
+
+.hidden {
+    visibility: hidden;
+}

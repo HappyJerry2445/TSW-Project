@@ -78,7 +78,7 @@
                                                       method="post">
                                                     <input type="hidden" name="cartItemId" value="${item.cartItemId}">
                                                     <button type="button" class="quantity-btn decrease"
-                                                            onclick="decreaseQuantity(this)">
+                                                            onclick="decreaseQuantity(this); updateCartCount()">
                                                         <i class="fas fa-minus"></i>
                                                     </button>
                                                     <input type="number" name="quantity" value="${item.quantity}"
@@ -170,6 +170,7 @@
             input.value = value - 1;
         }
     }
+
 
     // Animate the cart items when page loads
     document.addEventListener('DOMContentLoaded', function () {
