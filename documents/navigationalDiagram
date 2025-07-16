@@ -1,46 +1,53 @@
-graph TD
-    %% Define a simple style for the nodes
+---
+config:
+  layout: dagre
+---
+flowchart TD
+ subgraph subGraph0["User-Facing Website"]
+        Home("Home Page<br>(index.jsp)")
+        Products("Products<br>(ricerca-prodotti-categoria.jsp)")
+        SearchProduct("Search<br>(search.jsp)")
+        Account("My Account<br>(profile.jsp)")
+        Cart("Shopping Cart<br>(cart.jsp)")
+        Login("Login / Register<br>(login.jsp / register.jsp)")
+        MyOrders("My Orders<br>(common/orders.jsp)")
+        MyAddresses("My Addresses<br>(common/addresses.jsp)")
+        ChangePass("Change Password<br>(common/change-password.jsp)")
+        OrderDetails("Order Details<br>(common/order_details.jsp)")
+        AddAddress("Add New Address<br>(common/add-address.jsp)")
+        EditAddress("Edit Address<br>(common/edit-address.jsp)")
+        Ship("Shipping Details<br>(common/checkout/shipping.jsp)")
+        Review("Review Details<br>(common/checkout/review.jsp)")
+        Confirm("Confirm Order<br>(common/checkout/confirm.jsp)")
+        About("About<br>(static/about.jsp)")
+        Contact("Contact<br>(static/contact.jsp)")
+        Faq("Faq<br>(static/Faq.jsp)")
+        Privacy("Privacy<br>(static/privacy.jsp)")
+        Terms("Terms<br>(static/terms.jsp)")
+  end
+ subgraph subGraph1["Admin Panel (Requires Login)"]
+        AdminDash("Admin Dashboard<br>(admin/dashboard.jsp)")
+        ManageProd("Manage Products<br>(admin/products.jsp)")
+        ManageCat("Manage Categories<br>(admin/categories.jsp)")
+        ManageCatItem("Manage Categories<br>(admin/_categories_item.jsp)")
+        ManageOrders("Manage Orders<br>(admin/orders.jsp)")
+        ManageUsers("Manage Users<br>(admin/users.jsp)")
+        ManageRev("Manage Reviews<br>(admin/reviews.jsp)")
+        NewProd("New Product<br>(admin/new-product.jsp)")
+        EditProd("Edit Product<br>(admin/edit-product.jsp)")
+        AdminOrderDetails("Admin Order Details<br>(admin/order_details.jsp)")
+  end
+    Home --> Products & Account & Cart & Login & About & Contact & Faq & Privacy & Terms
+    Account --> MyOrders & MyAddresses & ChangePass
+    MyOrders --> OrderDetails
+    MyAddresses --> AddAddress & EditAddress
+    Cart -->  Ship
+    Ship --> Review
+    Review --> Confirm
+    AdminDash --> ManageProd & ManageCat & ManageOrders & ManageUsers & ManageRev
+    ManageProd --> NewProd & EditProd
+    ManageOrders --> AdminOrderDetails
+    ManageCat --> ManageCatItem
+    Products --> SearchProduct
     classDef page fill:#f8f9fa,stroke:#333,stroke-width:2px
-
-    subgraph "User-Facing Website"
-        Home("Home Page<br/>(index.jsp)")
-
-        %% --- Main Navigation ---
-        Home --> Products("Products<br/>(ricerca-prodotti-categoria.jsp)")
-        Home --> Account("My Account<br/>(profile.jsp)")
-        Home --> Cart("Shopping Cart<br/>(cart.jsp)")
-        Home --> Login("Login / Register")
-
-        %% --- 'My Account' Sub-pages ---
-        Account --> MyOrders("My Orders<br/>(common/orders.jsp)")
-        Account --> MyAddresses("My Addresses<br/>(common/addresses.jsp)")
-        Account --> ChangePass("Change Password<br/>(common/change-password.jsp)")
-        MyOrders --> OrderDetails("Order Details<br/>(common/order_details.jsp)")
-        MyAddresses --> AddAddress("Add New Address<br/>(common/add-address.jsp)")
-        MyAddresses --> EditAddress("Edit Address<br/>(common/edit-address.jsp)")
-
-        %% --- Checkout Flow ---
-        Cart --> Checkout("Checkout Process")
-        Checkout --> Ship("1. Shipping Details<br/>(checkout/shipping.jsp)")
-        Ship --> Review("2. Review Details<br/>(checkout/review.jsp)")
-        Review --> Confirm("3. Confirm Order<br/>(checkout/confirm.jsp)")
-    end
-
-    subgraph "Admin Panel (Requires Login)"
-        AdminDash("Admin Dashboard<br/>(admin/dashboard.jsp)")
-
-        %% --- Main Admin Sections ---
-        AdminDash --> ManageProd("Manage Products<br/>(admin/products.jsp)")
-        AdminDash --> ManageCat("Manage Categories<br/>(admin/categories.jsp)")
-        AdminDash --> ManageOrders("Manage Orders<br/>(admin/orders.jsp)")
-        AdminDash --> ManageUsers("Manage Users<br/>(admin/users.jsp)")
-        AdminDash --> ManageRev("Manage Reviews<br/>(admin/reviews.jsp)")
-
-        %% --- Admin Sub-pages ---
-        ManageProd --> NewProd("New Product<br/>(admin/new-product.jsp)")
-        ManageProd --> EditProd("Edit Product<br/>(admin/edit-product.jsp)")
-        ManageOrders --> AdminOrderDetails("Admin Order Details<br/>(admin/order_details.jsp)")
-    end
-
-    %% Apply the style to all nodes
-    classDef default fill:#f8f9fa,stroke:#333,stroke-width:2px;
+    classDef default fill:#f8f9fa,stroke:#333,stroke-width:2px
