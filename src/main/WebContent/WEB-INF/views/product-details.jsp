@@ -1,107 +1,178 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="my" uri="/WEB-INF/functions" %>
 
-<c:set var="pageTitle" value="${product.productName}" scope="request"/>
+<%-- Imposta il titolo della pagina con il nome del prodotto --%>
+<c:set var="pageTitle" value="${product.productName} | CardHaven" scope="request"/>
 
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <title>${pageTitle}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <jsp:include page="/WEB-INF/components/common_head.jsp"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css" type="text/css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/productdetails.css" type="text/css">
+    <title>${pageTitle}</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/productdetails.css">
 </head>
 <body>
 <jsp:include page="/WEB-INF/components/header.jsp"/>
 
-<main>
-    <div class="container">
-        <%-- Visualizzazione degli eventuali errori --%>
-        <c:if test="${not empty errors}">
-            <div class="error-container">
-                <c:forEach var="error" items="${errors}">
-                    <p class="error-message">${error}</p>
-                </c:forEach>
-            </div>
-        </c:if>
+<main class="container">
+    <c:if test="${not empty errors}">
+        <div class="alert alert-danger" role="alert">
+            <c:forEach var="error" items="${errors}">
+                <p>${error}</p>
+            </c:forEach>
+        </div>
+    </c:if>
 
-        <div class="product-detail-container">
-            <%-- Immagine del prodotto --%>
-            <div class="product-image-container">
-                <c:choose>
-                    <c:when test="${not empty productImages[product.productId]}">
-                        <img src="${pageContext.request.contextPath}/image/${productImages[product.productId].imageId}"
-                             alt="${product.productName}"
-                             class="product-detail-image">
-                    </c:when>
-                    <c:otherwise>
-                        <img src="${pageContext.request.contextPath}/images/noimage.png"
-                             alt="Immagine non disponibile"
-                             class="product-detail-image">
-                    </c:otherwise>
-                </c:choose>
-            </div>
-
-            <%-- Informazioni del prodotto --%>
-            <div class="product-info-container">
-                <h1 class="product-title">${product.productName}</h1>
-
-                <%-- Prezzo --%>
-                <div class="product-price">
-                    <fmt:formatNumber value="${product.currentPrice}"
-                                      type="currency"
-                                      currencySymbol="€"
-                                      maxFractionDigits="2"/>
-                </div>
-
-                <%-- Disponibilità --%>
-                <div class="product-availability">
+    <c:if test="${not empty product}">
+        <div class="product-details-grid">
+            <!-- Colonna Sinistra: Galleria Immagini -->
+            <div class="product-gallery">
+                <div class="main-image-container">
                     <c:choose>
-                        <c:when test="${product.stockQuantity > 0}">
-                            <span class="in-stock">Disponibile</span>
-                            <span class="stock-quantity">(${product.stockQuantity} pezzi)</span>
+                        <c:when test="${not empty productImages}">
+                            <img id="main-product-image" src="${pageContext.request.contextPath}/image/${productImages[0].imageId}" alt="Immagine principale di ${product.productName}">
                         </c:when>
                         <c:otherwise>
-                            <span class="out-of-stock">Non disponibile</span>
+                            <img id="main-product-image" src="${pageContext.request.contextPath}/images/noimage.png" alt="Immagine non disponibile">
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+                <c:if test="${productImages.size() > 1}">
+                    <div class="thumbnail-strip">
+                        <c:forEach var="img" items="${productImages}">
+                            <img src="${pageContext.request.contextPath}/image/${img.imageId}" alt="Miniatura di ${product.productName}" class="thumbnail-item" data-full-image="${pageContext.request.contextPath}/image/${img.imageId}">
+                        </c:forEach>
+                    </div>
+                </c:if>
+            </div>
+
+            <!-- Colonna Destra: Informazioni Principali -->
+            <div class="product-info-main">
+                <div class="product-categories">
+                    <c:forEach var="cat" items="${categories}" varStatus="loop">
+                        <a href="${pageContext.request.contextPath}/products/category/${cat.id}">${cat.name}</a>
+                        <c:if test="${not loop.last}"> / </c:if>
+                    </c:forEach>
+                </div>
+                <h1 class="product-title">${product.productName}</h1>
+                <p class="product-sku">SKU: ${product.sku}</p>
+
+                <div class="price-container-details">
+                    <c:choose>
+                        <c:when test="${product.currentPrice < product.basePrice}">
+                             <span class="original-price-details">
+                                 <fmt:formatNumber value="${product.basePrice}" type="currency" currencySymbol="€"/>
+                             </span>
+                            <span class="current-price-details sale">
+                                <fmt:formatNumber value="${product.currentPrice}" type="currency" currencySymbol="€"/>
+                            </span>
+                        </c:when>
+                        <c:otherwise>
+                             <span class="current-price-details">
+                                 <fmt:formatNumber value="${product.currentPrice}" type="currency" currencySymbol="€"/>
+                             </span>
                         </c:otherwise>
                     </c:choose>
                 </div>
 
-                <%-- Descrizione --%>
-                <div class="product-description">
-                    <h2>Descrizione</h2>
-                    <p>${product.productDescription}</p>
+                <div class="stock-info">
+                    <c:choose>
+                        <c:when test="${product.stockQuantity > 0}">
+                            <span class="stock-status in-stock"><i class="fas fa-check-circle"></i> Disponibile</span>
+                            <span class="stock-level">(${product.stockQuantity} rimanenti)</span>
+                        </c:when>
+                        <c:otherwise>
+                            <span class="stock-status out-of-stock"><i class="fas fa-times-circle"></i> Esaurito</span>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
-                <%-- Pulsante aggiungi al carrello --%>
                 <c:if test="${product.stockQuantity > 0}">
-                    <form action="${pageContext.request.contextPath}/cart/add"
-                          method="POST"
-                          class="add-to-cart-form">
+                    <form action="${pageContext.request.contextPath}/cart/add" method="post" class="add-to-cart-form-details">
                         <input type="hidden" name="productId" value="${product.productId}">
-
                         <div class="quantity-selector">
                             <label for="quantity">Quantità:</label>
-                            <input type="number"
-                                   id="quantity"
-                                   name="quantity"
-                                   value="1"
-                                   min="1"
-                                   max="${product.stockQuantity}">
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="${product.stockQuantity}">
                         </div>
-
-                        <button type="submit" class="btn btn-primary add-to-cart-btn">
-                            Aggiungi al carrello
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">
+                            <i class="fas fa-cart-plus"></i> Aggiungi al Carrello
                         </button>
                     </form>
                 </c:if>
             </div>
         </div>
-    </div>
+
+        <!-- Sezione Dettagli e Recensioni (sotto le colonne) -->
+        <div class="product-details-tabs">
+            <nav class="tab-navigation">
+                <a href="#tab-description" class="tab-link active">Descrizione</a>
+                <a href="#tab-specs" class="tab-link">Dettagli</a>
+                <a href="#tab-reviews" class="tab-link">Recensioni (${reviews.size()})</a>
+            </nav>
+            <div class="tab-content">
+                <div id="tab-description" class="tab-pane active">
+                    <c:choose>
+                        <c:when test="${not empty product.productDescription}">
+                            <p>${product.productDescription}</p>
+                        </c:when>
+                        <c:otherwise>
+                            <p>Nessuna descrizione disponibile per questo prodotto.</p>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+                <div id="tab-specs" class="tab-pane">
+                    <table class="specs-table">
+                        <c:if test="${not empty cardDetails}">
+                            <tr><th>Set</th><td>${cardDetails.cardSet}</td></tr>
+                            <tr><th>Numero Carta</th><td>${cardDetails.cardNumber}</td></tr>
+                            <tr><th>Rarità</th><td>${cardDetails.rarity}</td></tr>
+                            <tr><th>Condizione</th><td>${cardDetails.cardCondition}</td></tr>
+                            <c:if test="${not empty cardDetails.artist}"><tr><th>Artista</th><td>${cardDetails.artist}</td></tr></c:if>
+                            <c:if test="${not empty cardDetails.yearPublished}"><tr><th>Anno</th><td>${cardDetails.yearPublished}</td></tr></c:if>
+                        </c:if>
+                        <c:if test="${not empty accessoryDetails}">
+                            <tr><th>Tipo Accessorio</th><td>${accessoryDetails.accessoryType}</td></tr>
+                            <c:if test="${not empty accessoryDetails.material}"><tr><th>Materiale</th><td>${accessoryDetails.material}</td></tr></c:if>
+                            <c:if test="${not empty accessoryDetails.color}"><tr><th>Colore</th><td>${accessoryDetails.color}</td></tr></c:if>
+                            <c:if test="${not empty accessoryDetails.dimensions}"><tr><th>Dimensioni</th><td>${accessoryDetails.dimensions}</td></tr></c:if>
+                        </c:if>
+                    </table>
+                </div>
+                <div id="tab-reviews" class="tab-pane">
+                    <c:choose>
+                        <c:when test="${not empty reviews}">
+                            <div class="review-list">
+                                <c:forEach var="review" items="${reviews}">
+                                    <div class="review-item">
+                                        <div class="review-header">
+                                            <span class="review-author">${reviewUsers[review.userId].firstName}</span>
+                                            <span class="review-date">${my:formatDateTimePattern(review.createdAt, "dd MMMM yyyy")}</span>
+                                        </div>
+                                        <div class="review-rating">
+                                            <c:forEach begin="1" end="5" var="i">
+                                                <i class="fas fa-star ${i <= review.rating ? 'rated' : ''}"></i>
+                                            </c:forEach>
+                                        </div>
+                                        <h4 class="review-title">${review.title}</h4>
+                                        <p class="review-text">${review.reviewText}</p>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <p>Non ci sono ancora recensioni per questo prodotto. Sii il primo a lasciarne una!</p>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+            </div>
+        </div>
+    </c:if>
 </main>
 
 <jsp:include page="/WEB-INF/components/footer.jsp"/>
+<script src="${pageContext.request.contextPath}/scripts/product-details.js"></script>
 </body>
 </html>
