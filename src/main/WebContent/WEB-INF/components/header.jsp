@@ -20,8 +20,8 @@
         </nav>
         <div class="header-actions">
             <!-- TODO: implementare ricerca -->
-            <form class="search-bar">
-                <input type="search" placeholder="Cerca prodotti..." aria-label="Cerca">
+            <form action="${pageContext.request.contextPath}/products/search" method="get" class="search-bar">
+                <input type="search" name="query" placeholder="Cerca prodotti..." aria-label="Cerca">
                 <button type="submit" aria-label="Invia ricerca"><i class="fas fa-search"></i></button>
             </form>
             <div class="header-icons">

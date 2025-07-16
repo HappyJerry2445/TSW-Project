@@ -1,29 +1,40 @@
 /* Variable declaration */
 :root {
     /* Brand Colors */
-    --color-primary-dark: #1A2A40; /* Formerly --color-dark */
-    --color-primary-light: #FFFFFF; /* Retains --color-background-light */
-    --color-accent-vibrant: #007BFF; /* New primary brand accent (was --color-primary #3465A4, changing to a more vibrant blue) */
-    --color-accent-secondary: #0056B3; /* Darker shade of vibrant accent */
+    --color-primary-dark: #1a2a40; /* Formerly --color-dark */
+    --color-primary-light: #ffffff; /* Retains --color-background-light */
+    --color-accent-vibrant: #007bff; /* New primary brand accent (was --color-primary #3465A4, changing to a more vibrant blue) */
+    --color-accent-secondary: #0056b3; /* Darker shade of vibrant accent */
 
     /* Neutral Colors */
-    --color-neutral-lightest: #F8F9FA; /* For very light backgrounds */
-    --color-neutral-light: #E9ECEF; /* For subtle background/borders */
-    --color-neutral-base: #DEE2E6; /* Default border color */
-    --color-neutral-dark: #6C757D; /* For secondary text/icons */
+    --color-neutral-lightest: #f8f9fa; /* For very light backgrounds */
+    --color-neutral-light: #e9ecef; /* For subtle background/borders */
+    --color-neutral-base: #dee2e6; /* Default border color */
+    --color-neutral-dark: #6c757d; /* For secondary text/icons */
     --color-neutral-darkest: #212529; /* For main text */
-    --color-neutral-darkest-transparent: rgba(33, 37, 41, 0.5); /* For main text */
+    --color-neutral-darkest-transparent: rgba(
+        33,
+        37,
+        41,
+        0.5
+    ); /* For main text */
 
     /* Text Colors (derived from neutrals) */
-    --color-text-default: var(--color-neutral-darkest); /* Formerly --color-text-dark */
-    --color-text-secondary: var(--color-neutral-dark); /* Formerly --color-text-light-grey, now a darker grey */
+    --color-text-default: var(
+        --color-neutral-darkest
+    ); /* Formerly --color-text-dark */
+    --color-text-secondary: var(
+        --color-neutral-dark
+    ); /* Formerly --color-text-light-grey, now a darker grey */
     --color-table-thead: #495057;
-    --color-text-inverted: #F0F0F0; /* Formerly --color-text-light, for text on dark backgrounds */
+    --color-text-inverted: #f0f0f0; /* Formerly --color-text-light, for text on dark backgrounds */
 
     /* Background Colors */
     --color-bg-body: var(--color-primary-light); /* Main page background */
-    --color-bg-card: #FFFFFF; /* Card backgrounds */
-    --color-bg-light-grey: var(--color-neutral-lightest); /* Formerly --color-background-grey, adjusted */
+    --color-bg-card: #ffffff; /* Card backgrounds */
+    --color-bg-light-grey: var(
+        --color-neutral-lightest
+    ); /* Formerly --color-background-grey, adjusted */
 
     /* Status Colors */
     /*--color-status-error: #DC3545; !* Formerly --color-danger-red *!*/
@@ -35,13 +46,13 @@
     /*--color-status-info-hover: #138496;*/
 
     --color-status-error: #e74c3c; /* Deep, professional red */
-    --color-status-error-dark: #B71C1C; /* Darker red for error states */
+    --color-status-error-dark: #b71c1c; /* Darker red for error states */
 
     --color-status-success: #2ecc71; /* Earthy green (less neon) */
-    --color-status-success-dark: #1B5E20; /* Darker success state */
+    --color-status-success-dark: #1b5e20; /* Darker success state */
 
     --color-status-warning: #f39c12; /* Warm amber (more visible) */
-    --color-status-warning-dark: #E65100; /* Darker warning state */
+    --color-status-warning-dark: #e65100; /* Darker warning state */
 
     --color-status-info: #3498db; /* Softer blue (distinct from accent) */
     --color-status-info-hover: #2980b9; /* Darker info hover state */
@@ -52,10 +63,9 @@
     --color-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
     --color-shadow-strong: 0 4px 12px rgba(0, 0, 0, 0.17); /* Existing */
 
-
     /* Fonts & Spacing (no change to these values, just re-arranged slightly) */
-    --font-heading: 'Montserrat', sans-serif;
-    --font-body: 'Open Sans', sans-serif;
+    --font-heading: "Montserrat", sans-serif;
+    --font-body: "Open Sans", sans-serif;
 
     --border-radius-sm: 4px;
     --border-radius-md: 8px;
@@ -65,7 +75,9 @@
 }
 
 /* Basic Reset & Defaults */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -79,11 +91,12 @@ html {
 body {
     font-family: var(--font-body);
     color: var(--color-text-default); /* Changed from --color-text-dark */
-    background-color: var(--color-bg-body); /* Changed from --color-background-light */
+    background-color: var(
+        --color-bg-body
+    ); /* Changed from --color-background-light */
     line-height: 1.6;
     font-size: 16px; /* Base font size */
 }
-
 
 .container {
     width: 90%;
@@ -99,10 +112,17 @@ a {
 }
 
 a:hover {
-    color: var(--color-accent-secondary); /* Changed from --color-accent, now using a darker accent shade */
+    color: var(
+        --color-accent-secondary
+    ); /* Changed from --color-accent, now using a darker accent shade */
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: var(--font-heading);
     color: var(--color-primary-dark); /* Changed from --color-dark */
     line-height: 1.3;
@@ -139,12 +159,14 @@ img {
     font-weight: 600;
     text-align: center;
     border-radius: var(--border-radius-sm);
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    transition:
+        background-color 0.3s ease,
+        transform 0.2s ease,
+        box-shadow 0.3s ease;
     cursor: pointer;
     border: none;
     font-size: 1rem;
 }
-
 
 .btn-block {
     display: block;
@@ -154,7 +176,9 @@ img {
 }
 
 .btn-primary {
-    background-color: var(--color-accent-vibrant); /* Changed from --color-primary */
+    background-color: var(
+        --color-accent-vibrant
+    ); /* Changed from --color-primary */
     color: var(--color-text-inverted); /* Changed from --color-text-light */
 }
 
@@ -168,7 +192,9 @@ img {
 /* Optional: Hover effect for secondary button */
 .btn-secondary:hover {
     color: var(--color-primary-light);
-    background-color: var(--color-neutral-darkest); /* Slightly darker on hover */
+    background-color: var(
+        --color-neutral-darkest
+    ); /* Slightly darker on hover */
     border-color: var(--color-neutral-darkest);
 }
 
@@ -182,12 +208,16 @@ img {
 /* Optional: Hover effect for danger button */
 .btn-danger:hover {
     color: var(--color-primary-light);
-    background-color: var(--color-status-error-dark); /* A slightly darker red for hover, if not defined as a variable */
+    background-color: var(
+        --color-status-error-dark
+    ); /* A slightly darker red for hover, if not defined as a variable */
     border-color: var(--color-status-error-dark);
 }
 
 .btn-primary:hover {
-    background-color: var(--color-accent-secondary); /* Changed from --color-secondary */
+    background-color: var(
+        --color-accent-secondary
+    ); /* Changed from --color-secondary */
     transform: translateY(-2px);
     box-shadow: var(--color-shadow-light);
     color: var(--color-text-inverted); /* Changed from --color-text-light */
@@ -197,13 +227,17 @@ img {
     /* The old --color-accent was gold. The new accent is the vibrant blue. */
     /* This button should now use the original accent color or a complementary one. */
     /* Let's make this use a more muted, but still distinct accent for secondary actions. */
-    background-color: var(--color-neutral-light); /* Using a light neutral for a softer accent button */
+    background-color: var(
+        --color-neutral-light
+    ); /* Using a light neutral for a softer accent button */
     color: var(--color-text-default); /* Changed from --color-dark */
     border: 1px solid var(--color-neutral-base);
 }
 
 .btn-accent:hover {
-    background-color: var(--color-neutral-base); /* Slightly darker neutral on hover */
+    background-color: var(
+        --color-neutral-base
+    ); /* Slightly darker neutral on hover */
     /* Removed the hardcoded color #05a8c7, which was derived from the old accent */
     transform: translateY(-2px);
     box-shadow: var(--color-shadow-light);
@@ -217,7 +251,9 @@ img {
 }
 
 .btn-outline:hover {
-    background-color: var(--color-accent-vibrant); /* Changed from --color-primary */
+    background-color: var(
+        --color-accent-vibrant
+    ); /* Changed from --color-primary */
     color: var(--color-text-inverted); /* Changed from --color-text-light */
 }
 
@@ -242,12 +278,18 @@ select {
     font-family: var(--font-body);
     font-size: 1rem;
     width: 100%;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
     outline: none;
-    border-color: var(--color-accent-vibrant); /* Changed from --color-primary */
+    border-color: var(
+        --color-accent-vibrant
+    ); /* Changed from --color-primary */
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2); /* Adjusted to match new --color-accent-vibrant */
 }
 
@@ -256,7 +298,6 @@ label {
     font-weight: 600;
     color: var(--color-text-default); /* Changed from --color-dark */
 }
-
 
 /* Header */
 header {
@@ -277,12 +318,13 @@ header .container {
     gap: var(--spacing-unit);
 }
 
-
 .logo {
     font-family: var(--font-heading);
     font-size: 1.8rem;
     font-weight: bold;
-    color: var(--color-accent-vibrant); /* Changed from --color-accent, now using the primary vibrant accent */
+    color: var(
+        --color-accent-vibrant
+    ); /* Changed from --color-accent, now using the primary vibrant accent */
 }
 
 .main-nav ul {
@@ -303,9 +345,12 @@ header .container {
 }
 
 /* TODO: Add active to header */
-.main-nav ul li a:hover, .main-nav ul li a.active {
+.main-nav ul li a:hover,
+.main-nav ul li a.active {
     color: var(--color-accent-vibrant); /* Changed from --color-accent */
-    border-bottom-color: var(--color-accent-vibrant); /* Changed from --color-accent */
+    border-bottom-color: var(
+        --color-accent-vibrant
+    ); /* Changed from --color-accent */
 }
 
 .header-actions {
@@ -322,17 +367,23 @@ header .container {
     padding: 0.5rem 0.8rem;
     border: none;
     border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
-    background-color: var(--color-neutral-darkest-transparent); /* Changed from --color-secondary to the darker accent shade */
+    background-color: var(
+        --color-neutral-darkest-transparent
+    ); /* Changed from --color-secondary to the darker accent shade */
     color: var(--color-text-inverted); /* Changed from --color-text-light */
     min-width: 200px;
 }
 
 .search-bar input[type="search"]::placeholder {
-    color: var(--color-text-inverted); /* Changed from --color-text-light-grey */
+    color: var(
+        --color-text-inverted
+    ); /* Changed from --color-text-light-grey */
 }
 
 .search-bar button {
-    background-color: var(--color-accent-vibrant); /* Changed from --color-accent */
+    background-color: var(
+        --color-accent-vibrant
+    ); /* Changed from --color-accent */
     color: var(--color-primary-dark); /* Changed from --color-dark */
     border: none;
     padding: 0.5rem 0.8rem;
@@ -360,7 +411,9 @@ header .container {
     position: absolute;
     top: -8px;
     right: -10px;
-    background-color: var(--color-accent-vibrant); /* Changed from --color-accent */
+    background-color: var(
+        --color-accent-vibrant
+    ); /* Changed from --color-accent */
     color: var(--color-primary-dark); /* Changed from --color-dark */
     border-radius: 50%;
     font-size: 0.7rem;
@@ -374,7 +427,6 @@ header .container {
     display: none;
 }
 
-
 /* Footer */
 body {
     display: grid;
@@ -385,7 +437,9 @@ body {
 
 footer {
     background-color: var(--color-primary-dark); /* Changed from --color-dark */
-    color: var(--color-text-secondary); /* Changed from --color-text-light-grey */
+    color: var(
+        --color-text-secondary
+    ); /* Changed from --color-text-light-grey */
     padding: calc(var(--spacing-unit) * 3) 0 calc(var(--spacing-unit) * 1.5);
     margin-top: calc(var(--spacing-unit) * 3);
     margin-bottom: 0;
@@ -414,7 +468,9 @@ footer {
 }
 
 .footer-column ul li a {
-    color: var(--color-text-secondary); /* Changed from --color-text-light-grey */
+    color: var(
+        --color-text-secondary
+    ); /* Changed from --color-text-light-grey */
 }
 
 .footer-column ul li a:hover {
@@ -427,7 +483,9 @@ footer {
 }
 
 .social-icons a {
-    color: var(--color-text-secondary); /* Changed from --color-text-light-grey */
+    color: var(
+        --color-text-secondary
+    ); /* Changed from --color-text-light-grey */
     font-size: 1.5rem;
 }
 
@@ -500,6 +558,181 @@ footer {
     margin: calc(var(--spacing-unit) * 3);
 }
 
+/* Homepage Specific Styles */
+/* ================================= */
+
+/* Hero Section */
+.hero {
+    /* A gentle gradient overlay enhances text readability over a background image */
+    background:
+        linear-gradient(rgba(26, 42, 64, 0.8), rgba(26, 42, 64, 0.8)),
+        url("/images/trading_card_hero_background.jpg") no-repeat center center/cover;
+    color: var(--color-primary-light);
+    padding: calc(var(--spacing-unit) * 5) var(--spacing-unit);
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    color: var(
+        --color-primary-light
+    ); /* Ensure heading color is light on dark background */
+    margin-bottom: var(--spacing-unit);
+    font-weight: 700;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto calc(var(--spacing-unit) * 2);
+    color: var(--color-neutral-light); /* Softer white for paragraph */
+}
+
+.btn-lg {
+    padding: calc(var(--spacing-unit) * 0.9) calc(var(--spacing-unit) * 2.5);
+    font-size: 1.15rem;
+}
+
+/* Product Showcase Sections */
+.product-showcase {
+    padding-top: calc(var(--spacing-unit) * 3);
+    padding-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.product-showcase h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: calc(var(--spacing-unit) * 2);
+}
+
+/* Product Grid Layout */
+.product-grid {
+    display: grid;
+    /* Responsive grid: 1 col on small screens, up to 4 on large */
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: calc(var(--spacing-unit) * 2);
+}
+
+/* Product Card Styling */
+.product-card {
+    background: var(--color-bg-card);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--color-shadow-light);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--color-shadow-strong);
+}
+
+.product-card-link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: var(--color-text-default);
+    flex-grow: 1; /* Allows the link to fill the card space not taken by actions */
+}
+
+.product-image-container {
+    position: relative;
+    width: 100%;
+    /* Maintain a square aspect ratio for images */
+    padding-top: 100%;
+}
+
+.product-image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image covers the container without distortion */
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.05); /* Subtle zoom effect on hover */
+}
+
+.product-card h3 {
+    font-size: 1.1rem;
+    margin: var(--spacing-unit) var(--spacing-unit) 0.5rem;
+    line-height: 1.4;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-accent-vibrant);
+    padding: 0 var(--spacing-unit);
+}
+
+.add-to-cart-form {
+    padding: var(--spacing-unit);
+    margin-top: auto; /* Pushes the form to the bottom of the card */
+}
+
+/* On Sale Styles */
+.sale-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: var(--color-status-error);
+    color: var(--color-primary-light);
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: var(--border-radius-sm);
+    z-index: 2;
+}
+
+.price-on-sale {
+    display: flex;
+    align-items: baseline;
+    gap: calc(var(--spacing-unit) * 0.75);
+    padding: 0 var(--spacing-unit);
+}
+
+.original-price {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    text-decoration: line-through;
+}
+
+.current-price {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-status-error-dark);
+}
+
+/* Centering text for empty sections */
+.text-center {
+    text-align: center;
+    width: 100%;
+    padding: calc(var(--spacing-unit) * 2);
+    color: var(--color-text-secondary);
+}
+
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+
+    .product-showcase h2 {
+        font-size: 2rem;
+    }
+}
+
 .p-1 {
     padding: calc(var(--spacing-unit));
 }
@@ -513,7 +746,9 @@ footer {
 }
 
 .rounded-sm {
-    border-radius: var(--border-radius-sm); /* Uses a variable if defined, otherwise a default value */
+    border-radius: var(
+        --border-radius-sm
+    ); /* Uses a variable if defined, otherwise a default value */
 }
 
 .rounded-md {
@@ -536,11 +771,13 @@ footer {
 }
 
 .section-title::after {
-    content: '';
+    content: "";
     display: block;
     width: 70px;
     height: 4px;
-    background-color: var(--color-accent-vibrant); /* Changed from --color-accent */
+    background-color: var(
+        --color-accent-vibrant
+    ); /* Changed from --color-accent */
     margin: 0.5rem auto 0;
     border-radius: 2px;
 }
@@ -553,13 +790,20 @@ footer {
 
 .card {
     padding: calc(var(--spacing-unit) * 2);
-    background-color: var(--color-bg-card); /* Changed from --color-background-light */
+    background-color: var(
+        --color-bg-card
+    ); /* Changed from --color-background-light */
     border-radius: var(--border-radius-md);
     box-shadow: var(--color-shadow-strong);
 }
 
 .alert-danger {
-    background-color: rgba(220, 53, 69, 0.1); /* Adjusted to match --color-status-error */
+    background-color: rgba(
+        220,
+        53,
+        69,
+        0.1
+    ); /* Adjusted to match --color-status-error */
     color: var(--color-status-error); /* Changed from --color-danger-red */
     padding: var(--spacing-unit);
     border-radius: var(--border-radius-sm);
@@ -575,7 +819,6 @@ footer {
     margin-bottom: 0;
 }
 
-
 #notification-container {
     position: fixed;
     top: 20px;
@@ -583,7 +826,6 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-
 
     max-width: 100%;
 
@@ -600,7 +842,9 @@ footer {
     border-radius: var(--border-radius-md);
     box-shadow: var(--color-shadow-md);
     opacity: 0; /* Start hidden for animation */
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transition:
+        opacity 0.5s ease-in-out,
+        transform 0.5s ease-in-out;
     transform: translateY(-20px);
     position: relative;
     pointer-events: auto; /* Re-enable pointer events for the notification itself */
@@ -637,8 +881,6 @@ footer {
 
 /* Responsive (Basic) */
 @media (max-width: 992px) {
-
-
     .logo {
         grid-area: logo;
         text-align: center;
@@ -668,14 +910,13 @@ footer {
     header .container {
         grid-template-columns: 1fr auto 1fr;
         grid-template-areas:
-                "mobile-menu-toggle logo header-icons"
-                "search-bar search-bar search-bar";
+            "mobile-menu-toggle logo header-icons"
+            "search-bar search-bar search-bar";
     }
 
     .main-nav {
         display: none; /* TODO: To be handled by JS for mobile menu */
     }
-
 
     .header-actions {
         display: contents;
@@ -713,9 +954,9 @@ footer {
     header .container {
         grid-template-columns: 1fr auto 1fr;
         grid-template-areas:
-                "mobile-menu-toggle logo ."
-                "search-bar search-bar search-bar"
-                ". header-icons .";
+            "mobile-menu-toggle logo ."
+            "search-bar search-bar search-bar"
+            ". header-icons .";
     }
 }
 
