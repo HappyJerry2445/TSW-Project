@@ -651,7 +651,7 @@ footer {
 
     .header-icons {
         grid-area: header-icons;
-        justify-self: end;
+        justify-self: center;
     }
 
     .mobile-menu-toggle {

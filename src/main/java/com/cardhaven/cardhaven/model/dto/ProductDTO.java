@@ -17,12 +17,13 @@ public class ProductDTO implements Serializable {
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdated;
     private boolean isActive;
+    private String productDescription;
 
     public ProductDTO() {
     }
 
 
-    public ProductDTO(int productId, String sku, String productName, BigDecimal basePrice, BigDecimal currentPrice, int stockQuantity, ProductType productType, LocalDateTime createdAt, LocalDateTime lastUpdated, boolean isActive) {
+    public ProductDTO(int productId, String sku, String productName, BigDecimal basePrice, BigDecimal currentPrice, int stockQuantity, ProductType productType, LocalDateTime createdAt, LocalDateTime lastUpdated, boolean isActive, String productDescription) {
         this.productId = productId;
         this.sku = sku;
         this.productName = productName;
@@ -33,6 +34,15 @@ public class ProductDTO implements Serializable {
         this.createdAt = createdAt;
         this.lastUpdated = lastUpdated;
         this.isActive = isActive;
+        this.productDescription = productDescription;
+    }
+
+    public String getProductDescription() {
+        return productDescription;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
     }
 
     public int getProductId() {
@@ -129,6 +139,7 @@ public class ProductDTO implements Serializable {
                 ", createdAt=" + createdAt +
                 ", lastUpdated=" + lastUpdated +
                 ", isActive=" + isActive +
+                ", productDescription='" + productDescription + '\'' +
                 '}';
     }
 
@@ -136,7 +147,7 @@ public class ProductDTO implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ProductDTO productDTO = (ProductDTO) o;
-        return productId == productDTO.productId && basePrice.compareTo(productDTO.basePrice) == 0 && currentPrice.compareTo(productDTO.currentPrice) == 0 && stockQuantity == productDTO.stockQuantity && isActive == productDTO.isActive && Objects.equals(sku, productDTO.sku) && Objects.equals(productName, productDTO.productName) && productType == productDTO.productType && Objects.equals(createdAt, productDTO.createdAt) && Objects.equals(lastUpdated, productDTO.lastUpdated);
+        return productId == productDTO.productId && basePrice.compareTo(productDTO.basePrice) == 0 && currentPrice.compareTo(productDTO.currentPrice) == 0 && stockQuantity == productDTO.stockQuantity && isActive == productDTO.isActive && Objects.equals(sku, productDTO.sku) && Objects.equals(productName, productDTO.productName) && productType == productDTO.productType && Objects.equals(createdAt, productDTO.createdAt) && Objects.equals(lastUpdated, productDTO.lastUpdated) && Objects.equals(productDescription, productDTO.productDescription);
     }
 
     public enum ProductType {

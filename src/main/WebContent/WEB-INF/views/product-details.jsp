@@ -72,7 +72,7 @@
                 <%-- Descrizione --%>
                 <div class="product-description">
                     <h2>Descrizione</h2>
-                    <p>${product.description}</p>
+                    <p>${product.productDescription}</p>
                 </div>
 
                 <%-- Pulsante aggiungi al carrello --%>

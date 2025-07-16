@@ -1,0 +1,93 @@
+/* Styles for Product Search Page */
+
+.search-filter-card {
+    margin-bottom: 2rem;
+    padding: 1.5rem 2rem;
+}
+
+.search-filter-card h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-neutral-base);
+}
+
+.search-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    align-items: end; /* Align items at the bottom */
+}
+
+.search-form .form-group {
+    margin-bottom: 0;
+}
+
+.search-form .form-group label {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.search-form .form-group input[type="text"],
+.search-form .form-group input[type="number"],
+.search-form .form-group select {
+    padding: 0.7rem;
+    font-size: 0.95rem;
+}
+
+.search-form .form-group input[type="text"]#query {
+    grid-column: 1 / -1; /* Make query input span full width */
+}
+
+.filter-actions {
+    display: flex;
+    gap: 1rem;
+    grid-column: 1 / -1; /* Buttons span full width */
+    justify-content: flex-end;
+    padding-top: 1rem;
+}
+
+.filter-actions .btn {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.95rem;
+}
+
+.results-title {
+    text-align: center;
+    margin: 2rem 0;
+    font-size: 1.8rem;
+    color: var(--color-primary-dark);
+}
+
+.no-results-message {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .search-form {
+        grid-template-columns: 1fr; /* Stack filter inputs on smaller screens */
+    }
+
+    .search-form .form-group input[type="text"]#query {
+        grid-column: auto; /* Remove full width on small screens */
+    }
+
+    .filter-actions {
+        flex-direction: column; /* Stack buttons vertically */
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .filter-actions .btn {
+        width: 100%;
+    }
+
+    .search-filter-card {
+        padding: 0;
+    }
+}

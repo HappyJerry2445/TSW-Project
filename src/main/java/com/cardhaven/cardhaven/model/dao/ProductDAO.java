@@ -1,6 +1,8 @@
 package com.cardhaven.cardhaven.model.dao;
 
 import com.cardhaven.cardhaven.model.dto.ProductDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -11,9 +13,10 @@ import java.util.*;
 
 public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
     private static final List<String> ALLOWED_ORDER_COLUMNS = Arrays.asList(
-            "ProductId", "SKU", "ProductName", "BasePrice", "CurrentPrice", "StockQuantity", "ProductType", "CreatedAt", "LastUpdated", "IsActive"
+            "ProductId", "SKU", "ProductName", "BasePrice", "CurrentPrice", "StockQuantity", "ProductType", "CreatedAt", "LastUpdated", "IsActive", "ProductDescription", "score"
     );
     private static final String DEFAULT_ORDER_COLUMN = "ProductId";
+    private static final Logger log = LoggerFactory.getLogger(ProductDAO.class);
 
     private final DataSource dataSource;
 
@@ -26,7 +29,7 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
 
         String sql;
         if (productDTO.getProductId() == 0) {
-            sql = "INSERT INTO Product (ProductId, SKU, ProductName, BasePrice, CurrentPrice, StockQuantity, ProductType, CreatedAt, LastUpdated, IsActive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            sql = "INSERT INTO Product (ProductId, SKU, ProductName, BasePrice, CurrentPrice, StockQuantity, ProductType, CreatedAt, LastUpdated, IsActive, ProductDescription) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setInt(1, productDTO.getProductId());
                 ps.setString(2, productDTO.getSku());
@@ -38,6 +41,7 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
                 ps.setTimestamp(8, (productDTO.getCreatedAt() != null) ? Timestamp.valueOf(productDTO.getCreatedAt()) : Timestamp.valueOf(LocalDateTime.now()));
                 ps.setTimestamp(9, (productDTO.getLastUpdated() != null) ? Timestamp.valueOf(productDTO.getLastUpdated()) : null);
                 ps.setBoolean(10, productDTO.isActive());
+                ps.setString(11, productDTO.getProductDescription());
 
                 int affectedRows = ps.executeUpdate();
                 if (affectedRows == 0) {
@@ -53,7 +57,7 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
                 }
             }
         } else {
-            sql = "UPDATE Product SET SKU = ?, ProductName = ?, BasePrice = ?, CurrentPrice = ?, StockQuantity = ?, ProductType = ?, CreatedAt = ?, LastUpdated = ?, IsActive = ? WHERE ProductId = ?";
+            sql = "UPDATE Product SET SKU = ?, ProductName = ?, BasePrice = ?, CurrentPrice = ?, StockQuantity = ?, ProductType = ?, CreatedAt = ?, LastUpdated = ?, IsActive = ? , ProductDescription = ? WHERE ProductId = ?";
             try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, productDTO.getSku());
                 ps.setString(2, productDTO.getProductName());
@@ -64,7 +68,8 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
                 ps.setTimestamp(7, (productDTO.getCreatedAt() != null) ? Timestamp.valueOf(productDTO.getCreatedAt()) : null);
                 ps.setTimestamp(8, (productDTO.getLastUpdated() != null) ? Timestamp.valueOf(productDTO.getLastUpdated()) : null);
                 ps.setBoolean(9, productDTO.isActive());
-                ps.setInt(10, productDTO.getProductId());
+                ps.setString(10, productDTO.getProductDescription());
+                ps.setInt(11, productDTO.getProductId());
 
                 ps.executeUpdate();
             }
@@ -102,21 +107,100 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
 
 
     public Collection<ProductDTO> getAll(String order) throws SQLException {
-        Collection<ProductDTO> productDTOS = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM Product");
+        return getFilteredProducts(order, false, null, null, null, null, null, null, null, null);
+    }
 
-        String actualOrderColumn = DEFAULT_ORDER_COLUMN;
-        if (order != null && !order.trim().isEmpty()) {
-            String trimmedOrder = order.trim();
-            if (ALLOWED_ORDER_COLUMNS.contains(trimmedOrder)) {
-                actualOrderColumn = trimmedOrder;
-            } else {
-                System.err.println("Warning: Attempted to order by invalid column: '" + order + "'. Falling back to default order.");
-            }
+    /**
+     * Retrieves a filtered collection of products from the database.
+     *
+     * @param order       The column name to order the results by.
+     *                    Pass null or an empty string for default order.
+     * @param desc        Descending or not
+     * @param searchTerm  Optional. Filters products by product name (case-insensitive, partial match).
+     * @param sku         Optional. Filters products by SKU (case-insensitive, partial match).
+     * @param productType Optional. Filters products by product type.
+     * @param categoryId  Optional. Filters products by category ID.
+     * @param minPrice    Optional. Filters products with current price >= this value.
+     * @param maxPrice    Optional. Filters products with current price <= this value.
+     * @param minStock    Optional. Filters products with stock quantity >= this value.
+     * @param maxStock    Optional. Filters products with stock quantity <= this value.
+     * @return A collection of Product objects.
+     * @throws SQLException if a database access error occurs.
+     */
+    public Collection<ProductDTO> getFilteredProducts(String order, boolean desc, String searchTerm, String sku, ProductDTO.ProductType productType, Integer categoryId, BigDecimal minPrice, BigDecimal maxPrice, Integer minStock, Integer maxStock) throws SQLException {
+        Collection<ProductDTO> productDTOS = new ArrayList<>();
+        List<Object> params = new ArrayList<>();
+        boolean isFullTextSearch = (searchTerm != null && !searchTerm.isEmpty());
+
+        StringBuilder sql = new StringBuilder("SELECT p.*");
+        if (isFullTextSearch) {
+            sql.append(", MATCH(p.ProductName, p.ProductDescription) AGAINST (?)");
+            params.add(searchTerm);
         }
-        sql.append(" ORDER BY ").append(actualOrderColumn);
+        sql.append(" FROM Product p LEFT JOIN ProductCategory pc ON p.ProductId = pc.ProductID WHERE p.IsActive = true");
+
+        if (isFullTextSearch) {
+            // Trasforma "smart tv" in "+smart +tv" per una ricerca booleana che richiede tutte le parole.
+            String ftsQuery = Arrays.stream(searchTerm.trim().split("\\s+"))
+                    .map(word -> "+" + word)
+                    .reduce("", (a, b) -> a + " " + b).trim();
+            // La condizione di filtro
+            sql.append(" AND MATCH(p.ProductName, p.ProductDescription) AGAINST (? IN BOOLEAN MODE)");
+            params.add(ftsQuery); // Aggiungi lo stesso parametro una seconda volta
+        }
+
+        if (sku != null && !sku.isEmpty()) {
+            sql.append(" AND p.SKU LIKE ?");
+            params.add("%" + sku + "%");
+        }
+        if (productType != null) {
+            sql.append(" AND p.ProductType = ?");
+            params.add(productType.name());
+        }
+        if (categoryId != null && categoryId > 0) {
+            sql.append(" AND pc.CategoryID = ?");
+            params.add(categoryId);
+        }
+        if (minPrice != null && minPrice.compareTo(BigDecimal.ZERO) >= 0) {
+            sql.append(" AND p.CurrentPrice >= ?");
+            params.add(minPrice);
+        }
+        if (maxPrice != null && maxPrice.compareTo(BigDecimal.ZERO) >= 0) {
+            sql.append(" AND p.CurrentPrice <= ?");
+            params.add(maxPrice);
+        }
+        if (minStock != null && minStock >= 0) {
+            sql.append(" AND p.StockQuantity >= ?");
+            params.add(minStock);
+        }
+        if (maxStock != null && maxStock >= 0) {
+            sql.append(" AND p.StockQuantity <= ?");
+            params.add(maxStock);
+        }
+
+        sql.append(" GROUP BY p.ProductId");
+
+        // === GESTIONE DELL'ORDINAMENTO ===
+        String orderByClause;
+        orderByClause = "p.ProductName ASC";
+
+        log.debug("Order: {}", order);
+        if (order != null && !order.trim().isEmpty() && ALLOWED_ORDER_COLUMNS.contains(order.trim())) {
+            // L'utente può sovrascrivere l'ordinamento di default
+            // Non prefissare 'score' con 'p.' perché è un alias, non una colonna della tabella.
+            String columnPrefix = order.trim().equals("score") ? "" : "p.";
+            orderByClause = columnPrefix + order.trim() + (desc ? " DESC" : " ASC");
+        }
+
+        sql.append(" ORDER BY ").append(orderByClause);
+        log.debug("SQL: {}", sql);
+
 
         try (Connection conn = dataSource.getConnection(); PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+            log.debug("ps: {}", ps);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 productDTOS.add(extractProductFromResultSet(rs));
@@ -149,6 +233,7 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
             productDTO.setLastUpdated(lastUpdatedTimestamp.toLocalDateTime());
         }
         productDTO.setActive(rs.getBoolean("IsActive"));
+        productDTO.setProductDescription(rs.getString("ProductDescription"));
 
         return productDTO;
     }
