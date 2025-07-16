@@ -35,5 +35,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    fetchDashboardStats();
+    fetchDashboardStats().then(() => {
+        const refreshInterval = 10000;
+        setInterval(fetchDashboardStats, refreshInterval);
+    });
+
 });
