@@ -13,68 +13,42 @@
 /* Table styling */
 .table {
     width: 100%;
-    margin-bottom: 1rem;
-    color: var(--color-text-default);
-    border-collapse: collapse; /* Ensures borders are neat */
+    border-collapse: collapse;
+    font-size: 0.95rem;
 }
 
 .table th,
 .table td {
-    padding: calc(var(--spacing-unit) * 0.75);
-    vertical-align: top;
-    border-top: 1px solid var(--color-border-default); /* Light grey border for rows */
+    padding: 1rem 1.25rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-neutral-light);
+    vertical-align: middle;
 }
 
-.table thead th {
-    vertical-align: bottom;
-    border-bottom: 2px solid var(--color-border-default); /* Heavier border for table header */
-    background-color: var(--color-neutral-light); /* Light grey background for header */
-    color: var(--color-table-thead);
-    text-align: left; /* Align header text to the left */
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
+.table thead {
     background-color: var(--color-neutral-lightest);
 }
 
-.table-hover tbody tr:hover {
+.table th {
+    font-weight: 600;
+    color: var(--color-table-thead);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
     background-color: var(--color-bg-light-grey);
 }
 
-/* Responsive wrapper for the table */
-.table-responsive {
-    display: block;
-    width: 100%;
-    overflow-x: auto; /* Allows horizontal scrolling on small screens */
-    -webkit-overflow-scrolling: touch;
+.table tbody tr:last-child td {
+    border-bottom: none;
 }
 
-/* Styling for action buttons in the table */
-.table .btn { /* General button styling if not using a framework like Bootstrap */
-    padding: calc(var(--spacing-unit) * 0.375) calc(var(--spacing-unit) * 0.75);
-    font-size: 0.9rem;
-    line-height: 1.5;
-    border-radius: var(--border-radius-sm);
-    text-decoration: none;
-    color: var(--color-primary-light);
-    display: inline-block;
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-    user-select: none;
-    border: 1px solid transparent;
-    transition: all 0.2s ease;
-}
-
-.table .btn-info { /* Specific styling for info button */
-    background-color: var(--color-status-info);
-    border-color: var(--color-status-info);
-}
-
-.table .btn-info:hover {
-    background-color: var(--color-status-info-hover);
-    border-color: var(--color-status-info-hover);
-}
 
 .order-info-section {
     padding: calc(var(--spacing-unit) * 1.5);

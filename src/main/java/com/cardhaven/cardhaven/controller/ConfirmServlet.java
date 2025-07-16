@@ -16,15 +16,11 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 @WebServlet("/common/checkout/confirm")
 public class ConfirmServlet extends HttpServlet {
-
-    //TODO to rewatch
-    private static final Logger logger = Logger.getLogger(ConfirmServlet.class.getName());
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,7 +36,6 @@ public class ConfirmServlet extends HttpServlet {
         ProductImageDAO productImageDAO = new ProductImageDAO(ds);
         OrderAddressDAO orderAddressDAO = new OrderAddressDAO(ds);
         AddressDAO addressDAO = new AddressDAO(ds);
-        UserDAO userDAO = new UserDAO(ds);
 
         // Get session attributes
         Integer userId = (Integer) session.getAttribute("userId");
@@ -54,10 +49,18 @@ public class ConfirmServlet extends HttpServlet {
             return;
         }
 
-        // Validate addresses
+        // Validate addresses (must come from checkout flow)
         if (shippingAddressId == null || billingAddressId == null) {
             NotificationUtil.sendNotification(request, "Indirizzi non selezionati. Riprova il checkout.", "error");
             response.sendRedirect(request.getContextPath() + "/common/checkout/shipping");
+            return;
+        }
+
+        // Check if order was already processed (prevent duplicate orders)
+        Boolean orderProcessed = (Boolean) session.getAttribute("orderProcessed");
+        if (orderProcessed != null && orderProcessed) {
+            NotificationUtil.sendNotification(request, "Ordine già processato.", "warning");
+            response.sendRedirect(request.getContextPath() + "/common/checkout/confirm");
             return;
         }
 
@@ -109,10 +112,11 @@ public class ConfirmServlet extends HttpServlet {
 
             // --- POST-PROCESSING ---
             session.setAttribute("lastOrderId", newOrder.getOrderID());
+            session.setAttribute("orderProcessed", true); // Mark order as processed
             cleanupCheckoutSession(session);
 
-
             // Success notification and redirect
+            NotificationUtil.sendNotification(request, "Ordine confermato con successo!", "success");
             response.sendRedirect(request.getContextPath() + "/common/checkout/confirm");
 
         } catch (SQLException e) {
@@ -130,14 +134,22 @@ public class ConfirmServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO(ds);
         OrderDAO orderDAO = new OrderDAO(ds);
         OrderItemDAO orderItemDAO = new OrderItemDAO(ds);
-        ProductDAO productDAO = new ProductDAO(ds);
-        OrderAddressDAO orderAddressDAO = new OrderAddressDAO(ds);
 
         Integer userId = (Integer) session.getAttribute("userId");
         Integer lastOrderId = (Integer) session.getAttribute("lastOrderId");
 
+        // Check if user is logged in
         if (userId == null) {
-            response.sendRedirect(request.getContextPath() + "/");
+            NotificationUtil.sendNotification(request, "Accesso negato. Effettua il login.", "error");
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        // Check if user accessed this page through proper checkout flow
+        Boolean orderProcessed = (Boolean) session.getAttribute("orderProcessed");
+        if (lastOrderId == null || (orderProcessed == null || !orderProcessed)) {
+            NotificationUtil.sendNotification(request, "Accesso non autorizzato. Completa prima il checkout.", "error");
+            response.sendRedirect(request.getContextPath() + "/cart");
             return;
         }
 
@@ -146,23 +158,28 @@ public class ConfirmServlet extends HttpServlet {
             UserDTO loggedInUser = userDAO.getById(userId);
             request.setAttribute("loggedInUser", loggedInUser);
 
-            // Get last order details if available
-            if (lastOrderId != null) {
-                OrderDTO lastOrder = orderDAO.getById(lastOrderId);
-                if (lastOrder != null && lastOrder.getUserID() == userId) {
-                    request.setAttribute("lastOrder", lastOrder);
+            // Get last order details
+            OrderDTO lastOrder = orderDAO.getById(lastOrderId);
+            if (lastOrder != null && lastOrder.getUserID() == userId) {
+                request.setAttribute("lastOrder", lastOrder);
 
-                    // Get order items for display
-                    List<OrderItemDTO> orderItems = orderItemDAO.getOrderItemsByOrderId(lastOrderId);
-                    request.setAttribute("orderItems", orderItems);
-
-                }
-                // Remove from session after use
-                session.removeAttribute("lastOrderId");
+                // Get order items for display
+                List<OrderItemDTO> orderItems = orderItemDAO.getOrderItemsByOrderId(lastOrderId);
+                request.setAttribute("orderItems", orderItems);
+            } else {
+                NotificationUtil.sendNotification(request, "Ordine non trovato.", "error");
+                response.sendRedirect(request.getContextPath() + "/");
+                return;
             }
+
+            // Clean up session after displaying order (prevent refresh issues)
+            session.removeAttribute("lastOrderId");
+            session.removeAttribute("orderProcessed");
 
         } catch (SQLException e) {
             NotificationUtil.sendNotification(request, "Errore nel recupero dei dati dell'ordine.", "error");
+            response.sendRedirect(request.getContextPath() + "/");
+            return;
         }
 
         request.getRequestDispatcher("/WEB-INF/views/common/checkout/confirm.jsp").forward(request, response);
@@ -173,7 +190,6 @@ public class ConfirmServlet extends HttpServlet {
     private OrderAddressDTO createOrderAddressSnapshot(AddressDAO addressDAO, OrderAddressDAO orderAddressDAO, Integer addressId, String addressType) throws SQLException {
         AddressDTO address = addressDAO.getById(addressId);
         if (address == null) {
-            logger.severe("Address not found - addressId: " + addressId + ", type: " + addressType);
             throw new SQLException("Indirizzo di " + addressType + " non trovato");
         }
 
@@ -213,7 +229,6 @@ public class ConfirmServlet extends HttpServlet {
 
         // Double-check stock availability (race condition protection)
         if (product.getStockQuantity() < cartItem.getQuantity()) {
-            logger.warning("Stock changed during order processing - productId: " + cartItem.getProductId());
             throw new SQLException("Scorte insufficienti per il prodotto: " + cartItem.getProductName() +
                     " (Disponibili: " + product.getStockQuantity() + ", Richieste: " + cartItem.getQuantity() + ")");
         }
@@ -243,14 +258,8 @@ public class ConfirmServlet extends HttpServlet {
         json.append("{");
         json.append("\"productId\":").append(product.getProductId()).append(",");
         json.append("\"name\":\"").append(escapeJsonString(product.getProductName())).append("\",");
-
-
         json.append("\"price\":").append(product.getCurrentPrice()).append(",");
         json.append("\"stockAtPurchase\":").append(product.getStockQuantity());
-
-        // Add any other relevant fields you want to preserve
-        // json.append(",\"category\":\"").append(escapeJsonString(product.getCategory())).append("\"");
-
         json.append("}");
         return json.toString();
     }
@@ -268,7 +277,13 @@ public class ConfirmServlet extends HttpServlet {
     private void clearUserCart(CartDAO cartDAO, CartItemDAO cartItemDAO, Integer userId) throws SQLException {
         CartDTO userCart = cartDAO.getByUserId(userId);
         if (userCart != null) {
-            cartItemDAO.delete(userCart.getCartId());
+            // Get all cart items for this user's cart
+            Collection<CartItemDTO> cartItems = cartItemDAO.getByCartId(userCart.getCartId(), null);
+
+            // Delete each cart item individually using the CartItemDAO delete method
+            for (CartItemDTO item : cartItems) {
+                cartItemDAO.delete(item.getCartItemId());
+            }
         }
     }
 
@@ -277,20 +292,16 @@ public class ConfirmServlet extends HttpServlet {
         session.removeAttribute("billingAddressId");
     }
 
-
     private void handleCheckoutError(Connection conn, SQLException e, HttpServletRequest request,
                                      HttpServletResponse response) throws IOException {
         // Rollback transaction on error
         if (conn != null) {
             try {
                 conn.rollback();
-                logger.info("Transaction rolled back due to error");
             } catch (SQLException rollbackEx) {
-                logger.log(Level.SEVERE, "Failed to rollback transaction", rollbackEx);
+                // Log rollback error if needed
             }
         }
-
-        logger.log(Level.SEVERE, "Checkout error", e);
 
         String errorMessage = "Errore durante il checkout: " + e.getMessage();
         NotificationUtil.sendNotification(request, errorMessage, "error");
@@ -303,7 +314,7 @@ public class ConfirmServlet extends HttpServlet {
                 conn.setAutoCommit(true);
                 conn.close();
             } catch (SQLException e) {
-                logger.log(Level.SEVERE, "Error closing connection", e);
+                // Connection closing error - can be ignored in most cases
             }
         }
     }

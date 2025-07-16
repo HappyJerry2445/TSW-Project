@@ -1,0 +1,46 @@
+graph TD
+    %% Define a simple style for the nodes
+    classDef page fill:#f8f9fa,stroke:#333,stroke-width:2px
+
+    subgraph "User-Facing Website"
+        Home("Home Page<br/>(index.jsp)")
+
+        %% --- Main Navigation ---
+        Home --> Products("Products<br/>(ricerca-prodotti-categoria.jsp)")
+        Home --> Account("My Account<br/>(profile.jsp)")
+        Home --> Cart("Shopping Cart<br/>(cart.jsp)")
+        Home --> Login("Login / Register")
+
+        %% --- 'My Account' Sub-pages ---
+        Account --> MyOrders("My Orders<br/>(common/orders.jsp)")
+        Account --> MyAddresses("My Addresses<br/>(common/addresses.jsp)")
+        Account --> ChangePass("Change Password<br/>(common/change-password.jsp)")
+        MyOrders --> OrderDetails("Order Details<br/>(common/order_details.jsp)")
+        MyAddresses --> AddAddress("Add New Address<br/>(common/add-address.jsp)")
+        MyAddresses --> EditAddress("Edit Address<br/>(common/edit-address.jsp)")
+
+        %% --- Checkout Flow ---
+        Cart --> Checkout("Checkout Process")
+        Checkout --> Ship("1. Shipping Details<br/>(checkout/shipping.jsp)")
+        Ship --> Review("2. Review Details<br/>(checkout/review.jsp)")
+        Review --> Confirm("3. Confirm Order<br/>(checkout/confirm.jsp)")
+    end
+
+    subgraph "Admin Panel (Requires Login)"
+        AdminDash("Admin Dashboard<br/>(admin/dashboard.jsp)")
+
+        %% --- Main Admin Sections ---
+        AdminDash --> ManageProd("Manage Products<br/>(admin/products.jsp)")
+        AdminDash --> ManageCat("Manage Categories<br/>(admin/categories.jsp)")
+        AdminDash --> ManageOrders("Manage Orders<br/>(admin/orders.jsp)")
+        AdminDash --> ManageUsers("Manage Users<br/>(admin/users.jsp)")
+        AdminDash --> ManageRev("Manage Reviews<br/>(admin/reviews.jsp)")
+
+        %% --- Admin Sub-pages ---
+        ManageProd --> NewProd("New Product<br/>(admin/new-product.jsp)")
+        ManageProd --> EditProd("Edit Product<br/>(admin/edit-product.jsp)")
+        ManageOrders --> AdminOrderDetails("Admin Order Details<br/>(admin/order_details.jsp)")
+    end
+
+    %% Apply the style to all nodes
+    classDef default fill:#f8f9fa,stroke:#333,stroke-width:2px;
