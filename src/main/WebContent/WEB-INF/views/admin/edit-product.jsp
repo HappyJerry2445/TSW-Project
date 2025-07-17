@@ -33,29 +33,33 @@
             <h2 class="form-section-title">Informazioni Principali</h2>
             <div class="form-grid">
                 <div class="form-group"><label for="productName">Nome Prodotto <span
-                        class="required">*</span></label><input type="text" id="productName" name="productName" required
+                        class="required">*</span></label><input type="text" id="productName" name="productName" required maxlength="255" onblur="this.reportValidity()"
                                                                 value="<c:out value='${product.productName}'/>"></div>
                 <div class="form-group"><label for="sku">SKU <span class="required">*</span></label><input type="text"
                                                                                                            id="sku"
                                                                                                            name="sku"
-                                                                                                           required
+                                                                                                           required maxlength="50" onblur="this.reportValidity()"
                                                                                                            value="<c:out value='${product.sku}'/>">
                 </div>
                 <div class="form-group"><label for="basePrice">Prezzo Base (€) <span
                         class="required">*</span></label><input type="number" id="basePrice" name="basePrice"
-                                                                step="0.01" min="0" required
+                                                                step="0.01" min="0" required onblur="this.reportValidity()"
                                                                 value="${product.basePrice}"></div>
                 <div class="form-group"><label for="currentPrice">Prezzo Corrente (€) <span
                         class="required">*</span></label><input type="number" id="currentPrice" name="currentPrice"
-                                                                step="0.01" min="0" required
+                                                                step="0.01" min="0" required onblur="this.reportValidity()"
                                                                 value="${product.currentPrice}"></div>
                 <div class="form-group"><label for="stockQuantity">Quantità <span
                         class="required">*</span></label><input type="number" id="stockQuantity" name="stockQuantity"
-                                                                min="0" required value="${product.stockQuantity}"></div>
+                                                                min="0" required onblur="this.reportValidity()" value="${product.stockQuantity}"></div>
                 <div class="form-group">
                     <label for="productType">Tipo Prodotto</label>
                     <input type="text" id="productType" name="productType" value="${product.productType.name()}"
                            readonly disabled>
+                </div>
+                <div class="form-group full-width">
+                    <label for="description">Descrizione Prodotto</label>
+                    <textarea id="description" name="description" rows="4" maxlength="2000" onblur="this.reportValidity()"><c:out value="${not empty repopulatedDescription ? repopulatedDescription : product.productDescription}"/></textarea>
                 </div>
             </div>
         </div>
@@ -68,15 +72,15 @@
                     <div class="form-group"><label for="cardSet">Set<span class="required">*</span></label><input
                             type="text" id="cardSet"
                             name="cardSet"
-                            value="<c:out value='${cardDetails.cardSet}'/>" required>
+                            value="<c:out value='${cardDetails.cardSet}'/>" required maxlength="100" onblur="this.reportValidity()">
                     </div>
                     <div class="form-group"><label for="cardNumber">Numero<span class="required">*</span></label><input
                             type="text" id="cardNumber"
                             name="cardNumber"
-                            value="<c:out value='${cardDetails.cardNumber}'/>" required>
+                            value="<c:out value='${cardDetails.cardNumber}'/>" required maxlength="50" onblur="this.reportValidity()">
                     </div>
                     <div class="form-group"><label for="rarity">Rarità<span class="required">*</span></label><select
-                            id="rarity" name="rarity" required>
+                            id="rarity" name="rarity" required onblur="this.reportValidity()">
                         <option value="Common" ${repopulatedCard.rarity == 'Common' ? 'selected' : ''}>Comune</option>
                         <option value="Uncommon" ${repopulatedCard.rarity == 'Uncommon' ? 'selected' : ''}>Non Comune
                         </option>
@@ -86,7 +90,7 @@
                     </select></div>
                     <div class="form-group"><label for="cardCondition">Condizione<span class="required">*</span></label><select
                             id="cardCondition"
-                            name="cardCondition" required>
+                            name="cardCondition" required onblur="this.reportValidity()">
                         <option value="Mint" ${repopulatedCard.cardCondition == 'Mint' ? 'selected' : ''}>Mint</option>
                         <option value="Near Mint" ${empty repopulatedCard.cardCondition || repopulatedCard.cardCondition == 'Near Mint' ? 'selected' : ''}>
                             Near Mint
@@ -110,7 +114,7 @@
                 <div class="form-grid">
                     <div class="form-group"><label for="accessoryType">Tipo accessorio<span
                             class="required">*</span></label><select id="accessoryType"
-                                                                     name="accessoryType" required>
+                                                                     name="accessoryType" required onblur="this.reportValidity()">
                         <option value="Sleeves" ${repopulatedAccessory.accessoryType == 'Sleeves' ? 'selected' : ''}>
                             Bustine
                             Protettive
@@ -129,10 +133,10 @@
                     </select></div>
                     <div class="form-group"><label for="material">Materiale</label><input type="text" id="material"
                                                                                           name="material"
-                                                                                          value="<c:out value='${accessoryDetails.material}'/>">
+                                                                                          value="<c:out value='${accessoryDetails.material}'/>" maxlength="100" onblur="this.reportValidity()">
                     </div>
                     <div class="form-group"><label for="color">Colore</label><input type="text" id="color" name="color"
-                                                                                    value="<c:out value='${accessoryDetails.color}'/>">
+                                                                                    value="<c:out value='${accessoryDetails.color}'/>" maxlength="50" onblur="this.reportValidity()">
                     </div>
                 </div>
             </div>

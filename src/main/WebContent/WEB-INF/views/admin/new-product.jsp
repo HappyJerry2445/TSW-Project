@@ -72,8 +72,8 @@
                 </div>
                 <div class="form-group full-width">
                     <label for="description">Descrizione Prodotto</label>
-                    <textarea id="description" name="description" rows="4"><c:out
-                            value='${repopulatedDescription}'/></textarea>
+                    <textarea id="description" name="description" rows="4" maxlength="2000" onblur="this.reportValidity()"><c:out
+                            value='${repopulatedProduct.productDescription}'/></textarea>
                 </div>
             </div>
         </div>

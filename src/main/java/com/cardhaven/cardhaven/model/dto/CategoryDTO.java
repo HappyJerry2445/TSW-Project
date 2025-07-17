@@ -10,6 +10,12 @@ public class CategoryDTO implements Serializable {
     private String type;
     private String description;
 
+    public enum CategoryType {
+        Card,
+        Accessory,
+        Generic
+    }
+
     public CategoryDTO() {
     }
 

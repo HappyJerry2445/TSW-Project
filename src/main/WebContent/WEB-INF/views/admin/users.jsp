@@ -39,15 +39,22 @@
         <form action="${pageContext.request.contextPath}/admin/users" method="get" class="filter-form">
             <div class="form-group">
                 <label for="firstName">Nome:</label>
-                <input type="text" id="firstName" name="firstName" placeholder="Nome" value="${firstName}">
+                <input type="text" id="firstName" name="firstName" placeholder="Nome" value="${firstName}"
+                       pattern="[A-Za-zÀ-ÖØ-öø-ÿ'\- ]{2,50}"
+                       title="Il nome può contenere solo lettere, spazi, apostrofi e trattini."
+                       onblur="this.reportValidity()">
             </div>
             <div class="form-group">
                 <label for="lastName">Cognome:</label>
-                <input type="text" id="lastName" name="lastName" placeholder="Cognome" value="${lastName}">
+                <input type="text" id="lastName" name="lastName" placeholder="Cognome" value="${lastName}"
+                       pattern="[A-Za-zÀ-ÖØ-öø-ÿ'\- ]{2,50}"
+                       title="Il cognome può contenere solo lettere, spazi, apostrofi e trattini."
+                       onblur="this.reportValidity()">
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="text" id="email" name="email" placeholder="email@example.com" value="${email}">
+                <input type="email" id="email" name="email" placeholder="email@example.com" value="${email}"
+                       onblur="this.reportValidity()">
             </div>
             <div class="form-group">
                 <label for="role">Ruolo:</label>

@@ -8,34 +8,71 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
+import javax.sql.DataSource;
 
 @WebServlet(name = "AdminUsersServlet", value = "/admin/users")
 public class AdminUsersServlet extends HttpServlet {
+
+    private static final Pattern NAME_PATTERN = Pattern.compile(
+        "^[a-zA-Z'\\s-]{2,50}$"
+    );
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+        "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$"
+    );
 
     private UserDAO userDAO;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        DataSource dataSource = (DataSource) getServletContext().getAttribute("ds");
+        DataSource dataSource = (DataSource) getServletContext().getAttribute(
+            "ds"
+        );
         userDAO = new UserDAO(dataSource);
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws ServletException, IOException {
         List<String> errors = new ArrayList<>();
 
         String firstNameFilter = request.getParameter("firstName");
         String lastNameFilter = request.getParameter("lastName");
         String emailFilter = request.getParameter("email");
         String roleFilterStr = request.getParameter("role");
+
+        if (
+            firstNameFilter != null &&
+            !firstNameFilter.trim().isEmpty() &&
+            !NAME_PATTERN.matcher(firstNameFilter).matches()
+        ) {
+            errors.add("Formato del nome non valido per il filtro.");
+            firstNameFilter = "";
+        }
+        if (
+            lastNameFilter != null &&
+            !lastNameFilter.trim().isEmpty() &&
+            !NAME_PATTERN.matcher(lastNameFilter).matches()
+        ) {
+            errors.add("Formato del cognome non valido per il filtro.");
+            lastNameFilter = "";
+        }
+        if (
+            emailFilter != null &&
+            !emailFilter.trim().isEmpty() &&
+            !EMAIL_PATTERN.matcher(emailFilter).matches()
+        ) {
+            errors.add("Formato email non valido per il filtro.");
+            emailFilter = "";
+        }
 
         UserDTO.Role roleFilter = null;
         if (roleFilterStr != null && !roleFilterStr.isEmpty()) {
@@ -47,7 +84,14 @@ public class AdminUsersServlet extends HttpServlet {
         }
 
         try {
-            Collection<UserDTO> users = userDAO.getFilteredUsers("LastName", false, firstNameFilter, lastNameFilter, emailFilter, roleFilter);
+            Collection<UserDTO> users = userDAO.getFilteredUsers(
+                "LastName",
+                false,
+                firstNameFilter,
+                lastNameFilter,
+                emailFilter,
+                roleFilter
+            );
 
             request.setAttribute("users", users);
             request.setAttribute("userRoles", UserDTO.Role.values()); // For dropdown filter and role update
@@ -59,21 +103,34 @@ public class AdminUsersServlet extends HttpServlet {
             request.setAttribute("role", roleFilterStr); // Keep as string for JSP selected option
 
             request.setAttribute("errors", errors);
-            request.getRequestDispatcher("/WEB-INF/views/admin/users.jsp").forward(request, response);
-
+            request
+                .getRequestDispatcher("/WEB-INF/views/admin/users.jsp")
+                .forward(request, response);
         } catch (SQLException e) {
-            errors.add("Errore del database durante il recupero degli utenti: " + e.getMessage());
+            errors.add(
+                "Errore del database durante il recupero degli utenti: " +
+                e.getMessage()
+            );
             request.setAttribute("errors", errors);
-            request.getRequestDispatcher("/WEB-INF/views/admin/users.jsp").forward(request, response);
+            request
+                .getRequestDispatcher("/WEB-INF/views/admin/users.jsp")
+                .forward(request, response);
             e.printStackTrace();
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws ServletException, IOException {
         String action = request.getParameter("action");
         if (action == null) {
-            NotificationUtil.sendNotification(request, "Azione non specificata.", "error");
+            NotificationUtil.sendNotification(
+                request,
+                "Azione non specificata.",
+                "error"
+            );
             response.sendRedirect(request.getContextPath() + "/admin/users");
             return;
         }
@@ -82,7 +139,11 @@ public class AdminUsersServlet extends HttpServlet {
         try {
             userId = Integer.parseInt(request.getParameter("userId"));
         } catch (NumberFormatException e) {
-            NotificationUtil.sendNotification(request, "ID utente non valido.", "error");
+            NotificationUtil.sendNotification(
+                request,
+                "ID utente non valido.",
+                "error"
+            );
             response.sendRedirect(request.getContextPath() + "/admin/users");
             return;
         }
@@ -90,8 +151,14 @@ public class AdminUsersServlet extends HttpServlet {
         try {
             UserDTO user = userDAO.getById(userId);
             if (user == null) {
-                NotificationUtil.sendNotification(request, "Utente non trovato.", "error");
-                response.sendRedirect(request.getContextPath() + "/admin/users");
+                NotificationUtil.sendNotification(
+                    request,
+                    "Utente non trovato.",
+                    "error"
+                );
+                response.sendRedirect(
+                    request.getContextPath() + "/admin/users"
+                );
                 return;
             }
 
@@ -99,41 +166,80 @@ public class AdminUsersServlet extends HttpServlet {
                 case "updateRole":
                     String newRoleStr = request.getParameter("newRole");
                     if (newRoleStr == null || newRoleStr.isEmpty()) {
-                        NotificationUtil.sendNotification(request, "Ruolo non specificato.", "error");
+                        NotificationUtil.sendNotification(
+                            request,
+                            "Ruolo non specificato.",
+                            "error"
+                        );
                     } else {
                         UserDTO.Role newRole = UserDTO.Role.valueOf(newRoleStr);
                         user.setRole(newRole);
                         userDAO.save(user);
-                        NotificationUtil.sendNotification(request, "Ruolo utente aggiornato con successo!", "success");
+                        NotificationUtil.sendNotification(
+                            request,
+                            "Ruolo utente aggiornato con successo!",
+                            "success"
+                        );
                     }
                     break;
                 case "delete":
                     // Prevent deleting the currently logged-in admin user
-                    Integer loggedInUserId = (Integer) request.getSession().getAttribute("userId");
-                    if (loggedInUserId != null && loggedInUserId == userId) {
-                        NotificationUtil.sendNotification(request, "Non puoi eliminare il tuo stesso account amministratore.", "error");
+                    Integer loggedInUserId = (Integer) request
+                        .getSession()
+                        .getAttribute("userId");
+                    if (
+                        loggedInUserId != null && loggedInUserId.equals(userId)
+                    ) {
+                        NotificationUtil.sendNotification(
+                            request,
+                            "Non puoi eliminare il tuo stesso account amministratore.",
+                            "error"
+                        );
                     } else {
                         boolean deleted = userDAO.delete(userId);
                         if (deleted) {
-                            NotificationUtil.sendNotification(request, "Utente eliminato con successo.", "success");
+                            NotificationUtil.sendNotification(
+                                request,
+                                "Utente eliminato con successo.",
+                                "success"
+                            );
                         } else {
-                            NotificationUtil.sendNotification(request, "Impossibile eliminare l'utente.", "error");
+                            NotificationUtil.sendNotification(
+                                request,
+                                "Impossibile eliminare l'utente.",
+                                "error"
+                            );
                         }
                     }
                     break;
                 default:
-                    NotificationUtil.sendNotification(request, "Azione non valida.", "error");
+                    NotificationUtil.sendNotification(
+                        request,
+                        "Azione non valida.",
+                        "error"
+                    );
                     break;
             }
-
         } catch (SQLException e) {
-            NotificationUtil.sendNotification(request, "Errore del database: " + e.getMessage(), "error");
+            NotificationUtil.sendNotification(
+                request,
+                "Errore del database: " + e.getMessage(),
+                "error"
+            );
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
-            NotificationUtil.sendNotification(request, "Ruolo non valido: " + e.getMessage(), "error");
+            NotificationUtil.sendNotification(
+                request,
+                "Ruolo non valido: " + e.getMessage(),
+                "error"
+            );
         }
         // Redirect back to GET request to show updated list with filters preserved
-        response.sendRedirect(request.getContextPath() + "/admin/users" + getFilterQueryString(request));
+        response.sendRedirect(
+            request.getContextPath() +
+            "/admin/users" +
+            getFilterQueryString(request)
+        );
     }
 
     // Helper to preserve filters on redirect
@@ -156,7 +262,8 @@ public class AdminUsersServlet extends HttpServlet {
         if (role != null && !role.isEmpty()) {
             queryString.append("role=").append(role).append("&");
         }
-        if (queryString.length() > 1) { // Remove trailing '&' or '?' if no params
+        if (queryString.length() > 1) {
+            // Remove trailing '&' or '?' if no params
             return queryString.substring(0, queryString.length() - 1);
         }
         return "";

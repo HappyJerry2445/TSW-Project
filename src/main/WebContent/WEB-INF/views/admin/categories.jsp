@@ -50,7 +50,7 @@
                 <input type="hidden" id="categoryId" name="categoryId">
 
                 <div class="form-group"><label for="categoryName">Nome Categoria <span class="required">*</span></label><input
-                        type="text" id="categoryName" name="categoryName" required></div>
+                        type="text" id="categoryName" name="categoryName" required onblur="this.reportValidity()" pattern="^[a-zA-Z0-9\s'._-]{3,100}$" title="Il nome può contenere lettere, numeri, e caratteri speciali comuni (3-100 caratteri)."></div>
                 <div class="form-group"><label for="parentId">Categoria Genitore</label><select id="parentId"
                                                                                                 name="parentId">
                     <option value="">-- Nessuna (Livello Principale) --</option>
@@ -58,14 +58,14 @@
                         <option value="${cat.id}">${cat.name}</option>
                     </c:forEach></select></div>
                 <div class="form-group"><label for="categoryType">Tipo <span class="required">*</span></label><select
-                        id="categoryType" name="categoryType" required>
+                        id="categoryType" name="categoryType" required onblur="this.reportValidity()">
                     <option value="Generic">Generica</option>
                     <option value="Card">Carte</option>
                     <option value="Accessory">Accessori</option>
                 </select></div>
                 <div class="form-group"><label for="description">Descrizione</label><textarea id="description"
                                                                                               name="description"
-                                                                                              rows="4"></textarea></div>
+                                                                                              rows="4" maxlength="500"></textarea></div>
 
                 <div class="form-actions">
                     <button type="button" id="cancel-button" class="btn btn-outline" style="display: none;">Annulla
