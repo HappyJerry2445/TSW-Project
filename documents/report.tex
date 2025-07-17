@@ -17,6 +17,7 @@
 \usepackage{hyperref}
 \usepackage{mathabx}
 \usepackage{titlesec}
+\usepackage{wrapfig}
 
 %cartella in cui sono contenute le immagini
 \graphicspath{ {./Figure/} }
@@ -154,7 +155,6 @@ Gli utenti registrati avranno accesso a tutte le funzionalità del sito:
     \item \textbf{Storico Ordini:} Consultazione degli ordini effettuati e del loro stato.
     \item \textbf{Scrittura Recensioni:} Possibilità di scrivere e inviare recensioni (testo e valutazione numerica, es. 1-5 stelle) per i prodotti presenti nel catalogo. Le recensioni saranno soggette a moderazione prima della pubblicazione.
     \item \textbf{Visualizzazione Recensioni:} Leggere le recensioni lasciate da altri utenti sulle pagine dei prodotti.
-    \item \textbf{Wishlist/Lista Desideri:} Salvare prodotti preferiti per consultazione futura.
 \end{itemize}
 
 
@@ -169,16 +169,56 @@ I visitatori non autenticati potranno:
 \end{itemize}
 
 %-----------------------------------------------------------------------------------------------------
-\chapter{Palette dei colori}
+\chapter{Design sketch}
+Il \textbf{design sketch} rappresenta uno schizzo preliminare (wireframe) che illustra la disposizione degli elementi principali dell'interfaccia utente, come la barra di navigazione, l'area principale (hero section) e la griglia dei prodotti. \\
+Serve a dare un'idea visiva iniziale della struttura e del layout del sito web.
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.7\textwidth]{palette_colori.jpg}
+    \includegraphics[width=0.8\textwidth]{design.jpg}
 \end{figure}
+
+\chapter{Tema}
+\begin{wrapfigure}{r}{0.4\textwidth}
+    \centering
+    \includegraphics[width=0.45\textwidth]{tema.png}
+\end{wrapfigure}
+
+Il tema principale del sito è: \textbf{Il Rifugio del Collezionista}.\\
+Il nome stesso CardHaven è il pilastro del tema, "Haven" significa "rifugio", "porto sicuro", "oasi".\\\\
+Questo comunica immediatamente l'idea che il sito non è un semplice negozio, ma un luogo dedicato e sicuro per gli appassionati, un punto di riferimento dove possono trovare tutto ciò di cui hanno bisogno.\\\\
+Il tema si concretizza visivamente attraverso l'immagine di un mago sapiente che custodisce antichi grimori e segreti arcani, simboleggiando la saggezza e l'esperienza necessarie per guidare i collezionisti nel loro viaggio di scoperta. L'atmosfera mistica e avvolgente, con i toni blu profondi e gli effetti magici, trasforma l'esperienza di navigazione in un'avventura affascinante.\\\\
+
+\chapter{Palette dei colori}
+Qui viene definita l'identità visiva del progetto attraverso la scelta dei colori. Viene mostrata una palette che include i colori primari, secondari e d'accento che verranno utilizzati per gli sfondi, i testi, i pulsanti e altri elementi grafici, al fine di garantire coerenza stilistica e una buona esperienza utente.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{palette.png}
+\end{figure}
+
+\chapter{Diagramma Navigazionale}
+Il \textbf{Diagramma Navigazionale}, noto anche come mappa del sito (sitemap) o albero di navigazione, è una rappresentazione visuale della struttura gerarchica di un sito web o di un'applicazione.\\\\
+Esso illustra come le diverse pagine o sezioni sono collegate tra loro, definendo i percorsi che gli utenti possono seguire per navigare attraverso i contenuti. Esso è diviso in due aree:
+\begin{itemize}
+    \item \textbf{User-Facing Website (Sito per l'Utente)}: Parte dalla Home Page e si ramifica in tutte le sezioni accessibili al cliente, come My Account, Shopping Cart, Products, Login, Contact, ecc.
+    \item \textbf{Admin Panel (Pannello Amministratore)}: Mostra la struttura del backend, accessibile solo agli amministratori, con sezioni per gestire prodotti (Manage Products), ordini (Manage Orders), categorie (Manage Categories), ecc.
+\end{itemize}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1.1\textwidth]{navDiag1.png}
+\end{figure}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1.1\textwidth]{navDiag1.1.png}
+\end{figure}
+
+\chapter{Diagramma Navigazionale con le Servlet}
+A differenza di una semplice mappa del sito statica, questo schema illustra come le richieste degli utenti vengono elaborate e come la navigazione avviene attraverso l'interazione tra le interfacce utente (pagine JSP in giallo) e la logica di business (Servlet in blu).\\\\
+
 
 \chapter{Schema ER della base di dati}
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=1.1\textwidth]{cardHaven-er.png}
+    \includegraphics[width=1.1\textwidth]{cardHaven-er.jpg}
 \end{figure}
 
 \chapter{Repository GitHub}
