@@ -1,10 +1,10 @@
 function editProfile() {
-    var editButton = document.getElementById("edit-button");
-    var saveButton = document.getElementById("save-button");
+    let editButton = document.getElementById("edit-button");
+    let saveButton = document.getElementById("save-button");
     editButton.classList.add("d-none");
     saveButton.classList.remove("d-none");
-    var inputs = document.querySelectorAll(".profile-details input");
-    inputs.forEach(function (el) {
+    let inputs = document.querySelectorAll(".profile-details input");
+    inputs.forEach((el) => {
         el.removeAttribute("disabled");
     });
 }

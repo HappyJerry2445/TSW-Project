@@ -21,6 +21,9 @@ public class ProfileServlet extends HttpServlet {
 
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
+    private static final String NAME_REGEX = "^[A-Za-zÀ-ÖØ-öø-ÿ'\\- ]{2,50}$";
+    private static final Pattern NAME_PATTERN = Pattern.compile(NAME_REGEX);
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -49,12 +52,23 @@ public class ProfileServlet extends HttpServlet {
         var lastName = req.getParameter("lastName");
         var email = req.getParameter("email");
 
+
         if (firstName == null || firstName.trim().isEmpty()) {
-            errors.add("Il nome non può essere vuoto.");
+            errors.add("Il campo nome non può essere vuoto.");
+        } else if (!NAME_PATTERN.matcher(firstName.trim()).matches()) {
+            errors.add(
+                    "Il nome contiene caratteri non validi o è troppo corto/lungo."
+            );
         }
+
         if (lastName == null || lastName.trim().isEmpty()) {
-            errors.add("Il cognome non può essere vuoto.");
+            errors.add("Il campo cognome non può essere vuoto.");
+        } else if (!NAME_PATTERN.matcher(lastName.trim()).matches()) {
+            errors.add(
+                    "Il cognome contiene caratteri non validi o è troppo corto/lungo."
+            );
         }
+
         if (email == null || email.trim().isEmpty()) {
             errors.add("L'email non può essere vuota.");
         } else if (!EMAIL_PATTERN.matcher(email).matches()) {

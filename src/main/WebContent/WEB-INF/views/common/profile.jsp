@@ -31,6 +31,8 @@
                                    placeholder="Inserisci il tuo nome"
                                 <%--@elvariable id="submittedFirstName" type="java.lang.String"--%>
                                    value="<c:out value="${not empty submittedFirstName ? submittedFirstName : loggedInUser.firstName}"/>"
+                                   onblur="this.reportValidity()"
+                                   pattern="[A-Za-zÀ-ÖØ-öø-ÿ'\- ]{2,50}"
                                    disabled required>
                         </div>
                         <div class="mb-1">
@@ -39,12 +41,15 @@
                                    placeholder="Inserisci il tuo cognome"
                                 <%--@elvariable id="submittedLastName" type="java.lang.String"--%>
                                    value="<c:out value="${not empty submittedLastName ? submittedLastName : loggedInUser.lastName}"/>"
+                                   onblur="this.reportValidity()"
+                                   pattern="[A-Za-zÀ-ÖØ-öø-ÿ'\- ]{2,50}"
                                    disabled required>
                         </div>
                         <div class="mb-1">
                             <label for="email">Email:</label>
                             <input id="email" type="email" name="email" class="form-input"
                                    placeholder="Inserisci la tua email"
+                                   onblur="this.reportValidity()"
                                 <%--@elvariable id="submittedEmail" type="java.lang.String"--%>
                                    value="<c:out value="${not empty submittedEmail ? submittedEmail : loggedInUser.email}"/>"
                                    disabled
