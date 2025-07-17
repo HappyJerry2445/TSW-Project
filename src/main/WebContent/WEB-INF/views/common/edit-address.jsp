@@ -29,37 +29,47 @@
                 <div class="mb-1">
                     <label for="street">Via/Piazza:</label>
                     <input type="text" id="street" name="street" class="form-input"
-                           oninput="this.reportValidity()"
+                           onblur="validateFormElement(this)"
+                           onsubmit="validateFormElement(this)"
                            value="<c:out value="${address.streetAddress}"/>" required minlength="5" maxlength="255"
                            title="Inserisci la via e il numero civico.">
+                    <div class="errorFormElem"></div>
                 </div>
                 <div class="mb-1">
                     <label for="city">Città:</label>
                     <input type="text" id="city" name="city" class="form-input"
-                           oninput="this.reportValidity()"
+                           onblur="validateFormElement(this)"
+                           onsubmit="validateFormElement(this)"
                            value="<c:out value="${address.city}"/>" required pattern="[a-zA-ZÀ-ÖØ-öø-ÿ'\- ]{2,100}"
                            title="Inserisci una città valida.">
+                    <div class="errorFormElem"></div>
                 </div>
                 <div class="mb-1">
                     <label for="state">Provincia/Stato:</label>
                     <input type="text" id="state" name="state" class="form-input"
-                           onblur="this.reportValidity()"
+                           onblur="validateFormElement(this)"
+                           onsubmit="validateFormElement(this)"
                            value="<c:out value="${address.state}"/>" pattern="[A-Z]{2}"
                            title="Inserisci la sigla della provincia (es. SA).">
+                    <div class="errorFormElem"></div>
                 </div>
                 <div class="mb-1">
                     <label for="postalCode">CAP:</label>
                     <input type="text" id="postalCode" name="postalCode" class="form-input"
-                           onblur="this.reportValidity()"
+                           onblur="validateFormElement(this)"
+                           onsubmit="validateFormElement(this)"
                            value="<c:out value="${address.postalCode}"/>" required pattern="[0-9]{5}"
                            title="Inserisci un CAP a 5 cifre.">
+                    <div class="errorFormElem"></div>
                 </div>
                 <div class="mb-1">
                     <label for="country">Nazione:</label>
                     <input type="text" id="country" name="country" class="form-input"
-                           onblur="this.reportValidity()"
+                           onblur="validateFormElement(this)"
+                           onsubmit="validateFormElement(this)"
                            value="<c:out value="${address.country}"/>" required pattern="[a-zA-ZÀ-ÖØ-öø-ÿ'\- ]{2,100}"
                            title="Inserisci una nazione valida.">
+                    <div class="errorFormElem"></div>
                 </div>
 
                 <div class="mb-1">
@@ -85,5 +95,6 @@
 </main>
 
 <jsp:include page="/WEB-INF/components/footer.jsp"/>
+<script src="${pageContext.request.contextPath}/scripts/validation.js"></script>
 </body>
 </html>

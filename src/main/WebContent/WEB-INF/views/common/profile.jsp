@@ -31,9 +31,12 @@
                                    placeholder="Inserisci il tuo nome"
                                 <%--@elvariable id="submittedFirstName" type="java.lang.String"--%>
                                    value="<c:out value="${not empty submittedFirstName ? submittedFirstName : loggedInUser.firstName}"/>"
-                                   onblur="this.reportValidity()"
+                                   onblur="validateFormElement(this)"
+                                   onsubmit="validateFormElement(this)"
                                    pattern="[A-Za-zÀ-ÖØ-öø-ÿ'\- ]{2,50}"
                                    disabled required>
+                            <div class="errorFormElem"></div>
+
                         </div>
                         <div class="mb-1">
                             <label for="lastName">Cognome:</label>
@@ -41,19 +44,23 @@
                                    placeholder="Inserisci il tuo cognome"
                                 <%--@elvariable id="submittedLastName" type="java.lang.String"--%>
                                    value="<c:out value="${not empty submittedLastName ? submittedLastName : loggedInUser.lastName}"/>"
-                                   onblur="this.reportValidity()"
+                                   onblur="validateFormElement(this)"
+                                   onsubmit="validateFormElement(this)"
                                    pattern="[A-Za-zÀ-ÖØ-öø-ÿ'\- ]{2,50}"
                                    disabled required>
+                            <div class="errorFormElem"></div>
                         </div>
                         <div class="mb-1">
                             <label for="email">Email:</label>
                             <input id="email" type="email" name="email" class="form-input"
                                    placeholder="Inserisci la tua email"
-                                   onblur="this.reportValidity()"
+                                   onblur="validateFormElement(this)"
+                                   onsubmit="validateFormElement(this)"
                                 <%--@elvariable id="submittedEmail" type="java.lang.String"--%>
                                    value="<c:out value="${not empty submittedEmail ? submittedEmail : loggedInUser.email}"/>"
                                    disabled
                                    required>
+                            <div class="errorFormElem"></div>
                         </div>
                         <p><strong>Ruolo:</strong> <c:out value="${loggedInUser.role}"/></p>
                         <p><strong>Data di Registrazione:</strong>
@@ -94,6 +101,7 @@
 </main>
 
 <jsp:include page="/WEB-INF/components/footer.jsp"/>
-<script src="/scripts/profile.js"></script>
+<script defer src="${pageContext.request.contextPath}/scripts/profile.js"></script>
+<script defer src="${pageContext.request.contextPath}/scripts/validation.js"></script>
 </body>
 </html>

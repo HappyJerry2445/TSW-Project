@@ -1184,3 +1184,8 @@ body.no-scroll {
 .hidden {
     visibility: hidden;
 }
+
+.errorFormElem {
+    max-width: 400px;
+    color: var(--color-status-error);
+}

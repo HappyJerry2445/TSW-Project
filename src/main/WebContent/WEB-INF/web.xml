@@ -30,16 +30,11 @@
 
     <session-config>
         <session-timeout>120</session-timeout>
-        <!--
-        TODO: Enable this section and HTTPS
         <cookie-config>
             <http-only>true</http-only>
             <secure>true</secure>
         </cookie-config>
-        -->
     </session-config>
-    <!--
-    TODO: Enable HTTPS
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>All</web-resource-name>
@@ -49,7 +44,6 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
-    -->
     <filter>
         <filter-name>httpHeaderSecurity</filter-name>
         <filter-class>org.apache.catalina.filters.HttpHeaderSecurityFilter</filter-class>
