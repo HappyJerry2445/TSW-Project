@@ -12,25 +12,55 @@
         <div class="nav-overlay"></div>
         <nav class="main-nav">
             <ul>
-                <%-- L'attributo "allCategories" viene caricato dall'application scope (MainContext.java) --%>
-                <c:set var="categoryCount" value="0" scope="page"/>
-                <c:forEach var="category" items="${applicationScope.allCategories}">
-                    <%-- Mostra solo le categorie principali (senza genitore) e limita a 4 per pulizia --%>
-                    <c:if test="${empty category.parentId and categoryCount < 3}">
-                        <li>
-                            <a href="${pageContext.request.contextPath}/products/category/${category.id}">
-                                <c:out value="${category.name}"/>
-                            </a>
-                        </li>
-                        <c:set var="categoryCount" value="${categoryCount + 1}" scope="page"/>
-                    </c:if>
-                </c:forEach>
-                <li><a href="${pageContext.request.contextPath}/products/search?onSale=true">Offerte</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="dropdown-toggle" onclick="return false;">
+                        Categorie <i class="fas fa-chevron-down dropdown-icon"></i>
+                    </a>
+                    <ul id="category-header-dropdown-menu" class="dropdown-menu">
+                        <c:forEach var="category" items="${applicationScope.allCategories}">
+                            <c:if test="${empty category.parentId}">
+
+                                <%-- Check if this category has children to add a specific class --%>
+                                <c:set var="hasChildren" value="${false}"/>
+                                <c:forEach var="child" items="${applicationScope.allCategories}">
+                                    <c:if test="${not hasChildren and child.parentId == category.id}">
+                                        <c:set var="hasChildren" value="${true}"/>
+                                    </c:if>
+                                </c:forEach>
+
+                                <li class="${hasChildren ? 'has-submenu' : ''}">
+                                    <a href="${pageContext.request.contextPath}/products/category/${category.id}">
+                                        <c:out value="${category.name}"/>
+                                        <c:if test="${hasChildren}">
+                                            <i class="fas fa-chevron-right submenu-icon"></i>
+                                        </c:if>
+                                    </a>
+                                    <c:if test="${hasChildren}">
+                                        <ul class="submenu">
+                                            <c:forEach var="child" items="${applicationScope.allCategories}">
+                                                <c:if test="${child.parentId == category.id}">
+                                                    <li>
+                                                        <a href="${pageContext.request.contextPath}/products/category/${child.id}">
+                                                            <c:out value="${child.name}"/>
+                                                        </a>
+                                                    </li>
+                                                </c:if>
+                                            </c:forEach>
+                                        </ul>
+                                    </c:if>
+                                </li>
+                            </c:if>
+                        </c:forEach>
+                    </ul>
+                </li>
+                <li class="nav-item"><a
+                        href="${pageContext.request.contextPath}/products/search?onSale=true">Offerte</a></li>
             </ul>
         </nav>
         <div class="header-actions">
             <!-- TODO: implementare ricerca -->
-            <form action="${pageContext.request.contextPath}/products/search" method="get" class="search-bar" id="search-form" autocomplete="off">
+            <form action="${pageContext.request.contextPath}/products/search" method="get" class="search-bar"
+                  id="search-form" autocomplete="off">
                 <input type="search" name="query" id="search-input" placeholder="Cerca prodotti..." aria-label="Cerca">
                 <div class="search-spinner" id="search-spinner"><i class="fas fa-spinner"></i></div>
                 <button type="submit" aria-label="Invia ricerca"><i class="fas fa-search"></i></button>
@@ -77,6 +107,7 @@
                 </script>
                 <script defer src="${pageContext.request.contextPath}/scripts/cart-count-update.js"></script>
                 <script defer src="${pageContext.request.contextPath}/scripts/mobile-menu.js"></script>
+                <script defer src="${pageContext.request.contextPath}/scripts/mobile-accordion.js"></script>
                 <script defer src="${pageContext.request.contextPath}/scripts/search-suggestions.js"></script>
             </div>
         </div>

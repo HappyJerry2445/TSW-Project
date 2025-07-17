@@ -13,18 +13,18 @@
     --color-neutral-dark: #6c757d; /* For secondary text/icons */
     --color-neutral-darkest: #212529; /* For main text */
     --color-neutral-darkest-transparent: rgba(
-        33,
-        37,
-        41,
-        0.5
+            33,
+            37,
+            41,
+            0.5
     ); /* For main text */
 
     /* Text Colors (derived from neutrals) */
     --color-text-default: var(
-        --color-neutral-darkest
+            --color-neutral-darkest
     ); /* Formerly --color-text-dark */
     --color-text-secondary: var(
-        --color-neutral-dark
+            --color-neutral-dark
     ); /* Formerly --color-text-light-grey, now a darker grey */
     --color-table-thead: #495057;
     --color-text-inverted: #f0f0f0; /* Formerly --color-text-light, for text on dark backgrounds */
@@ -33,7 +33,7 @@
     --color-bg-body: var(--color-primary-light); /* Main page background */
     --color-bg-card: #ffffff; /* Card backgrounds */
     --color-bg-light-grey: var(
-        --color-neutral-lightest
+            --color-neutral-lightest
     ); /* Formerly --color-background-grey, adjusted */
 
     /* Status Colors */
@@ -92,7 +92,7 @@ body {
     font-family: var(--font-body);
     color: var(--color-text-default); /* Changed from --color-text-dark */
     background-color: var(
-        --color-bg-body
+            --color-bg-body
     ); /* Changed from --color-background-light */
     line-height: 1.6;
     font-size: 16px; /* Base font size */
@@ -113,7 +113,7 @@ a {
 
 a:hover {
     color: var(
-        --color-accent-secondary
+            --color-accent-secondary
     ); /* Changed from --color-accent, now using a darker accent shade */
 }
 
@@ -159,10 +159,9 @@ img {
     font-weight: 600;
     text-align: center;
     border-radius: var(--border-radius-sm);
-    transition:
-        background-color 0.3s ease,
-        transform 0.2s ease,
-        box-shadow 0.3s ease;
+    transition: background-color 0.3s ease,
+    transform 0.2s ease,
+    box-shadow 0.3s ease;
     cursor: pointer;
     border: none;
     font-size: 1rem;
@@ -177,7 +176,7 @@ img {
 
 .btn-primary {
     background-color: var(
-        --color-accent-vibrant
+            --color-accent-vibrant
     ); /* Changed from --color-primary */
     color: var(--color-text-inverted); /* Changed from --color-text-light */
 }
@@ -193,7 +192,7 @@ img {
 .btn-secondary:hover {
     color: var(--color-primary-light);
     background-color: var(
-        --color-neutral-darkest
+            --color-neutral-darkest
     ); /* Slightly darker on hover */
     border-color: var(--color-neutral-darkest);
 }
@@ -209,14 +208,14 @@ img {
 .btn-danger:hover {
     color: var(--color-primary-light);
     background-color: var(
-        --color-status-error-dark
+            --color-status-error-dark
     ); /* A slightly darker red for hover, if not defined as a variable */
     border-color: var(--color-status-error-dark);
 }
 
 .btn-primary:hover {
     background-color: var(
-        --color-accent-secondary
+            --color-accent-secondary
     ); /* Changed from --color-secondary */
     transform: translateY(-2px);
     box-shadow: var(--color-shadow-light);
@@ -228,7 +227,7 @@ img {
     /* This button should now use the original accent color or a complementary one. */
     /* Let's make this use a more muted, but still distinct accent for secondary actions. */
     background-color: var(
-        --color-neutral-light
+            --color-neutral-light
     ); /* Using a light neutral for a softer accent button */
     color: var(--color-text-default); /* Changed from --color-dark */
     border: 1px solid var(--color-neutral-base);
@@ -236,7 +235,7 @@ img {
 
 .btn-accent:hover {
     background-color: var(
-        --color-neutral-base
+            --color-neutral-base
     ); /* Slightly darker neutral on hover */
     /* Removed the hardcoded color #05a8c7, which was derived from the old accent */
     transform: translateY(-2px);
@@ -252,7 +251,7 @@ img {
 
 .btn-outline:hover {
     background-color: var(
-        --color-accent-vibrant
+            --color-accent-vibrant
     ); /* Changed from --color-primary */
     color: var(--color-text-inverted); /* Changed from --color-text-light */
 }
@@ -278,9 +277,8 @@ select {
     font-family: var(--font-body);
     font-size: 1rem;
     width: 100%;
-    transition:
-        border-color 0.3s ease,
-        box-shadow 0.3s ease;
+    transition: border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 input:focus,
@@ -288,7 +286,7 @@ textarea:focus,
 select:focus {
     outline: none;
     border-color: var(
-        --color-accent-vibrant
+            --color-accent-vibrant
     ); /* Changed from --color-primary */
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2); /* Adjusted to match new --color-accent-vibrant */
 }
@@ -323,7 +321,7 @@ header .container {
     font-size: 1.8rem;
     font-weight: bold;
     color: var(
-        --color-accent-vibrant
+            --color-accent-vibrant
     ); /* Changed from --color-accent, now using the primary vibrant accent */
 }
 
@@ -333,24 +331,135 @@ header .container {
     align-items: center;
 }
 
-.main-nav ul li {
+.main-nav .nav-item {
     margin-left: calc(var(--spacing-unit) * 1.5);
 }
 
-.main-nav ul li a {
-    color: var(--color-text-inverted); /* Changed from --color-text-light */
+.main-nav .nav-item > a {
+    color: var(--color-text-inverted);
     font-weight: 600;
     padding: 0.5rem 0;
     border-bottom: 2px solid transparent;
+    display: inline-block;
 }
 
 /* TODO: Add active to header */
-.main-nav ul li a:hover,
-.main-nav ul li a.active {
-    color: var(--color-accent-vibrant); /* Changed from --color-accent */
-    border-bottom-color: var(
-        --color-accent-vibrant
-    ); /* Changed from --color-accent */
+.main-nav .nav-item > a:hover,
+.main-nav .nav-item > a.active,
+.main-nav .nav-item.dropdown:hover > a {
+    /* Highlight "Categorie" on hover */
+    color: var(--color-accent-vibrant);
+}
+
+.nav-item.dropdown > a {
+    cursor: default;
+}
+
+.dropdown-icon {
+    font-size: 0.7em;
+    transition: transform 0.2s ease;
+}
+
+.nav-item.dropdown > a .dropdown-icon {
+    transform: rotate(180deg);
+}
+
+.nav-item.dropdown:hover > a .dropdown-icon {
+    transform: rotate(0deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    background-color: var(--color-primary-dark);
+    list-style: none;
+    padding: 0.5rem 0;
+    margin-top: 2px;
+    min-width: 220px;
+    border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+    box-shadow: var(--color-shadow-md);
+    z-index: 1010;
+    border-top: 2px solid var(--color-accent-vibrant);
+    opacity: 0;
+    transform: translateY(10px);
+    visibility: hidden;
+    transition: opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0.2s ease;
+}
+
+#category-header-dropdown-menu {
+    display: block;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
+
+.dropdown-menu li {
+    margin: 0;
+}
+
+.dropdown-menu > li > a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 1.2rem;
+    color: var(--color-text-inverted);
+    white-space: nowrap;
+    border: none !important;
+}
+
+.dropdown-menu > li > a:hover {
+    background-color: var(--color-accent-vibrant);
+    color: var(--color-primary-light) !important;
+}
+
+/* === Multi-level Fly-out Menu === */
+.dropdown-menu .has-submenu {
+    position: relative; /* Context for submenu positioning */
+}
+
+.submenu-icon {
+    font-size: 0.7em;
+    color: var(--color-neutral-dark);
+}
+
+.dropdown-menu > .has-submenu:hover > a > .submenu-icon {
+    color: var(--color-primary-light);
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: -1px; /* Align with parent top border */
+    list-style: none;
+    padding: 0.5rem 0;
+    min-width: 200px;
+    background-color: var(--color-primary-dark);
+    box-shadow: var(--color-shadow-md);
+    border-radius: var(--border-radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(10px);
+    transition: opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.has-submenu:hover > .submenu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.submenu li a {
+    padding: 0.6rem 1.2rem;
+    color: var(--color-neutral-light) !important;
 }
 
 .header-actions {
@@ -372,7 +481,7 @@ header .container {
     border: none;
     border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
     background-color: var(
-        --color-neutral-darkest-transparent
+            --color-neutral-darkest-transparent
     ); /* Changed from --color-secondary to the darker accent shade */
     color: var(--color-text-inverted); /* Changed from --color-text-light */
     min-width: 200px;
@@ -380,13 +489,13 @@ header .container {
 
 .search-bar input[type="search"]::placeholder {
     color: var(
-        --color-text-inverted
+            --color-text-inverted
     ); /* Changed from --color-text-light-grey */
 }
 
 .search-bar button {
     background-color: var(
-        --color-accent-vibrant
+            --color-accent-vibrant
     ); /* Changed from --color-accent */
     color: var(--color-primary-dark); /* Changed from --color-dark */
     border: none;
@@ -471,7 +580,7 @@ header .container {
     top: -8px;
     right: -10px;
     background-color: var(
-        --color-accent-vibrant
+            --color-accent-vibrant
     ); /* Changed from --color-accent */
     color: var(--color-primary-dark); /* Changed from --color-dark */
     border-radius: 50%;
@@ -497,7 +606,7 @@ body {
 footer {
     background-color: var(--color-primary-dark); /* Changed from --color-dark */
     color: var(
-        --color-text-secondary
+            --color-text-secondary
     ); /* Changed from --color-text-light-grey */
     padding: calc(var(--spacing-unit) * 3) 0 calc(var(--spacing-unit) * 1.5);
     margin-top: calc(var(--spacing-unit) * 3);
@@ -528,7 +637,7 @@ footer {
 
 .footer-column ul li a {
     color: var(
-        --color-text-secondary
+            --color-text-secondary
     ); /* Changed from --color-text-light-grey */
 }
 
@@ -543,7 +652,7 @@ footer {
 
 .social-icons a {
     color: var(
-        --color-text-secondary
+            --color-text-secondary
     ); /* Changed from --color-text-light-grey */
     font-size: 1.5rem;
 }
@@ -628,9 +737,8 @@ body.no-scroll {
     z-index: 1001; /* Below menu, above content */
     visibility: hidden;
     opacity: 0;
-    transition:
-        opacity 0.3s ease-in-out,
-        visibility 0s 0.3s;
+    transition: opacity 0.3s ease-in-out,
+    visibility 0s 0.3s;
 }
 
 .nav-overlay.is-visible {
@@ -653,10 +761,8 @@ body.no-scroll {
 /* Hero Section */
 .hero {
     /* A gentle gradient overlay enhances text readability over a background image */
-    background:
-        linear-gradient(rgba(26, 42, 64, 0.8), rgba(26, 42, 64, 0.8)),
-        url("/images/trading_card_hero_background.jpg") no-repeat center
-            center/cover;
+    background: linear-gradient(rgba(26, 42, 64, 0.8), rgba(26, 42, 64, 0.8)),
+    url("/images/trading_card_hero_background.jpg") no-repeat center center/cover;
     color: var(--color-primary-light);
     padding: calc(var(--spacing-unit) * 5) var(--spacing-unit);
     text-align: center;
@@ -665,7 +771,7 @@ body.no-scroll {
 .hero-content h1 {
     font-size: 3rem;
     color: var(
-        --color-primary-light
+            --color-primary-light
     ); /* Ensure heading color is light on dark background */
     margin-bottom: var(--spacing-unit);
     font-weight: 700;
@@ -733,7 +839,7 @@ body.no-scroll {
 
 .rounded-sm {
     border-radius: var(
-        --border-radius-sm
+            --border-radius-sm
     ); /* Uses a variable if defined, otherwise a default value */
 }
 
@@ -762,7 +868,7 @@ body.no-scroll {
     width: 70px;
     height: 4px;
     background-color: var(
-        --color-accent-vibrant
+            --color-accent-vibrant
     ); /* Changed from --color-accent */
     margin: 0.5rem auto 0;
     border-radius: 2px;
@@ -777,7 +883,7 @@ body.no-scroll {
 .card {
     padding: calc(var(--spacing-unit) * 2);
     background-color: var(
-        --color-bg-card
+            --color-bg-card
     ); /* Changed from --color-background-light */
     border-radius: var(--border-radius-md);
     box-shadow: var(--color-shadow-strong);
@@ -785,10 +891,10 @@ body.no-scroll {
 
 .alert-danger {
     background-color: rgba(
-        220,
-        53,
-        69,
-        0.1
+            220,
+            53,
+            69,
+            0.1
     ); /* Adjusted to match --color-status-error */
     color: var(--color-status-error); /* Changed from --color-danger-red */
     padding: var(--spacing-unit);
@@ -828,9 +934,8 @@ body.no-scroll {
     border-radius: var(--border-radius-md);
     box-shadow: var(--color-shadow-md);
     opacity: 0; /* Start hidden for animation */
-    transition:
-        opacity 0.5s ease-in-out,
-        transform 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out,
+    transform 0.5s ease-in-out;
     transform: translateY(-20px);
     position: relative;
     pointer-events: auto; /* Re-enable pointer events for the notification itself */
@@ -928,26 +1033,79 @@ body.no-scroll {
         width: 100%;
     }
 
-    .main-nav ul li {
+    .main-nav .nav-item {
         margin-left: 0;
         width: 100%;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .main-nav ul li:last-child {
+    .main-nav .nav-item:last-child {
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .main-nav ul li a {
+    .main-nav .nav-item > a {
         display: block;
         width: 100%;
         padding: 1rem 1.5rem;
         border-bottom: none;
     }
 
-    .main-nav ul li a:hover,
-    .main-nav ul li a.active {
+    .main-nav .nav-item > a:hover,
+    .main-nav .nav-item > a.active {
         background-color: var(--color-accent-vibrant);
+    }
+
+    /* Mobile Dropdown Styles */
+    .main-nav .nav-item.dropdown .dropdown-icon {
+        display: none; /* Hide chevron on mobile menu */
+    }
+
+    .main-nav .dropdown-menu {
+        position: static;
+        display: block;
+        opacity: 1;
+        transform: none;
+        visibility: visible;
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        min-width: unset;
+        animation: none;
+        background-color: transparent;
+    }
+
+    .main-nav .dropdown-menu > li > a {
+        font-weight: 600;
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .main-nav .dropdown-menu .has-submenu > a {
+        font-weight: 600;
+    }
+
+    .main-nav .submenu {
+        position: static;
+        display: block;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .main-nav .submenu li a {
+        padding-left: 3rem;
+        font-weight: 400;
+    }
+
+    .main-nav .submenu-icon {
+        display: none;
+    }
+
+    .main-nav .nav-item.dropdown > a {
+        cursor: pointer;
     }
 
     .header-actions {
@@ -982,6 +1140,7 @@ body.no-scroll {
     .header-icons {
         justify-self: center;
     }
+
     .logo {
         font-size: 1.5rem;
     }
