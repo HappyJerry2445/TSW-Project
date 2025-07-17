@@ -12,9 +12,13 @@
         <div class="nav-overlay"></div>
         <nav class="main-nav">
             <ul>
+                <li class="nav-item">
+                    <a href="${pageContext.request.contextPath}/pages/about">Chi siamo</a>
+                </li>
                 <li class="nav-item dropdown">
-                    <a href="#" class="dropdown-toggle" onclick="return false;">
-                        Categorie <i class="fas fa-chevron-down dropdown-icon"></i>
+                    <a href="${pageContext.request.contextPath}/products/search" class="dropdown-toggle"
+                    >
+                        Prodotti <i class="fas fa-chevron-down dropdown-icon"></i>
                     </a>
                     <ul id="category-header-dropdown-menu" class="dropdown-menu">
                         <c:forEach var="category" items="${applicationScope.allCategories}">
@@ -55,6 +59,9 @@
                 </li>
                 <li class="nav-item"><a
                         href="${pageContext.request.contextPath}/products/search?onSale=true">Offerte</a></li>
+                <li class="nav-item">
+                    <a href="${pageContext.request.contextPath}/pages/contact">Contattaci</a>
+                </li>
             </ul>
         </nav>
         <div class="header-actions">
