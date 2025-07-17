@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -208,31 +209,38 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
     ) throws SQLException {
         Collection<ProductDTO> productDTOS = new ArrayList<>();
         List<Object> params = new ArrayList<>();
-        boolean isFullTextSearch = (searchTerm != null &&
-            !searchTerm.isEmpty());
+        final String trimmedSearchTerm = (searchTerm != null &&
+                !searchTerm.trim().isEmpty())
+            ? searchTerm.trim()
+            : null;
+        boolean isFullTextSearch = trimmedSearchTerm != null;
 
         StringBuilder sql = new StringBuilder("SELECT p.*");
         if (isFullTextSearch) {
             sql.append(
-                ", MATCH(p.ProductName, p.ProductDescription) AGAINST (?)"
+                ", (MATCH(p.ProductName) AGAINST(?) * 3 + MATCH(p.ProductDescription) AGAINST(?)) AS relevance_score"
             );
-            params.add(searchTerm);
+            params.add(trimmedSearchTerm);
+            params.add(trimmedSearchTerm);
         }
         sql.append(
             " FROM Product p LEFT JOIN ProductCategory pc ON p.ProductId = pc.ProductID WHERE p.IsActive = true"
         );
 
         if (isFullTextSearch) {
-            // Trasforma "smart tv" in "+smart +tv" per una ricerca booleana che richiede tutte le parole.
-            String ftsQuery = Arrays.stream(searchTerm.trim().split("\\s+"))
-                .map(word -> "+" + word)
-                .reduce("", (a, b) -> a + " " + b)
+            String sanitizedSearch = trimmedSearchTerm
+                .replaceAll("[^a-zA-Z0-9\\s]", " ")
                 .trim();
-            // La condizione di filtro
+            String ftsBooleanQuery = Arrays.stream(
+                sanitizedSearch.split("\\s+")
+            )
+                .filter(word -> !word.isEmpty() && word.length() > 3)
+                .map(word -> "+" + word + "*")
+                .collect(Collectors.joining(" "));
             sql.append(
                 " AND MATCH(p.ProductName, p.ProductDescription) AGAINST (? IN BOOLEAN MODE)"
             );
-            params.add(ftsQuery); // Aggiungi lo stesso parametro una seconda volta
+            params.add(ftsBooleanQuery);
         }
 
         if (sku != null && !sku.isEmpty()) {
@@ -268,24 +276,35 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
 
         // === GESTIONE DELL'ORDINAMENTO ===
         String orderByClause;
-        orderByClause = "p.ProductName ASC";
 
-        log.debug("Order: {}", order);
+        // 2. Imposta un ordinamento di default intelligente.
+        if (isFullTextSearch) {
+            // Se si cerca, l'ordinamento di default DEVE essere per rilevanza.
+            orderByClause = "relevance_score DESC";
+        } else {
+            // Altrimenti, un default sensato.
+            orderByClause = "p.ProductName ASC";
+        }
+
+        // 3. Permetti all'utente di sovrascrivere il default, se valido.
         if (
             order != null &&
             !order.trim().isEmpty() &&
             ALLOWED_ORDER_COLUMNS.contains(order.trim())
         ) {
-            // L'utente può sovrascrivere l'ordinamento di default
-            // Non prefissare 'score' con 'p.' perché è un alias, non una colonna della tabella.
-            String columnPrefix = order.trim().equals("score") ? "" : "p.";
+            String columnToOrder = order.trim();
+            // L'alias 'relevance_score' non ha bisogno del prefisso della tabella 'p.'
+            String columnPrefix = columnToOrder.equals("relevance_score")
+                ? ""
+                : "p.";
             orderByClause =
-                columnPrefix + order.trim() + (desc ? " DESC" : " ASC");
+                columnPrefix + columnToOrder + (desc ? " DESC" : " ASC");
         }
 
         sql.append(" ORDER BY ").append(orderByClause);
-        log.debug("SQL: {}", sql);
 
+        // --- ESECUZIONE DELLA QUERY (invariata) ---
+        log.debug("Final SQL: {}", sql);
         try (
             Connection conn = dataSource.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql.toString());
@@ -293,10 +312,11 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
             for (int i = 0; i < params.size(); i++) {
                 ps.setObject(i + 1, params.get(i));
             }
-            log.debug("ps: {}", ps);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                productDTOS.add(extractProductFromResultSet(rs));
+            log.debug("Prepared Statement: {}", ps);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    productDTOS.add(extractProductFromResultSet(rs));
+                }
             }
         }
         return productDTOS;
@@ -455,5 +475,65 @@ public class ProductDAO implements GenericDAO<ProductDTO, Integer> {
             }
         }
         return 0;
+    }
+
+    /**
+     * Finds product names for live search suggestions.
+     *
+     * @param query The partial search term.
+     * @param limit The maximum number of suggestions to return.
+     * @return A list of product names.
+     * @throws SQLException If a database error occurs.
+     */
+    public List<ProductDTO> findByNameSuggestions(String query, int limit)
+        throws SQLException {
+        List<ProductDTO> suggestions = new ArrayList<>();
+        if (query == null || query.trim().isEmpty()) {
+            return suggestions;
+        }
+
+        String trimmedQuery = query.trim();
+        // Trasforma "ho oh" in "+ho* +oh*"
+        String sanitizedSearch = trimmedQuery
+            .replaceAll("[^a-zA-Z0-9\\s]", " ")
+            .trim();
+        String booleanQuery = Arrays.stream(sanitizedSearch.split("\\s+"))
+            .filter(word -> !word.isEmpty() && word.length() > 3)
+            .map(word -> "+" + word + "*")
+            .collect(Collectors.joining(" "));
+
+        // La query SQL è corretta, il problema è nella configurazione del DB
+        String sql =
+            "SELECT " +
+            "ProductId, ProductName, " +
+            "MATCH(ProductName) AGAINST(?) * 3 + " +
+            "MATCH(ProductDescription) AGAINST(?) AS relevance_score " +
+            "FROM Product " +
+            "WHERE IsActive = true AND " +
+            "MATCH(ProductName, ProductDescription) AGAINST(? IN BOOLEAN MODE) " +
+            "ORDER BY relevance_score DESC " +
+            "LIMIT ?";
+
+        try (
+            Connection conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+        ) {
+            // Per il punteggio, usi la query originale
+            ps.setString(1, trimmedQuery);
+            ps.setString(2, trimmedQuery);
+            // Per il filtro, usi la query booleana
+            ps.setString(3, booleanQuery);
+            ps.setInt(4, limit);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ProductDTO product = new ProductDTO();
+                    product.setProductId(rs.getInt("ProductId"));
+                    product.setProductName(rs.getString("ProductName"));
+                    suggestions.add(product);
+                }
+            }
+        }
+        return suggestions;
     }
 }

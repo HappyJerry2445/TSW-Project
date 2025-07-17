@@ -363,8 +363,12 @@ header .container {
     display: flex;
 }
 
+.search-bar {
+    position: relative;
+}
+
 .search-bar input[type="search"] {
-    padding: 0.5rem 0.8rem;
+    padding: 0.5rem 2.5rem 0.5rem 0.8rem; /* Aggiunto padding a destra per lo spinner */
     border: none;
     border-radius: var(--border-radius-sm) 0 0 var(--border-radius-sm);
     background-color: var(
@@ -401,6 +405,61 @@ header .container {
     color: var(--color-text-inverted); /* Changed from --color-text-light */
     font-size: 1.3rem;
     position: relative;
+}
+
+/* Search Suggestions */
+.search-suggestions-container {
+    display: none; /* Nascosto di default */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--color-primary-light);
+    border: 1px solid var(--color-neutral-light);
+    border-top: none;
+    border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+    box-shadow: var(--color-shadow-md);
+    z-index: 999;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.search-suggestions-container.visible {
+    display: block;
+}
+
+.suggestion-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    color: var(--color-text-default);
+    transition: background-color 0.2s ease;
+}
+
+.suggestion-item:hover,
+.suggestion-item.highlighted {
+    background-color: var(--color-neutral-lightest);
+}
+
+.suggestion-item strong {
+    color: var(--color-accent-vibrant);
+}
+
+.search-spinner {
+    position: absolute;
+    right: 50px; /* Posizionato a destra, prima del pulsante */
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-neutral-dark);
+    display: none; /* Nascosto di default */
+    pointer-events: none; /* Non deve essere cliccabile */
+}
+
+.search-spinner.visible {
+    display: block;
+}
+
+.search-spinner .fa-spinner {
+    animation: spin 1s linear infinite;
 }
 
 .action-icon:hover {

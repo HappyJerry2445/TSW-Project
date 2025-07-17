@@ -30,9 +30,11 @@
         </nav>
         <div class="header-actions">
             <!-- TODO: implementare ricerca -->
-            <form action="${pageContext.request.contextPath}/products/search" method="get" class="search-bar">
-                <input type="search" name="query" placeholder="Cerca prodotti..." aria-label="Cerca">
+            <form action="${pageContext.request.contextPath}/products/search" method="get" class="search-bar" id="search-form" autocomplete="off">
+                <input type="search" name="query" id="search-input" placeholder="Cerca prodotti..." aria-label="Cerca">
+                <div class="search-spinner" id="search-spinner"><i class="fas fa-spinner"></i></div>
                 <button type="submit" aria-label="Invia ricerca"><i class="fas fa-search"></i></button>
+                <div class="search-suggestions-container" id="suggestions-container"></div>
             </form>
             <div class="header-icons">
                 <%--@elvariable id="userRole" type="com.cardhaven.cardhaven.model.dto.UserDTO.Role"--%>
@@ -75,6 +77,7 @@
                 </script>
                 <script defer src="${pageContext.request.contextPath}/scripts/cart-count-update.js"></script>
                 <script defer src="${pageContext.request.contextPath}/scripts/mobile-menu.js"></script>
+                <script defer src="${pageContext.request.contextPath}/scripts/search-suggestions.js"></script>
             </div>
         </div>
         <!-- TODO: pagina menu -->
