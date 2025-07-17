@@ -33,26 +33,32 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label for="productName">Nome Prodotto <span class="required">*</span></label>
-                    <input type="text" id="productName" name="productName" required
+                    <input type="text" id="productName" name="productName" required maxlength="255"
+                           onblur="this.reportValidity()"
                            value="<c:out value='${repopulatedProduct.productName}'/>">
                 </div>
                 <div class="form-group">
                     <label for="sku">SKU (Codice Univoco) <span class="required">*</span></label>
-                    <input type="text" id="sku" name="sku" required value="<c:out value='${repopulatedProduct.sku}'/>">
+                    <input type="text" id="sku" name="sku"
+                           onblur="this.reportValidity()"
+                           required maxlength="50" value="<c:out value='${repopulatedProduct.sku}'/>">
                 </div>
                 <div class="form-group">
                     <label for="basePrice">Prezzo di Base (€) <span class="required">*</span></label>
                     <input type="number" id="basePrice" name="basePrice" step="0.01" min="0" required
+                           onblur="this.reportValidity()"
                            value="${repopulatedProduct.basePrice}">
                 </div>
                 <div class="form-group">
                     <label for="currentPrice">Prezzo Corrente (€) <span class="required">*</span></label>
                     <input type="number" id="currentPrice" name="currentPrice" step="0.01" min="0" required
+                           onblur="this.reportValidity()"
                            value="${repopulatedProduct.currentPrice}">
                 </div>
                 <div class="form-group">
                     <label for="stockQuantity">Quantità in Stock <span class="required">*</span></label>
                     <input type="number" id="stockQuantity" name="stockQuantity" min="0" required
+                           onblur="this.reportValidity()"
                            value="${repopulatedProduct.stockQuantity}">
                 </div>
                 <div class="form-group">
@@ -79,13 +85,14 @@
                 <div class="form-group"><label for="cardSet">Set/Espansione<span class="required">*</span></label><input
                         type="text" id="cardSet"
                         name="cardSet"
-                        value="<c:out value='${repopulatedCard.cardSet}'/>" required>
+                        value="<c:out value='${repopulatedCard.cardSet}'/>" required maxlength="100">
                 </div>
                 <div class="form-group"><label for="cardNumber">Numero Carta<span
                         class="required">*</span></label><input type="text" id="cardNumber"
+                                                                onblur="this.reportValidity()"
                                                                 name="cardNumber"
                                                                 value="<c:out value='${repopulatedCard.cardNumber}'/>"
-                                                                required>
+                                                                required maxlength="50">
                 </div>
                 <div class="form-group"><label for="rarity">Rarità<span class="required">*</span></label><select
                         id="rarity" name="rarity" required>
@@ -141,10 +148,12 @@
                     </option>
                 </select></div>
                 <div class="form-group"><label for="material">Materiale</label><input type="text" id="material"
+                                                                                      onblur="this.reportValidity()"
                                                                                       name="material"
                                                                                       value="<c:out value='${repopulatedAccessory.material}'/>">
                 </div>
                 <div class="form-group"><label for="color">Colore</label><input type="text" id="color" name="color"
+                                                                                onblur="this.reportValidity()"
                                                                                 value="<c:out value='${repopulatedAccessory.color}'/>">
                 </div>
             </div>
@@ -156,11 +165,14 @@
                 <div class="form-group full-width image-upload-area">
                     <label for="productImages">Carica Immagini</label>
                     <input type="file" id="productImages" name="productImages" multiple
-                           accept="image/png, image/jpeg, image/webp" style="display: none;">
+                           onblur="this.reportValidity()"
+                           accept="image/png, image/jpeg, image/webp, image/gif" style="display: none;">
                     <label for="productImages" id="image-drop-zone"><i class="fas fa-upload"></i>
                         <p>Trascina le immagini qui, oppure <span>clicca per selezionare</span>.</p></label>
                     <div id="image-preview-container"></div>
-                    <input type="hidden" name="imageOrder" id="imageOrder">
+                    <input type="hidden" name="imageOrder" id="imageOrder"
+                           onblur="this.reportValidity()"
+                    >
                 </div>
                 <div class="form-group">
                     <label for="categories">Categorie</label>
@@ -173,6 +185,7 @@
                 </div>
                 <div class="form-group checkbox-group">
                     <input type="checkbox" id="isActive" name="isActive"
+                           onblur="this.reportValidity()"
                            value="true" ${empty repopulatedProduct or repopulatedProduct.isActive() ? 'checked' : ''}>
                     <label for="isActive">Prodotto Attivo (visibile sul sito)</label>
                 </div>

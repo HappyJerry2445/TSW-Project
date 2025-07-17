@@ -28,27 +28,34 @@
                 <div class="mb-1">
                     <label for="street">Via/Piazza:</label>
                     <input type="text" id="street" name="street" class="form-input"
-                           required>
+                           onblur="this.reportValidity()"
+                           minlength="5"
+                           required maxlength="255" title="Inserisci la via e il numero civico.">
                 </div>
                 <div class="mb-1">
                     <label for="city">Città:</label>
                     <input type="text" id="city" name="city" class="form-input"
-                           required>
+                           onblur="this.reportValidity()"
+                           required pattern="[a-zA-ZÀ-ÖØ-öø-ÿ'\- ]{2,100}" title="Inserisci una città valida.">
                 </div>
                 <div class="mb-1">
                     <label for="state">Provincia/Stato:</label>
                     <input type="text" id="state" name="state" class="form-input"
-                    >
+                           onblur="this.reportValidity()"
+                           pattern="[A-Z]{2}" title="Inserisci la sigla della provincia (es. SA).">
                 </div>
                 <div class="mb-1">
                     <label for="postalCode">CAP:</label>
                     <input type="text" id="postalCode" name="postalCode" class="form-input"
-                           required>
+                           onblur="this.reportValidity()"
+                           required pattern="[0-9]{5}" title="Inserisci un CAP a 5 cifre.">
                 </div>
                 <div class="mb-1">
                     <label for="country">Nazione:</label>
                     <input type="text" id="country" name="country" class="form-input"
-                           required>
+                           onblur="this.reportValidity()"
+                           required pattern="[a-zA-ZÀ-ÖØ-öø-ÿ'\- ]{2,100}" value="Italia"
+                           title="Inserisci una nazione valida.">
                 </div>
 
                 <div class="mb-1">

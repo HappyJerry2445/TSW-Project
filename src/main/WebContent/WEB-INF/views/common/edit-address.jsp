@@ -29,27 +29,37 @@
                 <div class="mb-1">
                     <label for="street">Via/Piazza:</label>
                     <input type="text" id="street" name="street" class="form-input"
-                           value="<c:out value="${address.streetAddress}"/>" required>
+                           oninput="this.reportValidity()"
+                           value="<c:out value="${address.streetAddress}"/>" required minlength="5" maxlength="255"
+                           title="Inserisci la via e il numero civico.">
                 </div>
                 <div class="mb-1">
                     <label for="city">Città:</label>
                     <input type="text" id="city" name="city" class="form-input"
-                           value="<c:out value="${address.city}"/>" required>
+                           oninput="this.reportValidity()"
+                           value="<c:out value="${address.city}"/>" required pattern="[a-zA-ZÀ-ÖØ-öø-ÿ'\- ]{2,100}"
+                           title="Inserisci una città valida.">
                 </div>
                 <div class="mb-1">
                     <label for="state">Provincia/Stato:</label>
                     <input type="text" id="state" name="state" class="form-input"
-                           value="<c:out value="${address.state}"/>">
+                           onblur="this.reportValidity()"
+                           value="<c:out value="${address.state}"/>" pattern="[A-Z]{2}"
+                           title="Inserisci la sigla della provincia (es. SA).">
                 </div>
                 <div class="mb-1">
                     <label for="postalCode">CAP:</label>
                     <input type="text" id="postalCode" name="postalCode" class="form-input"
-                           value="<c:out value="${address.postalCode}"/>" required>
+                           onblur="this.reportValidity()"
+                           value="<c:out value="${address.postalCode}"/>" required pattern="[0-9]{5}"
+                           title="Inserisci un CAP a 5 cifre.">
                 </div>
                 <div class="mb-1">
                     <label for="country">Nazione:</label>
                     <input type="text" id="country" name="country" class="form-input"
-                           value="<c:out value="${address.country}"/>" required>
+                           onblur="this.reportValidity()"
+                           value="<c:out value="${address.country}"/>" required pattern="[a-zA-ZÀ-ÖØ-öø-ÿ'\- ]{2,100}"
+                           title="Inserisci una nazione valida.">
                 </div>
 
                 <div class="mb-1">

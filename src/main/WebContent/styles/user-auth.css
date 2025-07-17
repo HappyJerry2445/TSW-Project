@@ -12,6 +12,13 @@
     text-decoration: underline;
 }
 
+.field-error {
+    color: var(--color-status-error);
+    font-size: 0.8rem;
+    margin-top: 4px;
+}
+
+
 @media (max-width: 768px) {
     .user-auth-card {
         box-shadow: none;

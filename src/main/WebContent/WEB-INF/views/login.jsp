@@ -26,20 +26,23 @@
             <form action="${pageContext.request.contextPath}/login" method="post">
                 <div class="mb-1">
                     <label for="email">Email</label>
-                    <input id="email" type="email" name="email" class="form-input" placeholder="Inserisci la tua email">
+                    <input id="email" type="email" name="email" class="form-input" placeholder="Inserisci la tua email"
+                           onblur="this.reportValidity()"
+                           required>
                 </div>
 
                 <div class="mb-1">
                     <label for="password">Password</label>
                     <input id="password" type="password" name="password" class="form-input"
-                           placeholder="Inserisci la tua password">
+                           onblur="this.reportValidity()"
+                           placeholder="Inserisci la tua password" required minlength="8">
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block">Accedi</button>
             </form>
 
             <div class="user-auth-links">
-                <a href="#">Password dimenticata?</a>
+                <span></span>
                 <a href="${pageContext.request.contextPath}/register">Registrati</a>
             </div>
         </div>

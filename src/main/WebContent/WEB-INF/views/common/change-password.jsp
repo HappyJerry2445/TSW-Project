@@ -31,12 +31,16 @@
                 </div>
                 <div class="mb-1">
                     <label for="newPassword">Nuova Password:</label>
-                    <input type="password" id="newPassword" name="newPassword" class="form-input" required>
+                    <input type="password" id="newPassword" name="newPassword" class="form-input" required minlength="8"
+                           onblur="this.reportValidity()"
+                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}"
+                           title="La password deve contenere almeno 8 caratteri, inclusi una maiuscola, una minuscola, un numero e un carattere speciale.">
                 </div>
                 <div class="mb-1">
                     <label for="confirmNewPassword">Conferma Nuova Password:</label>
                     <input type="password" id="confirmNewPassword" name="confirmNewPassword" class="form-input"
                            required>
+                    <span id="password-match-message" class="field-error"></span>
                 </div>
 
                 <div class="profile-actions">
@@ -49,6 +53,6 @@
 </main>
 
 <jsp:include page="/WEB-INF/components/footer.jsp"/>
-<script src="${pageContext.request.contextPath}/scripts/change-password.js"></script>
+<script src="${pageContext.request.contextPath}/scripts/change-password-validity.js"></script>
 </body>
 </html>

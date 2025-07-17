@@ -11,59 +11,93 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import javax.sql.DataSource;
 
 @WebServlet("/common/addresses/add")
 public class AddAddressServlet extends HttpServlet {
 
+    // Regex for validation
+    private static final String STREET_REGEX =
+        "^[a-zA-Z0-9À-ÖØ-öø-ÿ'\\s.,-]{5,255}$";
+    private static final String CITY_COUNTRY_REGEX =
+        "^[a-zA-ZÀ-ÖØ-öø-ÿ'\\s-]{2,100}$";
+    private static final String STATE_REGEX = "^[A-Z]{2}$"; // Assuming 2-letter state codes like IT provinces
+    private static final String POSTAL_CODE_REGEX = "^[0-9]{5}$"; // Italian CAP format
+
+    private static final Pattern STREET_PATTERN = Pattern.compile(STREET_REGEX);
+    private static final Pattern CITY_COUNTRY_PATTERN = Pattern.compile(
+        CITY_COUNTRY_REGEX
+    );
+    private static final Pattern STATE_PATTERN = Pattern.compile(STATE_REGEX);
+    private static final Pattern POSTAL_CODE_PATTERN = Pattern.compile(
+        POSTAL_CODE_REGEX
+    );
+
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
         HttpSession session = req.getSession();
         Integer userId = (Integer) session.getAttribute("userId");
         List<String> errors = new ArrayList<>();
 
-        DataSource dataSource = (DataSource) getServletContext().getAttribute("ds");
+        DataSource dataSource = (DataSource) getServletContext().getAttribute(
+            "ds"
+        );
         UserDAO userDAO = new UserDAO(dataSource);
         AddressDAO addressDAO = new AddressDAO(dataSource);
 
         try {
             UserDTO loggedInUser = userDAO.getById(userId);
             if (loggedInUser == null) {
-                NotificationUtil.sendNotification(req, "Utente non trovato. Si prega di accedere nuovamente.", "error");
+                NotificationUtil.sendNotification(
+                    req,
+                    "Utente non trovato. Si prega di accedere nuovamente.",
+                    "error"
+                );
                 resp.sendRedirect(req.getContextPath() + "/login");
                 return;
             }
 
             req.setAttribute("addressTypes", AddressDTO.AddressType.values());
-            req.getRequestDispatcher("/WEB-INF/views/common/add-address.jsp").forward(req, resp);
-
+            req
+                .getRequestDispatcher("/WEB-INF/views/common/add-address.jsp")
+                .forward(req, resp);
         } catch (SQLException e) {
             errors.add("Errore del database durante il recupero dell'utente.");
             req.setAttribute("errors", errors);
-            req.getRequestDispatcher("/WEB-INF/views/common/addresses.jsp").forward(req, resp);
+            req
+                .getRequestDispatcher("/WEB-INF/views/common/addresses.jsp")
+                .forward(req, resp);
             e.printStackTrace();
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
         HttpSession session = req.getSession();
         Integer userId = (Integer) session.getAttribute("userId");
         List<String> errors = new ArrayList<>();
 
-        DataSource dataSource = (DataSource) getServletContext().getAttribute("ds");
+        DataSource dataSource = (DataSource) getServletContext().getAttribute(
+            "ds"
+        );
         UserDAO userDAO = new UserDAO(dataSource);
         AddressDAO addressDAO = new AddressDAO(dataSource);
 
         try {
             UserDTO loggedInUser = userDAO.getById(userId);
             if (loggedInUser == null) {
-                NotificationUtil.sendNotification(req, "Utente non trovato. Si prega di accedere nuovamente.", "error");
+                NotificationUtil.sendNotification(
+                    req,
+                    "Utente non trovato. Si prega di accedere nuovamente.",
+                    "error"
+                );
                 resp.sendRedirect(req.getContextPath() + "/login");
                 return;
             }
@@ -75,15 +109,42 @@ public class AddAddressServlet extends HttpServlet {
             String country = req.getParameter("country");
             String addressTypeStr = req.getParameter("addressType");
 
-            // Basic validation
+            // --- Detailed Validation ---
+            if (street == null || !STREET_PATTERN.matcher(street).matches()) {
+                errors.add(
+                    "L'indirizzo non è valido (min 5, max 255 caratteri)."
+                );
+            }
+            if (city == null || !CITY_COUNTRY_PATTERN.matcher(city).matches()) {
+                errors.add(
+                    "La città può contenere solo lettere, spazi, e trattini."
+                );
+            }
             if (
-                    street == null || street.isEmpty() ||
-                            city == null || city.isEmpty() ||
-                            postalCode == null || postalCode.isEmpty() ||
-                            country == null || country.isEmpty() ||
-                            addressTypeStr == null || addressTypeStr.isEmpty()
+                state != null &&
+                !state.trim().isEmpty() &&
+                !STATE_PATTERN.matcher(state).matches()
             ) {
-                errors.add("Tutti i campi obbligatori dell'indirizzo devono essere compilati.");
+                errors.add(
+                    "La provincia deve essere composta da due lettere maiuscole (es. SA)."
+                );
+            }
+            if (
+                postalCode == null ||
+                !POSTAL_CODE_PATTERN.matcher(postalCode).matches()
+            ) {
+                errors.add("Il CAP deve essere composto da 5 cifre numeriche.");
+            }
+            if (
+                country == null ||
+                !CITY_COUNTRY_PATTERN.matcher(country).matches()
+            ) {
+                errors.add(
+                    "La nazione può contenere solo lettere, spazi, e trattini."
+                );
+            }
+            if (addressTypeStr == null || addressTypeStr.isEmpty()) {
+                errors.add("È necessario selezionare un tipo di indirizzo.");
             }
 
             int addressId = 0;
@@ -107,10 +168,13 @@ public class AddAddressServlet extends HttpServlet {
                 submittedAddress.setPostalCode(postalCode);
                 submittedAddress.setCountry(country);
                 req.setAttribute("address", submittedAddress); // Pass submitted data back to form
-                req.getRequestDispatcher("/WEB-INF/views/common/add-address.jsp").forward(req, resp);
+                req
+                    .getRequestDispatcher(
+                        "/WEB-INF/views/common/add-address.jsp"
+                    )
+                    .forward(req, resp);
                 return;
             }
-
 
             // Create an Address object with updated values
             AddressDTO updatedAddress = new AddressDTO();
@@ -124,11 +188,16 @@ public class AddAddressServlet extends HttpServlet {
 
             addressDAO.save(updatedAddress);
 
-            NotificationUtil.sendNotification(req, "Indirizzo aggiunto con successo!", "success");
+            NotificationUtil.sendNotification(
+                req,
+                "Indirizzo aggiunto con successo!",
+                "success"
+            );
             resp.sendRedirect(req.getContextPath() + "/common/addresses"); // Redirect to address list
-
         } catch (SQLException e) {
-            errors.add("Errore del database durante l'aggiunta dell'indirizzo.");
+            errors.add(
+                "Errore del database durante l'aggiunta dell'indirizzo."
+            );
             req.setAttribute("errors", errors);
             // Re-populate the address object with submitted values for display in case of DB error
             AddressDTO submittedAddress = new AddressDTO();
@@ -138,7 +207,9 @@ public class AddAddressServlet extends HttpServlet {
             submittedAddress.setPostalCode(req.getParameter("postalCode"));
             submittedAddress.setCountry(req.getParameter("country"));
             req.setAttribute("address", submittedAddress);
-            req.getRequestDispatcher("/WEB-INF/views/common/add-address.jsp").forward(req, resp);
+            req
+                .getRequestDispatcher("/WEB-INF/views/common/add-address.jsp")
+                .forward(req, resp);
             e.printStackTrace();
         }
     }
