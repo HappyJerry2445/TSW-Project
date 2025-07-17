@@ -17,39 +17,38 @@ graph TD
             ProfileS -->|Forwards| ProfileJ(profile.jsp)
             ProfileJ -->|Logout| LogoutS(LogoutServlet)
             LogoutS -->|Redirect| I
-            %% --- Subgraph: User Profile Management ---
-                subgraph "User Profile Management"
-                    I -->|My Account| ProfileS(ProfileServlet)
-                    ProfileS -->|Forwards| ProfileJ
 
-                    ProfileJ -->|Change Password| CPJ(common/change-password.jsp)
-                    CPJ --"Submit"--> CPS(ChangePasswordServlet)
-                    CPS --"Success"--> ProfileS
+            subgraph "User Profile Management"
+                I -->|My Account| ProfileS
+                ProfileS -->|Forwards| ProfileJ
 
-                    ProfileJ -->|Manage Addresses| AddrS(AddressesServlet)
-                    AddrS -->|Forwards| AddrJ(common/addresses.jsp)
-                    AddrJ -->|Add New| AddAddrJ(common/add-address.jsp)
-                    AddAddrJ --"Submit"--> AddAddrS(AddAddressServlet)
-                    AddAddrS --"Success"--> AddrS
+                ProfileJ -->|Change Password| CPJ(common/change-password.jsp)
+                CPJ --"Submit"--> CPS(ChangePasswordServlet)
+                CPS --"Success"--> ProfileS
 
-                    AddrJ -->|Edit| EditAddrJ(common/edit-address.jsp)
-                    EditAddrJ --"Submit"--> EditAddrS(EditAddressServlet)
-                    EditAddrS --"Success"--> AddrS
+                ProfileJ -->|Manage Addresses| AddrS(AddressesServlet)
+                AddrS -->|Forwards| AddrJ(common/addresses.jsp)
+                AddrJ -->|Add New| AddAddrJ(common/add-address.jsp)
+                AddAddrJ --"Submit"--> AddAddrS(AddAddressServlet)
+                AddAddrS --"Success"--> AddrS
 
-                    AddrJ --"Delete"--> DelAddrS(DeleteAddressServlet)
-                    DelAddrS --"Success"--> AddrS
+                AddrJ -->|Edit| EditAddrJ(common/edit-address.jsp)
+                EditAddrJ --"Submit"--> EditAddrS(EditAddressServlet)
+                EditAddrS --"Success"--> AddrS
 
-                    AddrJ --"Set Default"--> SetDefAddrS(SetDefaultAddressServlet)
-                    SetDefAddrS --"Success"--> AddrS
-                end
+                AddrJ --"Delete"--> DelAddrS(DeleteAddressServlet)
+                DelAddrS --"Success"--> AddrS
+
+                AddrJ --"Set Default"--> SetDefAddrS(SetDefaultAddressServlet)
+                SetDefAddrS --"Success"--> AddrS
+            end
         end
-        %% --- Subgraph: Product Browse & Cart ---
+
         subgraph "Product Browse & Shopping Cart"
             I -->|View Products| PCS(ProductsCategoryServlet)
             PCS -->|Forwards| PCJ(ricerca-prodotti-categoria.jsp)
             PCJ -->|Select Product| PDS(ProductDetailsServlet)
 
-            %% Assumed user-facing product view, handled by ProductDetailsServlet
             PDS -->|Forwards| UserProductView("User Product View")
             UserProductView -->|Add to Cart| ATCS(AddToCartServlet)
             ATCS -->|Redirect| CartS(CartServlet)
@@ -60,12 +59,10 @@ graph TD
             CartJ -->|Delete Item| DeleteCS(DeleteCartServlet)
             DeleteCS -->|Redirect| CartS
 
-            %% ImageServlet is a resource called by pages displaying products
             PCJ --> |"<img> src"| ImgS(ImageServlet)
             UserProductView --> |"<img> src"| ImgS
         end
 
-        %% --- Subgraph: Checkout Process ---
         subgraph "Checkout & Post-Order"
             CartJ -->|Proceed to Checkout| ShipS(ShippingServlet)
             ShipS -->|Forwards| ShipJ(common/checkout/shipping.jsp)
@@ -78,40 +75,38 @@ graph TD
             OrderS --"Success"--> OrderDetailsS(OrderDetailsServlet)
             OrderDetailsS -->|Forwards| OrderDetailsJ(common/order_details.jsp)
 
-            %% Viewing order history and submitting reviews
             ProfileJ -->|My Orders| OrderS
             OrderS -->|Forwards| OrdersJ(common/orders.jsp)
             OrdersJ -->|View Details| OrderDetailsS
         end
 
         subgraph "Admin Panel"
-        LS --"Success (Admin)"--> ADashS(admin/AdminDashboardServlet)
-        ADashS -->|Forwards| ADashJ(admin/dashboard.jsp)
+            LS --"Success (Admin)"--> ADashS(admin/AdminDashboardServlet)
+            ADashS -->|Forwards| ADashJ(admin/dashboard.jsp)
 
-        ADashJ -->|Manage Products| AProdS(admin/AdminProductsServlet)
-        AProdS -->|Forwards| AProdJ(admin/products.jsp)
-        AProdJ -->|Add New| ANewProdJ(admin/new-product.jsp)
-        ANewProdJ --"Submit"--> ANewProdS(admin/AdminNewProductServlet)
-        ANewProdS --"Success"--> AProdS
-        AProdJ -->|Edit| AEditProdJ(admin/edit-product.jsp)
-        AEditProdJ --"Submit"--> AEditProdS(admin/AdminEditProductServlet)
-        AEditProdS --"Success"--> AProdS
+            ADashJ -->|Manage Products| AProdS(admin/AdminProductsServlet)
+            AProdS -->|Forwards| AProdJ(admin/products.jsp)
+            AProdJ -->|Add New| ANewProdJ(admin/new-product.jsp)
+            ANewProdJ --"Submit"--> ANewProdS(admin/AdminNewProductServlet)
+            ANewProdS --"Success"--> AProdS
+            AProdJ -->|Edit| AEditProdJ(admin/edit-product.jsp)
+            AEditProdJ --"Submit"--> AEditProdS(admin/AdminEditProductServlet)
+            AEditProdS --"Success"--> AProdS
 
-        ADashJ -->|Manage Categories| ACatS(admin/AdminCategoriesServlet)
-        ACatS -->|Forwards| ACatJ(admin/categories.jsp)
+            ADashJ -->|Manage Categories| ACatS(admin/AdminCategoriesServlet)
+            ACatS -->|Forwards| ACatJ(admin/categories.jsp)
 
-        ADashJ -->|Manage Orders| AOrdersS(admin/AdminOrdersServlet)
-        AOrdersS -->|Forwards| AOrdersJ(admin/orders.jsp)
-        AOrdersJ -->|Details| AOrderDetailsS(admin/AdminOrderDetailsServlet)
-        AOrderDetailsS -->|Forwards| AOrderDetailsJ(admin/order_details.jsp)
+            ADashJ -->|Manage Orders| AOrdersS(admin/AdminOrdersServlet)
+            AOrdersS -->|Forwards| AOrdersJ(admin/orders.jsp)
+            AOrdersJ -->|Details| AOrderDetailsS(admin/AdminOrderDetailsServlet)
+            AOrderDetailsS -->|Forwards| AOrderDetailsJ(admin/order_details.jsp)
 
-        ADashJ -->|Manage Users| AUsersS(admin/AdminUsersServlet)
-        AUsersS -->|Forwards| AUsersJ(admin/users.jsp)
+            ADashJ -->|Manage Users| AUsersS(admin/AdminUsersServlet)
+            AUsersS -->|Forwards| AUsersJ(admin/users.jsp)
 
-        ADashJ -->|Manage Reviews| AReviewsS(admin/AdminReviewsServlet)
-        AReviewsS -->|Forwards| AReviewsJ(admin/reviews.jsp)
-    end
-
+            ADashJ -->|Manage Reviews| AReviewsS(admin/AdminReviewsServlet)
+            AReviewsS -->|Forwards| AReviewsJ(admin/reviews.jsp)
+        end
     end
 
     %% --- Assign Classes to all nodes ---
