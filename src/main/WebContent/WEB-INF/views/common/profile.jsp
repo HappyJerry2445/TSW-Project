@@ -30,6 +30,7 @@
                             <input id="firstName" type="text" name="firstName" class="form-input"
                                    placeholder="Inserisci il tuo nome"
                                 <%--@elvariable id="submittedFirstName" type="java.lang.String"--%>
+                                   title="Il nome può contenere solo lettere, spazi, apostrofi e trattini."
                                    value="<c:out value="${not empty submittedFirstName ? submittedFirstName : loggedInUser.firstName}"/>"
                                    onblur="validateFormElement(this)"
                                    onsubmit="validateFormElement(this)"
@@ -43,6 +44,7 @@
                             <input id="lastName" type="text" name="lastName" class="form-input"
                                    placeholder="Inserisci il tuo cognome"
                                 <%--@elvariable id="submittedLastName" type="java.lang.String"--%>
+                                   title="Il cognome può contenere solo lettere, spazi, apostrofi e trattini."
                                    value="<c:out value="${not empty submittedLastName ? submittedLastName : loggedInUser.lastName}"/>"
                                    onblur="validateFormElement(this)"
                                    onsubmit="validateFormElement(this)"
@@ -56,6 +58,7 @@
                                    placeholder="Inserisci la tua email"
                                    onblur="validateFormElement(this)"
                                    onsubmit="validateFormElement(this)"
+                                   title="La email deve essere nel formato username@dominio.ext"
                                 <%--@elvariable id="submittedEmail" type="java.lang.String"--%>
                                    value="<c:out value="${not empty submittedEmail ? submittedEmail : loggedInUser.email}"/>"
                                    disabled

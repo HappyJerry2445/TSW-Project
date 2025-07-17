@@ -72,11 +72,11 @@
                 </c:when>
                 <c:otherwise>
                     <p class="text-center">Non hai ancora nessun indirizzo
-                        salvato.</p> <%-- 'text-center' is likely a utility class. --%>
+                        salvato.</p>
                 </c:otherwise>
             </c:choose>
 
-            <div class="address-buttons text-center mt-3"> <%-- 'text-center', 'mt-3' are utility classes. --%>
+            <div class="address-buttons mt-3">
                 <a href="${pageContext.request.contextPath}/common/addresses/add" class="btn btn-primary ">Aggiungi
                     Nuovo
                     Indirizzo</a> <%-- 'btn', 'btn-primary' are expected in style.css. --%>
