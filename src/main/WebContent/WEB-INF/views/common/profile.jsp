@@ -23,7 +23,7 @@
 
             <%--@elvariable id="loggedInUser" type="com.cardhaven.cardhaven.model.dto.UserDTO"--%>
             <c:if test="${not empty loggedInUser}">
-                <form action="${pageContext.request.contextPath}/common/profile" method="post">
+                <form id="editProfileForm" action="${pageContext.request.contextPath}/common/profile" method="post">
                     <div class="profile-details">
                         <div class="mb-1">
                             <label for="firstName">Nome:</label>
