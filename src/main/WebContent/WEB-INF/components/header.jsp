@@ -4,6 +4,7 @@
 <%@ page import="java.sql.SQLException" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
 
 <jsp:include page="/WEB-INF/components/notification.jsp"/>
 <header>
@@ -16,43 +17,16 @@
                     <a href="${pageContext.request.contextPath}/pages/about">Chi siamo</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a href="${pageContext.request.contextPath}/products/search" class="dropdown-toggle"
-                    >
+                    <a href="${pageContext.request.contextPath}/products/search" class="dropdown-toggle">
                         Prodotti <i class="fas fa-chevron-down dropdown-icon"></i>
                     </a>
                     <ul id="category-header-dropdown-menu" class="dropdown-menu">
                         <c:forEach var="category" items="${applicationScope.allCategories}">
                             <c:if test="${empty category.parentId}">
-
-                                <%-- Check if this category has children to add a specific class --%>
-                                <c:set var="hasChildren" value="${false}"/>
-                                <c:forEach var="child" items="${applicationScope.allCategories}">
-                                    <c:if test="${not hasChildren and child.parentId == category.id}">
-                                        <c:set var="hasChildren" value="${true}"/>
-                                    </c:if>
-                                </c:forEach>
-
-                                <li class="${hasChildren ? 'has-submenu' : ''}">
-                                    <a href="${pageContext.request.contextPath}/products/category/${category.id}">
-                                        <c:out value="${category.name}"/>
-                                        <c:if test="${hasChildren}">
-                                            <i class="fas fa-chevron-right submenu-icon"></i>
-                                        </c:if>
-                                    </a>
-                                    <c:if test="${hasChildren}">
-                                        <ul class="submenu">
-                                            <c:forEach var="child" items="${applicationScope.allCategories}">
-                                                <c:if test="${child.parentId == category.id}">
-                                                    <li>
-                                                        <a href="${pageContext.request.contextPath}/products/category/${child.id}">
-                                                            <c:out value="${child.name}"/>
-                                                        </a>
-                                                    </li>
-                                                </c:if>
-                                            </c:forEach>
-                                        </ul>
-                                    </c:if>
-                                </li>
+                                <mytags:categoryNode
+                                        currentCategory="${category}"
+                                        allCategories="${applicationScope.allCategories}"
+                                />
                             </c:if>
                         </c:forEach>
                     </ul>
