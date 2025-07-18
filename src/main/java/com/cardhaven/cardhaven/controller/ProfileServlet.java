@@ -74,32 +74,17 @@ public class ProfileServlet extends HttpServlet {
         } else if (!EMAIL_PATTERN.matcher(email).matches()) {
             errors.add("Il formato dell'email non è valido.");
         } else {
-            // Controllo se l'email esiste già per un altro utente
             try {
                 UserDTO existingUser = userDAO.getUserByEmail(email);
-                // Se esiste un utente con questa email E il suo ID non è quello dell'utente corrente
                 if (existingUser != null && existingUser.getId() != userId) {
                     errors.add("Questa email è già associata ad un altro account.");
                 }
             } catch (SQLException e) {
-                errors.add("Errore durante la verifica dell'email.");
-                e.printStackTrace();
+                throw new RuntimeException("Errore durante l'aggiornamento del profilo. " + e.getMessage());
             }
         }
-        // Se ci sono errori, ripresenta il form con i messaggi di errore
         if (!errors.isEmpty()) {
-            req.setAttribute("errors", errors);
-            // Metti i dati sottomessi nel request per ripopolare il form
-            /*
-            TODO: Fai per bene
-            req.setAttribute("submittedFirstName", firstName);
-            req.setAttribute("submittedLastName", lastName);
-            req.setAttribute("submittedEmail", email);
-            req.setAttribute("initialEditMode", true);
-
-            */
-            req.getRequestDispatcher("/WEB-INF/views/common/profile.jsp").forward(req, resp);
-            return;
+            throw new RuntimeException("Errore durante l'aggiornamento del profilo." + errors);
         }
 
         UserDTO loggedInUser;
@@ -120,18 +105,7 @@ public class ProfileServlet extends HttpServlet {
             NotificationUtil.sendNotification(req, "Profilo aggiornato con successo!", "success");
             resp.sendRedirect(req.getContextPath() + "/common/profile");
         } catch (SQLException e) {
-            errors.add("Errore durante l'aggiornamento del profilo.");
-            req.setAttribute("errors", errors);
-            req.setAttribute("loggedInUser", loggedInUser);
-            /*
-            TODO: Fai per bene
-            req.setAttribute("submittedFirstName", firstName);
-            req.setAttribute("submittedLastName", lastName);
-            req.setAttribute("submittedEmail", email);
-            req.setAttribute("initialEditMode", true);
-             */
-            req.getRequestDispatcher("/WEB-INF/views/common/profile.jsp").forward(req, resp);
-            e.printStackTrace();
+            throw new RuntimeException("Errore durante l'aggiornamento del profilo." + e);
         }
     }
 }

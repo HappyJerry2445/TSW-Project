@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         fetch(this.action, {
             method: "POST",
-            body: formData
+            body: new URLSearchParams(formData)
         }).then((response) => {
             if (response.ok) {
                 button.classList.add("btn-success");
