@@ -1,5 +1,5 @@
-# tsw_project 
+# CardHaven
 
-UNISA-Progetto di Tecnologie Software per il Web.
+## UNISA - Progetto di Tecnologie Software per il Web.
 
-Il progetto riguarda lo sviluppo di un sito di commercio elettronico (vendita online di beni materiali o servizi).
+Il progetto riguarda lo sviluppo di un sito di vendita di carte collezionabili
